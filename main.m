@@ -11,10 +11,9 @@ popsize=1000;%Size of population
 beta=0.001;%Infectiveness
 nu=1;%Rate of recovery
 
-%Create a transmission tree with at least ten individuals
+%Create a transmission tree with ten individuals
 n=1;
-while n~=5%n<10 || n>15
-    n
+while n~=10
     ttree=makeTTree(popsize,beta,nu);
     n=size(ttree,1);
 end
@@ -30,11 +29,6 @@ truth=glueTrees(ttree,wtree);
 truth(:,1)=truth(:,1)+2005;%Epidemic started in 2005
 timeLastRem=max(truth(:,1));
 
-return;
-
-%plotBothTree(truth,1);
-%return;
-
 %MCMC loop
 fulltree=makeFullTreeFromPTree(ptreeFromFullTree(truth));%Starting point
 mcmc=10000;
@@ -42,7 +36,7 @@ record(mcmc).tree=0;
 pTTree=probTTree(ttreeFromFullTree(fulltree),popsize,beta,nu);
 pPTree=probPTreeGivenTTree(fulltree,neg);
 for i=1:mcmc
-    i
+    if mod(i,100)==0,i,end
     %if sanitycheck(fulltree)==0,break;end
     %Record things
     record(i).tree=absolute(fulltree,timeLastRem);
@@ -57,16 +51,16 @@ for i=1:mcmc
     pTTree2=probTTree(ttreeFromFullTree(fulltree2),popsize,beta,nu);
     pPTree2=probPTreeGivenTTree(fulltree2,neg);
     if log(rand)<pTTree2+pPTree2-pTTree-pPTree,fulltree=fulltree2;pTTree=pTTree2;pPTree=pPTree2;end
-    %%Metropolis update for Ne*g, assuming Exp(1) prior
-    %neg2=neg+(rand-0.5)*record(1).neg;
-    %if neg2<0,neg2=-neg2;end
-    %pPTree2=probPTreeGivenTTree(fulltree,neg2);
-    %if log(rand)<pPTree2-pPTree-neg2+neg,neg=neg2;pPTree=pPTree2;end
-    %%Gibbs updates for beta and nu based on O'Neill and Roberts JRSSA 16:121-129 (1999) and assuming Exp(1) priors
-    %ttree=ttreeFromFullTree(fulltree);
-    %intXtYtdt=intXtYtdtGivenTTree(ttree,popsize);
-    %beta=gamrnd(1+n-1,1/(1+intXtYtdt));
-    %nu=gamrnd(1+n,1/(1+n*mean(ttree(:,2)-ttree(:,1))));
+    %Metropolis update for Ne*g, assuming Exp(1) prior
+    neg2=neg+(rand-0.5)*record(1).neg;
+    if neg2<0,neg2=-neg2;end
+    pPTree2=probPTreeGivenTTree(fulltree,neg2);
+    if log(rand)<pPTree2-pPTree-neg2+neg,neg=neg2;pPTree=pPTree2;end
+    %Gibbs updates for beta and nu based on O'Neill and Roberts JRSSA 16:121-129 (1999) and assuming Exp(1) priors
+    ttree=ttreeFromFullTree(fulltree);
+    intXtYtdt=intXtYtdtGivenTTree(ttree,popsize);
+    beta=gamrnd(1+n-1,1/(1+intXtYtdt));
+    nu=gamrnd(1+n,1/(1+n*mean(ttree(:,2)-ttree(:,1))));
 end
 
 ft=absolute(consensus(record),timeLastRem);
@@ -87,7 +81,6 @@ subplot('Position',[0.5 0.1 0.35 0.35]);
 set(gca,'FontSize',12);
 plotBothTree(ft,1);
 %title('Inferred coloring','FontSize',16);
-%return;
 
 %Plot traces
 figure;
