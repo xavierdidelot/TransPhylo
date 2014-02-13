@@ -39,5 +39,5 @@ glueTrees = function(ttree,wtree)  {
     intnodes <- rbind(tree,intnodes) 
   } 
   fulltree <- rbind(leaves,intnodes) 
-  #  fulltree <- cbind(fulltree,hostFromFulltree(fulltree)) 
+  fulltree <- cbind(fulltree,hostFromFulltree(fulltree)) 
 } 

@@ -2,6 +2,7 @@
 source('makeTTree.R')
 source('withinhost.R')
 source('glueTrees.R')
+source('hostFromFulltree.R')
 neg<-100/365#Within-host effective population size (Ne) times  generation duration (g)
 R<-1#Basic reproduction number
 
