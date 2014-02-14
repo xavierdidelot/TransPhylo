@@ -6,7 +6,7 @@ hostFromFulltree = function(fulltree)  {
   fathers[fulltree[ ,3] + 1] <- 1:nrow(fulltree) 
   fathers <- fathers[seq(2,length(fathers),1)] 
   host <- rep(0, nrow(fulltree)) 
-  n <- sum(cbind(fulltree[ ,2]) == 0&cbind(fulltree[ ,3]) == 0) 
+  n <- sum(fulltree[ ,2] == 0&fulltree[ ,3] == 0) 
   for (i in (1:n)) { 
     j <- i 
     while (1)  { 
@@ -17,7 +17,7 @@ hostFromFulltree = function(fulltree)  {
       } 
     } 
   } 
-  f <- n + which( fulltree[seq(n + 1,nrow(fulltree)-1,1),3] == 0 ); 
+  f <- n + which( fulltree[seq(n + 1,nrow(fulltree)-1,1),3] == 0 )
   for (i in (seq(1,length(f),1))) { 
     j <- f[i] 
     tocol <- c() 
