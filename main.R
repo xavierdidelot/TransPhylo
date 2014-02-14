@@ -6,6 +6,8 @@ source('glueTrees.R')
 source('hostFromFulltree.R')
 source('ttreeFromFullTree.R')
 source('probPTreeGivenTTree.R')
+source('pTreeFromFullTree.R')
+source('makeFullTreeFromPTree.R')
 neg<-100/365#Within-host effective population size (Ne) times  generation duration (g)
 R<-1#Basic reproduction number
 
@@ -27,3 +29,4 @@ for (i in (1:n)) {
 #Glue these trees together
 truth<-glueTrees(ttree,wtree)
 truth[,1]<-truth[,1]+2005#Epidemic started in 2005
+makeFullTreeFromPTree(ptreeFromFullTree(truth))
