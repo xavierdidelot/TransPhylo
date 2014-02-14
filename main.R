@@ -29,11 +29,10 @@ for (i in (1:n)) {
 
 #Glue these trees together
 truth<-glueTrees(ttree,wtree)
-#truth[,1]<-truth[,1]+2005#Epidemic started in 2005
+truth[,1]<-truth[,1]+2005#Epidemic started in 2005
 
 #MCMC loop 
-#fulltree <- makeFullTreeFromPTree(ptreeFromFullTree(truth));#Starting point 
-fulltree<-truth
+fulltree <- makeFullTreeFromPTree(ptreeFromFullTree(truth));#Starting point 
 mcmc <- 1000 
 record <- vector('list',mcmc)
 pTTree <- probTTree(ttreeFromFullTree(fulltree),R) 
