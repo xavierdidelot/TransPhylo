@@ -1,6 +1,5 @@
-hostFromFulltree = function(fulltree)  {
-  # Here is the return arguments list return(host) 
-  #Build vector 'host' indicating in which host each node of the fulltree is found 
+#Build vector 'host' indicating in which host each node of the fulltree is found 
+.hostFromFulltree = function(fulltree)  {
   fathers <- rep(0, nrow(fulltree) + 1) 
   fathers[fulltree[ ,2] + 1] <- 1:nrow(fulltree) 
   fathers[fulltree[ ,3] + 1] <- 1:nrow(fulltree) 

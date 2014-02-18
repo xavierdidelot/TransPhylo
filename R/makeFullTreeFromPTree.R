@@ -1,5 +1,7 @@
+#' Deterministically create a transmission tree compatible with the provided phylogenetic tree
+#' @param tree phylogenetic tree
+#' @return A non-zero probability phylogenetic+transmission tree
 makeFullTreeFromPTree = function(tree)  {
-  #Return a non-zero probability phylogenetic+transmission tree for a given phylogenetic tree 
   n <- ceiling( nrow(tree)/2 ) 
   tree <- rbind(tree,matrix(0, n, 3)) 
   tree[nrow(tree),1] <- min(tree[1:( 2*n-1 ),1])-1
@@ -30,6 +32,6 @@ makeFullTreeFromPTree = function(tree)  {
     } 
   } 
   tree <- tree[c(1:n,n + ind), ] 
-  fulltree <- cbind(tree,hostFromFulltree(tree)) 
+  fulltree <- cbind(tree,.hostFromFulltree(tree)) 
   return(fulltree)
 } 

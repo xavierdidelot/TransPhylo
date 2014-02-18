@@ -1,7 +1,8 @@
+#' Calculate the probability of a phylogenetic tree given a transmission tree
+#' @param fulltree Combined phylogenetic/transmission tree
+#' @param neg Within-host coalescent rate
+#' @return Probability of phylogeny given transmission tree
 probPTreeGivenTTree = function(fulltree,neg)  {
-  #To calculate the probability of a phylogenetic tree given a transmission 
-  #tree,split up the phylogenetic tree into individual within-host subtrees,and 
-  #calculate the product of their probabilities 
   n <- sum(fulltree[ ,2] == 0&fulltree[ ,3] == 0) 
   prob <- 0 
   fathers <- rep(0, nrow(fulltree) + 1) 
@@ -9,13 +10,13 @@ probPTreeGivenTTree = function(fulltree,neg)  {
   fathers[fulltree[ ,3] + 1] <- 1:nrow(fulltree) 
   fathers <- fathers[-1] 
   for (i in (1:n)) { 
-    subtree <- extractSubtree(fulltree,i,fathers) 
-    prob <- prob + probSubtree(subtree,neg) 
+    subtree <- .extractSubtree(fulltree,i,fathers) 
+    prob <- prob + .probSubtree(subtree,neg) 
   } 
   return(prob)
 } 
 
-extractSubtree = function(fulltree,which,fathers)  {
+.extractSubtree = function(fulltree,which,fathers)  {
   #Take all nodes in host 
   host <- cbind(fulltree[ ,4]) 
   ind <- 1:nrow(fulltree) 
@@ -36,7 +37,7 @@ extractSubtree = function(fulltree,which,fathers)  {
   return(subtree)
 } 
 
-probSubtree = function(tab,rate)  {
+.probSubtree = function(tab,rate)  {
   #tab(:,1)=age at bottom;tab(:,2)=father;rate=coalescence rate 
   #Return the log-prior probability of a subtree 
   #This is an extension to Eq1 of Drummond et al(2002)Genetics 
@@ -49,7 +50,7 @@ probSubtree = function(tab,rate)  {
   ex <- rep(0, nrow(tab));#Keep track of which nodes are active 
   MySort <- sort(tab[ ,1],index.return = TRUE); s <- MySort$x; ind <- MySort$ix 
   cur <- iso[1];while (tab[cur,2] > 0) {ex[cur] <- 1;cur <- tab[cur,2]};ex[length(ex)] <- 1; 
-  for (l in (seqML(2,length(iso),1))) {#For all others leaves in increasing order of age 
+  for (l in (.seqML(2,length(iso),1))) {#For all others leaves in increasing order of age 
     isanc <- rep(0, nrow(tab));#Ancestors of the current node 
     anc <- iso[l] 
     while (tab[anc,2] > 0)  { 
@@ -94,5 +95,3 @@ probSubtree = function(tab,rate)  {
   }
   return(p)
 }
-
-seqML <- function(from, to, by=1) {if (from > to) integer(0) else seq.int(from, to, by)}

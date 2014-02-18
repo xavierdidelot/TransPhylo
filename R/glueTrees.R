@@ -1,5 +1,5 @@
-glueTrees = function(ttree,wtree)  {
-  #Glue together the within-host trees using the transmission tree 
+#Glue together some within-host trees using a transmission tree 
+.glueTrees = function(ttree,wtree)  {
   n <- nrow(ttree)
   no <- n + 1 
   ma<-0
@@ -39,5 +39,5 @@ glueTrees = function(ttree,wtree)  {
     intnodes <- rbind(tree,intnodes) 
   } 
   fulltree <- rbind(leaves,intnodes) 
-  fulltree <- cbind(fulltree,hostFromFulltree(fulltree)) 
+  fulltree <- cbind(fulltree,.hostFromFulltree(fulltree)) 
 } 

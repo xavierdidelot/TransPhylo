@@ -1,12 +1,8 @@
+#' Simulate a transmission tree
+#' (assumes generation distribution w is Gamma(2,1))
+#' @param R the basic reproduction number
+#' @return A N*3 matrix in the following format with one row per infected host, first column is time of infection, second column is time of sampling, third column is infector
 makeTTree <-function(R) { 
-  #Creates a transmission tree, and returns the result as a N*3 matrix in the
-  #following format:
-  #One row per infected host
-  #First column is time of infection
-  #Second column is time of sampling
-  #Third column is infector
-  #R is the basic reproduction number
-  #Assume w is Gamma(2,1)
   ttree<-matrix(0,1,3)
   prob<-0
   todo<-1

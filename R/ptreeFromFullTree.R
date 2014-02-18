@@ -1,5 +1,7 @@
+#' Extracts phylogenetic tree from a combined phylogenetic/transmission tree 
+#' @param tree Combined tree
+#' @return phylogenetic tree
 ptreeFromFullTree = function(tree)  {
-  #Extract phylogenetic tree from a phylogenetic+transmission tree 
   n <- sum(tree[ ,2] + tree[ ,3] == 0) 
   tra <- n + 1 
   while (tra < nrow(tree))  { 

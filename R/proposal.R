@@ -1,4 +1,5 @@
-proposal = function(fulltree)  {
+#Proposal distribution used in MCMC to update the transmission tree
+.proposal = function(fulltree)  {
   n <- sum(fulltree[ ,2] == 0&fulltree[ ,3] == 0) 
   host <- fulltree[ ,4]
   fathers <- seq(0, nrow(fulltree)+1) 
@@ -79,6 +80,6 @@ proposal = function(fulltree)  {
     } 
   } 
   fulltree <- fulltree[c(1:n,n+ind), ] 
-  res <- cbind(fulltree[ ,1:3],hostFromFulltree(fulltree)) 
+  res <- cbind(fulltree[ ,1:3],.hostFromFulltree(fulltree)) 
   return(res)
 } 

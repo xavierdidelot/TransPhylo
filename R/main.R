@@ -1,7 +1,8 @@
-main = function() {
-  neg<-100/365#Within-host effective population size (Ne) times  generation duration (g)
-  R<-1#Basic reproduction number
-  
+#' Simulate an outbreak
+#' @param neg the within-host effective population size (Ne) times  generation duration (g)
+#' @param R the basic reproduction number
+#' @return Combined phylogenetic and transmission tree
+simulateOutbreak = function(R,neg) {
   #Create a transmission tree with ten individuals
   n<-1
   while (n!=10) {
@@ -14,18 +15,23 @@ main = function() {
   wtree<-vector('list',n)
   for (i in (1:n)) {
     times<-c(ttree[i,2],ttree[which(ttree[,3]==i),1])-ttree[i,1]
-    wtree[[i]]<-withinhost(times,neg)[[1]];
+    wtree[[i]]<-.withinhost(times,neg)[[1]];
   }
   
   #Glue these trees together
-  truth<-glueTrees(ttree,wtree)
+  truth<-.glueTrees(ttree,wtree)
   truth[,1]<-truth[,1]+2005#Epidemic started in 2005
-  
-  plotBothTree(truth)
-  stop('Finished test')
-  
-  #MCMC loop 
-  fulltree <- makeFullTreeFromPTree(ptreeFromFullTree(truth));#Starting point 
+  return(truth)
+}  
+
+#' Infer transmission tree given a phylogenetic tree
+#' @param ptree Phylogenetic tree
+#' @return posterior sample set of transmission trees
+mcmc = function(ptree) {
+  #MCMC algorithm
+  neg <- 100/365
+  R <- 1
+  fulltree <- makeFullTreeFromPTree(ptree);#Starting point 
   mcmc <- 1000 
   record <- vector('list',mcmc)
   pTTree <- probTTree(ttreeFromFullTree(fulltree),R) 
@@ -41,7 +47,7 @@ main = function() {
     record[[i]]$neg <- neg 
     record[[i]]$source <- fulltree[nrow(fulltree)-1,4] 
     #Metropolis update for transmission tree 
-    fulltree2 <- proposal(fulltree) 
+    fulltree2 <- .proposal(fulltree) 
     pTTree2 <- probTTree(ttreeFromFullTree(fulltree2),R) 
     pPTree2 <- probPTreeGivenTTree(fulltree2,neg) 
     if (log(runif(1)) < pTTree2 + pPTree2-pTTree-pPTree)  { 
@@ -60,4 +66,5 @@ main = function() {
       pPTree <- pPTree2 
     } 
   } 
+  return(record)
 }

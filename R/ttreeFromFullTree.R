@@ -1,5 +1,7 @@
+#' Extracts transmission tree from a combined phylogenetic/transmission tree 
+#' @param fulltree Combined tree
+#' @return transmission tree
 ttreeFromFullTree = function(fulltree)  {
-  #Takes in a fulltree and extracts the ttree 
   host <- fulltree[ ,4]
   ttree <- fulltree[fulltree[ ,2] == 0&fulltree[ ,3] == 0,1] 
   n <- length(ttree) 
