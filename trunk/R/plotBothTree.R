@@ -1,8 +1,6 @@
+#' Plot both phylogenetic and transmission trees using colors on the phylogeny
+#' @param tree Combined phylogenetic/transmission tree
 plotBothTree = function(tree)  {
-  #Plot both phylogenetic and transmission trees on the same figure 
-  #The second parameter indicates whether to show stars for transmission 
-  #events(method=0),color branches according to host(method=1)or use 
-  #boxes to represent hosts(method=2) 
   n <- sum(tree[ ,2]+tree[ ,3] == 0) 
   plot.new()
   method <- 1 

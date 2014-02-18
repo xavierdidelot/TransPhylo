@@ -1,6 +1,9 @@
+#' Calculates the log-probability of a transmission tree
+#' (assumes w is Gamma(2,1)) 
+#' @param ttree Transmission tree
+#' @param R Basic reproduction number
+#' @return Probability of the transmission tree
 probTTree = function(ttree,R)  {
-  #Calculate the log-probability of a transmission tree given R 
-  #Assume w is Gamma(2,1) 
   prob <- 0 
   for (i in (1:nrow(ttree))) { 
     prob <- prob + log(dgamma((ttree[i,2]-ttree[i,1]), shape = 2, scale = 1)) 
