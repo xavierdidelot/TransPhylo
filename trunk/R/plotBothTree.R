@@ -7,8 +7,6 @@ plotBothTree = function(tree)  {
   method <- 1 
   par(yaxt='n',bty='n')
   plot(0,0,xlim=c(min(tree[,1]),max(tree[,1])),ylim=c(0,n+1),xlab='',ylab='')
-  lines(c(10,11),c(10,11))
-  lines(c(10,11),c(11,10))
   host <- tree[ ,4] 
   palette(rainbow(n))#Need as many unique colors as there are hosts
   
