@@ -1,8 +1,10 @@
 #' Simulate an outbreak
-#' @param neg the within-host effective population size (Ne) times  generation duration (g)
 #' @param R the basic reproduction number
+#' @param neg the within-host effective population size (Ne) times  generation duration (g)
 #' @return Combined phylogenetic and transmission tree
-simulateOutbreak = function(R,neg) {
+#' @examples
+#' plotBothTree(simulateOutbreak())
+simulateOutbreak = function(R=1,neg=0.25) {
   #Create a transmission tree with ten individuals
   n<-1
   while (n!=10) {

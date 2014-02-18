@@ -2,18 +2,21 @@
 \alias{simulateOutbreak}
 \title{Simulate an outbreak}
 \usage{
-  simulateOutbreak(R, neg)
+  simulateOutbreak(R = 1, neg = 100/365)
 }
 \arguments{
+  \item{R}{the basic reproduction number}
+
   \item{neg}{the within-host effective population size (Ne)
   times generation duration (g)}
-
-  \item{R}{the basic reproduction number}
 }
 \value{
   Combined phylogenetic and transmission tree
 }
 \description{
   Simulate an outbreak
+}
+\examples{
+plotBothTree(simulateOutbreak())
 }
 

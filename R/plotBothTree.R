@@ -1,8 +1,9 @@
 #' Plot both phylogenetic and transmission trees using colors on the phylogeny
 #' @param tree Combined phylogenetic/transmission tree
+#' @examples
+#' plotBothTree(simulateOutbreak())
 plotBothTree = function(tree)  {
   n <- sum(tree[ ,2]+tree[ ,3] == 0) 
-  plot.new()
   method <- 1 
   par(yaxt='n',bty='n')
   plot(0,0,xlim=c(min(tree[,1]),max(tree[,1])),ylim=c(0,n+1),xlab='',ylab='')

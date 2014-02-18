@@ -11,4 +11,7 @@
   Plot both phylogenetic and transmission trees using
   colors on the phylogeny
 }
+\examples{
+plotBothTree(simulateOutbreak())
+}
 
