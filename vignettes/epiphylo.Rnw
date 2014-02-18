@@ -26,7 +26,7 @@ plotBothTree(simu)
 @
 \end{center}
 
-It is also possible to extract the phylogenetic tree and convert it into a phylo object from the ape package:
+The phylogenetic tree can be extracted and converted into a phylo object from the ape package:
 
 <<fig=TRUE>>=
 library(ape)
@@ -35,6 +35,11 @@ p<-phyloFromPtree(ptree)
 plot(p)
 @
 
+The transmission tree can be extract and plotted separately from the phylogeny:
 
+<<fig=TRUE>>=
+ttree<-ttreeFromFullTree(simu)
+plotTTree(ttree)
+@
 
 \end{document}

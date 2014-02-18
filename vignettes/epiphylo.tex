@@ -28,7 +28,7 @@ This simulation contains both the transmission tree between infected hosts and t
 \includegraphics{epiphylo-003}
 \end{center}
 
-It is also possible to extract the phylogenetic tree and convert it into a phylo object from the ape package:
+The phylogenetic tree can be extracted and converted into a phylo object from the ape package:
 
 \begin{Schunk}
 \begin{Sinput}
@@ -40,6 +40,14 @@ It is also possible to extract the phylogenetic tree and convert it into a phylo
 \end{Schunk}
 \includegraphics{epiphylo-004}
 
+The transmission tree can be extract and plotted separately from the phylogeny:
 
+\begin{Schunk}
+\begin{Sinput}
+> ttree<-ttreeFromFullTree(simu)
+> plotTTree(ttree)
+\end{Sinput}
+\end{Schunk}
+\includegraphics{epiphylo-005}
 
 \end{document}
