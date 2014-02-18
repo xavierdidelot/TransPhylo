@@ -11,6 +11,7 @@ Encoding: UTF-8
 
 RnwWeave: Sweave
 LaTeX: pdfLaTeX
+RootDocument: vignettes/epiphylo.Rnw
 
 BuildType: Package
 PackageInstallArgs: --no-multiarch --with-keep.source
