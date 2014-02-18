@@ -36,7 +36,7 @@ plotBothTree = function(tree)  {
   MySort <- sort(ys,index.return = TRUE); ys <- MySort$ix 
   ys[ys] <- 1:length(ys) 
   ylims <- cbind(ys,ys)
-  ylims <- rbind(ylims,matrix(0,nrow(truth)-n,2))
+  ylims <- rbind(ylims,matrix(0,nrow(tree)-n,2))
   for (i in ((n+1):nrow(tree))) { 
     f <- 1 + which( tree[i,2:3] > 0 ) 
     ylims[i,1] <- min(ylims[tree[i,f],1])
