@@ -2,7 +2,7 @@
 \alias{simulateOutbreak}
 \title{Simulate an outbreak}
 \usage{
-  simulateOutbreak(R = 1, neg = 100/365)
+  simulateOutbreak(R = 1, neg = 0.25)
 }
 \arguments{
   \item{R}{the basic reproduction number}

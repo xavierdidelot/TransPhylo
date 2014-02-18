@@ -10,7 +10,7 @@
 \maketitle
 
 
-A pathogen has an effective within-host population size of $N_e=100$ and a generation time $g=1$ day, so that the within-host coalescent rate is $N_e g=100/365$ years. The basic reproduction number is $R=1$. To following command simulates an outbreak of this pathogen: 
+A pathogen has an effective within-host population size of $N_e=100$ and a generation time $g=1$ day, so that $N_e g=100/365$ years. The basic reproduction number is $R=1$. To following command simulates an outbreak of this pathogen: 
 \begin{Schunk}
 \begin{Sinput}
 > simu <- simulateOutbreak(R=1,neg=100/365)
@@ -27,6 +27,18 @@ This simulation contains both the transmission tree between infected hosts and t
 \end{Schunk}
 \includegraphics{epiphylo-003}
 \end{center}
+
+It is also possible to extract the phylogenetic tree and convert it into a phylo object from the ape package:
+
+\begin{Schunk}
+\begin{Sinput}
+> library(ape)
+> ptree<-ptreeFromFullTree(simu)
+> p<-phyloFromPtree(ptree)
+> plot(p)
+\end{Sinput}
+\end{Schunk}
+\includegraphics{epiphylo-004}
 
 
 
