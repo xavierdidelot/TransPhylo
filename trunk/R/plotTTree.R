@@ -1,5 +1,5 @@
 #' Plot a transmission tree
-#' @param Transmission tree
+#' @param ttree Transmission tree
 plotTTree = function(ttree) {
   n=nrow(ttree)
   #Determine ys 

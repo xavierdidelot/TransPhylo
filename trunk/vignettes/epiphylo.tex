@@ -6,9 +6,12 @@
 \usepackage{Sweave}
 \begin{document}
 \input{epiphylo-concordance}
+%\VignetteIndexEntry{Using epiphylo}
 
 \maketitle
 
+
+\section{Simulation}
 
 A pathogen has an effective within-host population size of $N_e=100$ and a generation time $g=1$ day, so that $N_e g=100/365$ years. The basic reproduction number is $R=1$. To following command simulates an outbreak of this pathogen: 
 \begin{Schunk}
@@ -28,6 +31,16 @@ This simulation contains both the transmission tree between infected hosts and t
 \includegraphics{epiphylo-003}
 \end{center}
 
+The transmission tree can be extracted and plotted separately from the phylogeny:
+
+\begin{Schunk}
+\begin{Sinput}
+> ttree<-ttreeFromFullTree(simu)
+> plotTTree(ttree)
+\end{Sinput}
+\end{Schunk}
+\includegraphics{epiphylo-004}
+
 The phylogenetic tree can be extracted and converted into a phylo object from the ape package:
 
 \begin{Schunk}
@@ -38,16 +51,37 @@ The phylogenetic tree can be extracted and converted into a phylo object from th
 > plot(p)
 \end{Sinput}
 \end{Schunk}
-\includegraphics{epiphylo-004}
+\includegraphics{epiphylo-005}
 
-The transmission tree can be extract and plotted separately from the phylogeny:
+\section{Inference of transmission tree given a phylogeny}
+
+A phylo object can be turned  into a phylogenetic tree and complemented with a wild guess at the transmission tree in order to provide the starting point of the MCMC procedure:
 
 \begin{Schunk}
 \begin{Sinput}
-> ttree<-ttreeFromFullTree(simu)
-> plotTTree(ttree)
+> ptree<-ptreeFromPhylo(p)
+> full<-makeFullTreeFromPTree(ptree)
+> plotBothTree(full)
 \end{Sinput}
 \end{Schunk}
-\includegraphics{epiphylo-005}
+\includegraphics{epiphylo-006}
+
+The MCMC procedure to infer the transmission tree given the phylogenetic tree can be run as follows:
+
+\begin{Schunk}
+\begin{Sinput}
+> record<-inferTTree(ptree,mcmcIterations=100)
+\end{Sinput}
+\end{Schunk}
+
+This returns a record of all MCMC iterations. Let's see what the transmission tree looked like at the end of the MCMC:
+
+\begin{Schunk}
+\begin{Sinput}
+> lastIteration<-record[[length(record)]]
+> plotBothTree(lastIteration$tree)
+\end{Sinput}
+\end{Schunk}
+\includegraphics{epiphylo-008}
 
 \end{document}

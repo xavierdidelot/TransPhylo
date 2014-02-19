@@ -5,7 +5,7 @@
   plotTTree(ttree)
 }
 \arguments{
-  \item{Transmission}{tree}
+  \item{ttree}{Transmission tree}
 }
 \description{
   Plot a transmission tree

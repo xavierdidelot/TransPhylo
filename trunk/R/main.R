@@ -1,13 +1,14 @@
 #' Simulate an outbreak
 #' @param R the basic reproduction number
 #' @param neg the within-host effective population size (Ne) times  generation duration (g)
+#' @param ninf number of infected individuals
 #' @return Combined phylogenetic and transmission tree
 #' @examples
 #' plotBothTree(simulateOutbreak())
-simulateOutbreak = function(R=1,neg=0.25) {
+simulateOutbreak = function(R=1,neg=0.25,ninf=10) {
   #Create a transmission tree with ten individuals
   n<-1
-  while (n!=10) {
+  while (n!=ninf) {
     ttree<-makeTTree(R)[[1]]
     n<-nrow(ttree)
     if (is.null(ttree)) {n<-0}
@@ -28,17 +29,17 @@ simulateOutbreak = function(R=1,neg=0.25) {
 
 #' Infer transmission tree given a phylogenetic tree
 #' @param ptree Phylogenetic tree
+#' @param mcmcIterations Number of MCMC iterations to run the algorithm for
 #' @return posterior sample set of transmission trees
-mcmc = function(ptree) {
+inferTTree = function(ptree,mcmcIterations=1000) {
   #MCMC algorithm
   neg <- 100/365
   R <- 1
   fulltree <- makeFullTreeFromPTree(ptree);#Starting point 
-  mcmc <- 1000 
-  record <- vector('list',mcmc)
+  record <- vector('list',mcmcIterations)
   pTTree <- probTTree(ttreeFromFullTree(fulltree),R) 
   pPTree <- probPTreeGivenTTree(fulltree,neg) 
-  for (i in 1:mcmc) { 
+  for (i in 1:mcmcIterations) { 
     if (i%%100 == 0)  { 
       print(i) 
     } 
