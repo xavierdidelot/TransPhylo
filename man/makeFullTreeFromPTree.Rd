@@ -2,16 +2,16 @@
 \alias{makeFullTreeFromPTree}
 \title{Deterministically create a transmission tree compatible with the provided phylogenetic tree}
 \usage{
-  makeFullTreeFromPTree(tree)
+makeFullTreeFromPTree(tree)
 }
 \arguments{
   \item{tree}{phylogenetic tree}
 }
 \value{
-  A non-zero probability phylogenetic+transmission tree
+A non-zero probability phylogenetic+transmission tree
 }
 \description{
-  Deterministically create a transmission tree compatible
-  with the provided phylogenetic tree
+Deterministically create a transmission tree compatible
+with the provided phylogenetic tree
 }
 

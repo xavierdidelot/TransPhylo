@@ -2,17 +2,17 @@
 \alias{ptreeFromPhylo}
 \title{Converts an ape phylo object into a phylogenetic tree}
 \usage{
-  ptreeFromPhylo(tr)
+ptreeFromPhylo(tr)
 }
 \arguments{
   \item{tr}{phylo object}
 }
 \value{
-  phylogenetic tree
+phylogenetic tree
 
-  phylo object
+phylo object
 }
 \description{
-  Converts an ape phylo object into a phylogenetic tree
+Converts an ape phylo object into a phylogenetic tree
 }
 
