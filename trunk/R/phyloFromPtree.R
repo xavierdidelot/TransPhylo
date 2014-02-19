@@ -4,7 +4,7 @@
 phyloFromPtree <- function(ptree) {
   n<-ceiling(nrow(ptree)/2)
   tr<-list()
-  tr$Nnode<-n
+  tr$Nnode<-n-1
   tr$tip.label<-as.character(1:n)
   tr$edge<-matrix(0,n*2-2,2)
   tr$edge.length<-rep(0,n*2-2)

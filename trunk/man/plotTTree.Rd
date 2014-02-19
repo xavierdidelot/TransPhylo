@@ -2,12 +2,12 @@
 \alias{plotTTree}
 \title{Plot a transmission tree}
 \usage{
-  plotTTree(ttree)
+plotTTree(ttree)
 }
 \arguments{
   \item{ttree}{Transmission tree}
 }
 \description{
-  Plot a transmission tree
+Plot a transmission tree
 }
 

@@ -3,7 +3,7 @@
 #' @return phylogenetic tree
 #' @return phylo object
 ptreeFromPhylo <- function(tr) {
-  n<-tr$Nnode
+  n<-tr$Nnode+1
   ed<-tr$edge
   le<-tr$edge.length
   tra<-c(1:n,(2*n-1):(n+1))
