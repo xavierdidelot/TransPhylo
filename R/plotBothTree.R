@@ -6,7 +6,7 @@ plotBothTree = function(tree)  {
   n <- sum(tree[ ,2]+tree[ ,3] == 0) 
   method <- 1 
   par(yaxt='n',bty='n')
-  plot(0,0,xlim=c(min(tree[,1]),max(tree[,1])),ylim=c(0,n+1),xlab='',ylab='')
+  plot(0,0,type='l',xlim=c(min(tree[,1]),max(tree[,1])),ylim=c(0,n+1),xlab='',ylab='')
   host <- tree[ ,4] 
   palette(rainbow(n))#Need as many unique colors as there are hosts
   
