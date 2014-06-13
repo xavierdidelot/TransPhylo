@@ -2,7 +2,7 @@
 \alias{simulateOutbreak}
 \title{Simulate an outbreak}
 \usage{
-simulateOutbreak(R = 1, neg = 0.25, ninf = 10)
+simulateOutbreak(R = 1, neg = 0.25, ninf = 10, pi = 0.5)
 }
 \arguments{
   \item{R}{the basic reproduction number}
@@ -11,6 +11,8 @@ simulateOutbreak(R = 1, neg = 0.25, ninf = 10)
   times generation duration (g)}
 
   \item{ninf}{number of infected individuals}
+
+  \item{pi}{proportion of sampled infected individuals}
 }
 \value{
 Combined phylogenetic and transmission tree
