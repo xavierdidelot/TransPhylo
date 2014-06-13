@@ -15,7 +15,6 @@ simulateOutbreak = function(R=1,neg=0.25,ninf=10,pi=0.5) {
     if (is.null(ttree)) {nsam<-0;nh=0} else {nsam<-length(which(!is.na(ttree[,2])));nh=nrow(ttree)-nsam}
   }
   n<-nsam+nh
-  plotTTree(ttree)
   
   #Create a within-host phylogenetic tree for each infected host
   wtree<-vector('list',n)
