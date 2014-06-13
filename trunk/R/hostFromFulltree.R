@@ -3,27 +3,29 @@
   fathers <- rep(0, nrow(fulltree) + 1) 
   fathers[fulltree[ ,2] + 1] <- 1:nrow(fulltree) 
   fathers[fulltree[ ,3] + 1] <- 1:nrow(fulltree) 
-  fathers <- fathers[seq(2,length(fathers),1)] 
+  fathers <- fathers[-1] 
   host <- rep(0, nrow(fulltree)) 
-  n <- sum(fulltree[ ,2] == 0&fulltree[ ,3] == 0) 
-  for (i in (1:n)) { 
+  nsam <- sum(fulltree[ ,2] == 0&fulltree[ ,3] == 0) 
+  for (i in (1:nsam)) { 
     j <- i 
     while (1)  { 
       host[j] <- i 
       j <- fathers[j] 
-      if (fulltree[j,3] == 0)  { 
-        break 
-      } 
+      if (fulltree[j,3] == 0) break 
     } 
   } 
-  f <- n + which( fulltree[seq(n + 1,nrow(fulltree)-1,1),3] == 0 )
-  for (i in (seq(1,length(f),1))) { 
+
+  dispo=nsam+1
+  f <- which( fulltree[,3] == 0 & fulltree[,2]>0 & fathers>0 ) #transmission events other than root
+  for (i in 1:length(f)) { 
     j <- f[i] 
     tocol <- c() 
-    while (host[j] == 0)  { 
+    while (fulltree[fathers[j],3]>0&&fathers[fathers[j]]>0)  { 
       tocol <- c(tocol,j) 
       j <- fathers[j] 
+      #if (fulltree[j,3]==0||fathers[j]==0) break
     } 
+    if (host[j]==0) {host[j]=dispo;dispo=dispo+1}
     host[tocol] <- host[j] 
   } 
   return(host)
