@@ -12,7 +12,7 @@ simulateOutbreak(R = 1, neg = 0.25, ninf = 10, pi = 0.5)
 
   \item{ninf}{number of infected individuals}
 
-  \item{pi}{proportion of sampled infected individuals}
+  \item{pi}{probability of sampling an infected individual}
 }
 \value{
 Combined phylogenetic and transmission tree

@@ -11,7 +11,7 @@ plotTTree = function(ttree) {
   }
   par(yaxt='n',bty='n')
   mi=min(ttree[,1])
-  ma=max(ttree[,2])
+  ma=max(ttree[!is.na(ttree[,2]),2])
   plot(0,0,xlim=c(mi,ma+(ma-mi)*0.05),ylim=c(-1,n+1),xlab='',ylab='')
   for (i in 1:n) {
     lines(c(ttree[i,1],ma),c(ys[i],ys[i]))
