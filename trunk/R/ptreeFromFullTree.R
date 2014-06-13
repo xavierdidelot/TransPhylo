@@ -4,7 +4,7 @@
 ptreeFromFullTree = function(tree)  {
   n <- sum(tree[ ,2] + tree[ ,3] == 0) 
   tra <- n + 1 
-  while (tra < nrow(tree))  { 
+  while (tra <= nrow(tree))  { #Removing transmission events from the tree one by one
     if (tree[tra,3] != 0)  { 
       tra <- tra + 1 
       next 
@@ -15,9 +15,9 @@ ptreeFromFullTree = function(tree)  {
     f <- which( t > tra ) 
     t[f] <- t[f]-1 
     tree[ ,2:3] <- t 
-    tree <- tree[setdiff(1:nrow(tree),tra), ] 
+    tree <- tree[-tra, ] 
     tra <- n + 1 
   } 
-  ptree <- tree[1:(nrow(tree)-1),1:(ncol(tree)-1)] 
+  ptree <- tree[,1:(ncol(tree)-1)] 
   return(ptree)
 } 

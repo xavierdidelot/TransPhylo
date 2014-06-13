@@ -16,7 +16,7 @@
 A pathogen has an effective within-host population size of $N_e=100$ and a generation time $g=1$ day, so that $N_e g=100/365$ years. The basic reproduction number is $R=1$. To following command simulates an outbreak of this pathogen: 
 \begin{Schunk}
 \begin{Sinput}
-> simu <- simulateOutbreak(R=1,neg=100/365)
+> simu <- simulateOutbreak(R=1,neg=100/365,pi=0.5)
 \end{Sinput}
 \end{Schunk}
 
@@ -48,6 +48,11 @@ The phylogenetic tree can be extracted and converted into a phylo object from th
 > library(ape)
 > ptree<-ptreeFromFullTree(simu)
 > p<-phyloFromPtree(ptree)
+\end{Sinput}
+\begin{Soutput}
+ [1]  1  2  3  4  5  6  7  8  9 10 12 13 11 14 15 16 17 18 19
+\end{Soutput}
+\begin{Sinput}
 > plot(p)
 \end{Sinput}
 \end{Schunk}
