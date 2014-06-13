@@ -3,16 +3,18 @@
 #' @examples
 #' plotBothTree(simulateOutbreak())
 plotBothTree = function(tree)  {
-  n <- sum(tree[ ,2]+tree[ ,3] == 0) 
-  method <- 1 
+  nsam <- sum(tree[ ,2]+tree[ ,3] == 0) 
+  nh <- nrow(tree)-3*nsam+1
+  ntot <- nsam+nh
   par(yaxt='n',bty='n')
-  plot(0,0,type='l',xlim=c(min(tree[,1]),max(tree[,1])),ylim=c(0,n+1),xlab='',ylab='')
+  plot(0,0,type='l',xlim=c(min(tree[,1]),max(tree[,1])),ylim=c(0,nsam+1),xlab='',ylab='')
   host <- tree[ ,4] 
-  palette(rainbow(n))#Need as many unique colors as there are hosts
+  palette(rainbow(ntot))#Need as many unique colors as there are hosts
   
-  #Determine ys 
-  ys <- matrix(0, n, 1) 
-  todo <- cbind(nrow(tree),0,0.5,1);#Matrix of nodes to do,with associated starting x and y coordinates and scale 
+  #Determine ys for leaves
+  root<-which(host==0)
+  ys <- matrix(0, nsam, 1) 
+  todo <- cbind(root,0,0.5,1);#Matrix of nodes to do,with associated starting x and y coordinates and scale 
   while (nrow(todo) > 0)  { 
     w <- todo[1,1] 
     x <- todo[1,2] 
@@ -28,25 +30,28 @@ plotBothTree = function(tree)  {
       #Binary node 
       todo <- rbind(todo,cbind(tree[w,2],tree[w,1],y + scale/2,scale/2,deparse.level=0),cbind(tree[w,3],tree[w,1],y-scale/2,scale/2,deparse.level=0))
     } 
-    todo <- rbind(todo[-1,]);
+    todo <- rbind(todo[-1,])
   } 
   MySort <- sort(ys,index.return = TRUE); ys <- MySort$ix 
   ys[ys] <- 1:length(ys) 
-  ylims <- cbind(ys,ys)
-  ylims <- rbind(ylims,matrix(0,nrow(tree)-n,2))
-  for (i in ((n+1):nrow(tree))) { 
-    f <- 1 + which( tree[i,2:3] > 0 ) 
-    ylims[i,1] <- min(ylims[tree[i,f],1])
-    ylims[i,2] <- max(ylims[tree[i,f],2])
-    ys[i] <- mean(ys[tree[i,f]])
+  
+  #Determine ys for non-leaves
+  for (i in ((nsam+1):nrow(tree))) { 
+    children <- c()
+    todo <- i
+    while (length(todo)>0) {
+      children=c(children,todo[1])
+      todo=c(todo[-1],setdiff(tree[todo[1],2:3],0))
+    }
+    ys[i] <- mean(ys[children[which(children<=nsam)]])
   } 
   
-  todo <- cbind(nrow(tree),tree[nrow(tree),1]);
+  todo <- cbind(root,tree[root,1]);
   while (nrow(todo) > 0)  { 
     w <- todo[1,1] 
     x <- todo[1,2] 
     y <- ys[w] 
-    col=host[w];
+    col=host[w]
     if (tree[w,2] == 0 && tree[w,3] == 0)  { 
       #Leaf node 
       lines(c(x,tree[w,1]),c(y,y),col=col,lwd=2) 
