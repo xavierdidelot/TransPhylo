@@ -4,10 +4,13 @@
 ttreeFromFullTree = function(fulltree)  {
   host <- fulltree[ ,4]
   ttree <- fulltree[fulltree[ ,2] == 0&fulltree[ ,3] == 0,1] 
-  n <- length(ttree) 
-  ttree <- cbind(matrix(0, length(ttree), 1),ttree,matrix(0, length(ttree), 1),deparse.level=0) 
-  for (i in (1:n)) { 
-    j <- i 
+  nsam <- length(ttree) 
+  nh <- nrow(fulltree)-3*nsam+1
+  ntot <- nsam+nh
+  ttree <- c(ttree,rep(NA,nh))
+  ttree <- cbind(matrix(0, ntot, 1),ttree,matrix(0, ntot, 1),deparse.level=0) 
+  for (i in (1:ntot)) { 
+    j <- min(which(host==i)) 
     while (host[j] == i)  { 
       j <- which( fulltree[ ,2] == j | fulltree[ ,3] == j ) 
     } 
