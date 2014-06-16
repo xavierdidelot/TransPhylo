@@ -36,10 +36,9 @@
     intnodes <- rbind(tree,intnodes) 
   } 
   tree <- rbind(leaves,intnodes) 
-  n<-nsam
-  MySort <- sort(tree[seq(n + 1,nrow(tree),1),1],decreasing=TRUE,index.return = TRUE); ind <- MySort$ix 
-  for (i in (n+1):nrow(tree)) for (j in (2:3)) if (tree[i,j] > n) tree[i,j] <- n + which( ind == tree[i,j]-n ) 
-  tree <- tree[c(1:n,n + ind), ] 
+  MySort <- sort(tree[(nsam+1):nrow(tree),1],decreasing=TRUE,index.return = TRUE); ind <- MySort$ix 
+  for (i in (nsam+1):nrow(tree)) for (j in (2:3)) if (tree[i,j] > nsam) tree[i,j] <- nsam + which( ind == tree[i,j]-nsam ) 
+  tree <- tree[c(1:nsam,nsam + ind), ] 
   tree <- cbind(tree,.hostFromFulltree(tree)) 
   return(tree)
 } 
