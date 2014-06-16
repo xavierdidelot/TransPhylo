@@ -3,7 +3,7 @@
 #' @param neg Within-host coalescent rate
 #' @return Probability of phylogeny given transmission tree
 probPTreeGivenTTree = function(fulltree,neg)  {
-  n <- sum(fulltree[ ,2] == 0&fulltree[ ,3] == 0) 
+  n <- max(fulltree[,4])
   prob <- 0 
   fathers <- rep(0, nrow(fulltree) + 1) 
   fathers[fulltree[ ,2] + 1] <- 1:nrow(fulltree) 
