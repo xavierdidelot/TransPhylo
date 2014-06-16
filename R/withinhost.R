@@ -1,9 +1,7 @@
-#Input=times at which N samples are taken(counted forward in time from infection time) 
-#Output=array of size(2N)*3 where each row is a node,the first column indicate the date of the node and the last two 
-#columns indicate the two children 
-#This array has internal nodes sorted in order of most recent to most ancient node(and remains so during the algorithm) 
-#The last node corresponds to infection time and only has one child 
-#neg is the product of the within-host effective population size and the generation duration in days 
+# Simulates the within-host coalescent model
+# @param times times at which N samples are taken(counted forward in time from infection time) 
+# @param neg is the product of the within-host effective population size and the generation duration in days 
+# @return array of size(2N)*3 where each row is a node,the first column indicate the date of the node and the last two columns indicate the two children. This array has internal nodes sorted in order of most recent to most ancient node(and remains so during the algorithm). The last node corresponds to infection time and only has one child 
 .withinhost = function(times,neg)  {
   prob <- 0 
   MySort <- sort(times,decreasing=TRUE,index.return = TRUE); tim <- MySort$x; ind <- MySort$ix 
@@ -51,3 +49,4 @@
 } 
 
 .seqML <- function(from, to, by=1) {if (from > to) integer(0) else seq.int(from, to, by)}
+

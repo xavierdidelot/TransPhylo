@@ -71,15 +71,15 @@
   } 
   
   #Reorder nodes chronologically 
-  MySort <- sort(fulltree[seq(from = n + 1,to = nrow(fulltree),by = 1),1],decreasing=TRUE,index.return = TRUE); ind <- MySort$ix 
-  for (i in seq(n+1,nrow(fulltree),1)) { 
-    for (j in 2:3) { 
-      if (fulltree[i,j] > n)  { 
-        fulltree[i,j] <- n + which( ind == fulltree[i,j]-n ) 
-      } 
-    } 
-  } 
-  fulltree <- fulltree[c(1:n,n+ind), ] 
+  #MySort <- sort(fulltree[seq(from = n + 1,to = nrow(fulltree),by = 1),1],decreasing=TRUE,index.return = TRUE); ind <- MySort$ix 
+  #for (i in seq(n+1,nrow(fulltree),1)) { 
+  #  for (j in 2:3) { 
+  #    if (fulltree[i,j] > n)  { 
+  #      fulltree[i,j] <- n + which( ind == fulltree[i,j]-n ) 
+  #    } 
+  #  } 
+  #} 
+  #fulltree <- fulltree[c(1:n,n+ind), ] 
   res <- cbind(fulltree[ ,1:3],.hostFromFulltree(fulltree)) 
   return(res)
 } 

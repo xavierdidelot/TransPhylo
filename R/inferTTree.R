@@ -6,9 +6,10 @@ inferTTree = function(ptree,mcmcIterations=1000) {
   #MCMC algorithm
   neg <- 100/365
   R <- 1
+  pi <- 0.5
   fulltree <- makeFullTreeFromPTree(ptree);#Starting point 
   record <- vector('list',mcmcIterations)
-  pTTree <- probTTree(ttreeFromFullTree(fulltree),R) 
+  pTTree <- probTTree(ttreeFromFullTree(fulltree),R,pi) 
   pPTree <- probPTreeGivenTTree(fulltree,neg) 
   for (i in 1:mcmcIterations) { 
     if (i%%100 == 0)  { 
@@ -22,7 +23,7 @@ inferTTree = function(ptree,mcmcIterations=1000) {
     record[[i]]$source <- fulltree[nrow(fulltree)-1,4] 
     #Metropolis update for transmission tree 
     fulltree2 <- .proposal(fulltree) 
-    pTTree2 <- probTTree(ttreeFromFullTree(fulltree2),R) 
+    pTTree2 <- probTTree(ttreeFromFullTree(fulltree2),R,pi) 
     pPTree2 <- probPTreeGivenTTree(fulltree2,neg) 
     if (log(runif(1)) < pTTree2 + pPTree2-pTTree-pPTree)  { 
       fulltree <- fulltree2 
