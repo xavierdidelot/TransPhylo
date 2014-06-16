@@ -3,18 +3,29 @@
 plotTTree = function(ttree) {
   n=nrow(ttree)
   #Determine ys 
-  ys <- matrix(0, n, 1) 
-  for (i in 1:n) {
-    if (ttree[i,3]==0) {next}
-    ys[which(ys>ys[ttree[i,3]])]=ys[which(ys>ys[ttree[i,3]])]+1
-    ys[i]=ys[ttree[i,3]]+1
+  ys <- rep(0, n)
+  scale <- rep(1,n)
+  todo=c(which(ttree[,3]==0))
+  while (length(todo)>0) {
+    f=which(ttree[,3]==todo[1])
+    o=rank(-ttree[f,1])
+    f[o]=f
+    for (i in f) {ys[i]=ys[todo[1]]+scale[todo[1]]*which(f==i)/(length(f)+1);scale[i]=scale[todo[1]]/(length(f)+1);todo=c(todo,i)}
+    todo=todo[-1]
   }
+  ys=rank(ys)
   par(yaxt='n',bty='n')
   mi=min(ttree[,1])
   ma=max(ttree[!is.na(ttree[,2]),2])
-  plot(0,0,xlim=c(mi,ma+(ma-mi)*0.05),ylim=c(-1,n+1),xlab='',ylab='')
+  xstep=(ma-mi)/2000
+  plot(c(),c(),xlim=c(mi-(ma-mi)*0.05,ma+(ma-mi)*0.05),ylim=c(0,n+1),xlab='',ylab='')
+  maxcol=max(dgamma(seq(mi,ma,xstep),2,1))
   for (i in 1:n) {
-    lines(c(ttree[i,1],ma),c(ys[i],ys[i]))
+    as=seq(ttree[i,1],ma,xstep)
+    bs=rep(ys[i],length(as))
+    cs=abs((maxcol-dgamma(as-ttree[i,1],2,1))/maxcol)
+    cs=gray(cs)
+    segments(as,bs,x1=as+xstep,col=cs)
     points(ttree[i,2],ys[i],col = 'red') 
     text(ma+(ma-mi)*0.05,ys[i],i)
     if (ttree[i,3]==0) {next}

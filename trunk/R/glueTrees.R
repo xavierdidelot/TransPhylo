@@ -35,7 +35,11 @@
     } 
     intnodes <- rbind(tree,intnodes) 
   } 
-  fulltree <- rbind(leaves,intnodes) 
-  fulltree <- cbind(fulltree,.hostFromFulltree(fulltree)) 
-  return(fulltree)
+  tree <- rbind(leaves,intnodes) 
+  n<-nsam
+  MySort <- sort(tree[seq(n + 1,nrow(tree),1),1],decreasing=TRUE,index.return = TRUE); ind <- MySort$ix 
+  for (i in (n+1):nrow(tree)) for (j in (2:3)) if (tree[i,j] > n) tree[i,j] <- n + which( ind == tree[i,j]-n ) 
+  tree <- tree[c(1:n,n + ind), ] 
+  tree <- cbind(tree,.hostFromFulltree(tree)) 
+  return(tree)
 } 
