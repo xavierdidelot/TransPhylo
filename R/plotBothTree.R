@@ -32,8 +32,7 @@ plotBothTree = function(tree)  {
     } 
     todo <- rbind(todo[-1,])
   } 
-  MySort <- sort(ys,index.return = TRUE); ys <- MySort$ix 
-  ys[ys] <- 1:length(ys) 
+  ys<-rank(ys)
   
   #Determine ys for non-leaves
   for (i in ((nsam+1):nrow(tree))) { 

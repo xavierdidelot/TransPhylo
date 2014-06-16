@@ -61,11 +61,21 @@ The MCMC procedure to infer the transmission tree given the phylogenetic tree ca
 record<-inferTTree(ptree,mcmcIterations=100)
 @
 
-This returns a record of all MCMC iterations. Let's see what the transmission tree looked like at the end of the MCMC:
+This returns a record of all MCMC iterations. This is what the transmission tree looks like at the end of the MCMC:
 
 <<fig=TRUE>>=
 lastIteration<-record[[length(record)]]
 plotBothTree(lastIteration$tree)
+@
+
+Traces of the MCMC:
+
+<<echo=FALSE,fig=TRUE>>=
+par(mfrow=c(2,2))
+plot(sapply(record,function(x) x$pTTree+x$pPTree),ylab='Posterior probability',xlab='MCMC iterations',type='l')
+plot(sapply(record,function(x) x$pi),ylab='Sampling proportion pi',xlab='MCMC iterations',type='l')
+plot(sapply(record,function(x) x$neg),ylab='Within-host coalescent rate Ne*g',xlab='MCMC iterations',type='l')
+plot(sapply(record,function(x) x$R),ylab='Basic reproduction number R',xlab='MCMC iterations',type='l')
 @
 
 \end{document}

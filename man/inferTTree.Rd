@@ -2,13 +2,30 @@
 \alias{inferTTree}
 \title{Infer transmission tree given a phylogenetic tree}
 \usage{
-inferTTree(ptree, mcmcIterations = 1000)
+inferTTree(ptree, mcmcIterations = 1000, startNeg = 100/365, startR = 1,
+  startPi = 0.5, updateNeg = TRUE, updateR = TRUE, updatePi = TRUE)
 }
 \arguments{
   \item{ptree}{Phylogenetic tree}
 
   \item{mcmcIterations}{Number of MCMC iterations to run
   the algorithm for}
+
+  \item{startNeg}{Starting value of within-host coalescent
+  parameter Ne*g}
+
+  \item{startR}{Starting value of basic reproduction number
+  R}
+
+  \item{startPi}{Starting value of sampling proportion pi}
+
+  \item{updateNeg}{Whether of not to update the parameter
+  Ne*g}
+
+  \item{updateR}{Whether or not to update the parameter R}
+
+  \item{updatePi}{Whether or not to update the parameter
+  pi}
 }
 \value{
 posterior sample set of transmission trees
