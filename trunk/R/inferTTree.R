@@ -7,8 +7,13 @@
 #' @param updateNeg Whether of not to update the parameter Ne*g
 #' @param updateR Whether or not to update the parameter R
 #' @param updatePi Whether or not to update the parameter pi
+#' @param testing Whether or not to apply the test mode without likelihood
 #' @return posterior sample set of transmission trees
-inferTTree = function(ptree,mcmcIterations=1000,startNeg=100/365,startR=1,startPi=0.5,updateNeg=TRUE,updateR=TRUE,updatePi=TRUE) {
+inferTTree = function(ptree,mcmcIterations=1000,startNeg=100/365,startR=1,startPi=0.5,updateNeg=TRUE,updateR=TRUE,updatePi=TRUE,testing=FALSE) {
+  if (testing) {
+    probPTreeGivenTTree = function(fulltree,neg) {return(0)} 
+    #probTTree = function(ttree,R,pi) {return(0)}
+  }
   #MCMC algorithm
   neg <- startNeg
   R <- startR

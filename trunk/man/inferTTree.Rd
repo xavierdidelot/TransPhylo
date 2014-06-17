@@ -3,7 +3,8 @@
 \title{Infer transmission tree given a phylogenetic tree}
 \usage{
 inferTTree(ptree, mcmcIterations = 1000, startNeg = 100/365, startR = 1,
-  startPi = 0.5, updateNeg = TRUE, updateR = TRUE, updatePi = TRUE)
+  startPi = 0.5, updateNeg = TRUE, updateR = TRUE, updatePi = TRUE,
+  testing = FALSE)
 }
 \arguments{
   \item{ptree}{Phylogenetic tree}
@@ -26,6 +27,9 @@ inferTTree(ptree, mcmcIterations = 1000, startNeg = 100/365, startR = 1,
 
   \item{updatePi}{Whether or not to update the parameter
   pi}
+
+  \item{testing}{Whether or not to apply the test mode
+  without likelihood}
 }
 \value{
 posterior sample set of transmission trees

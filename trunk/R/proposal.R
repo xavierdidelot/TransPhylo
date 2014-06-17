@@ -1,21 +1,22 @@
 #Proposal distribution used in rjMCMC to update the transmission tree
 #Returns the proposed tree as well as qr=proposal ratio part of the Metropolis-Hastings ratio
 .proposal = function(tree)  {
+  pmove1=0.2
   nsam <- sum(tree[ ,2] == 0&tree[ ,3] == 0) 
   host <- tree[ ,4]
   fathers <- rep(NA, nrow(tree)) 
   fathers[tree[ ,2] + 1] <- 1:nrow(tree) 
   fathers[tree[ ,3] + 1] <- 1:nrow(tree) 
   fathers <- fathers[-1] 
+  totbralen=sum(head(tree[,1],-2)-head(tree[fathers,1],-1))
   
   #Choose a transmission event
   w <- sample(which( tree[ ,2] > 0&tree[ ,3] == 0 ) ,1)
   infector <- host[w] 
   infected <- host[tree[w,2]]   
   
-  if (runif(1)<0.2) {
+  if (runif(1)<pmove1) {
     #MOVE1: Add a new transmission event
-    totbralen=sum(head(tree[,1],-2)-head(tree[fathers,1],-1))
     loc=runif(1)*totbralen
     bra=1
     while (loc>(tree[bra,1]-tree[fathers[bra],1])) {
@@ -23,7 +24,8 @@
       bra=bra+1}
     tree=rbind(tree,c(tree[fathers[bra],1]+loc,bra,0,0))
     tree[fathers[bra],1+which(tree[fathers[bra],2:3]==bra)]=nrow(tree)
-    qr=1#TODO
+    ntraeve=sum( tree[ ,2] > 0&tree[ ,3] == 0 )
+    qr=((1-pmove1)/ntraeve)/(pmove1/totbralen)
     
   } else if (w == nrow(tree))  { 
     #MOVE2: update age of transmission to the index case 
@@ -89,7 +91,8 @@
     tree[which(tree[,2]>w),2]=tree[which(tree[,2]>w),2]-1
     tree[which(tree[,3]>w),3]=tree[which(tree[,3]>w),3]-1
     tree=tree[-w,]
-    qr=1#TODO
+    ntraeve=sum( tree[ ,2] > 0&tree[ ,3] == 0 )
+    qr=(pmove1/totbralen)/((1-pmove1)/(ntraeve+1))
   }
   
   #Reorder nodes chronologically 
