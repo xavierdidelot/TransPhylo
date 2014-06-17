@@ -1,10 +1,11 @@
 #' Calculates the log-probability of a transmission tree
-#' (assumes w is Gamma(2,1)) 
+#' (assumes w is Gamma(2,1)) #TODO relax this
 #' @param ttree Transmission tree
 #' @param R Basic reproduction number
 #' @param pi probability of sampling an infected individual
 #' @return Probability of the transmission tree
 probTTree = function(ttree,R,pi)  {
+  #TODO need to account for unobserved branches, cf writelatex file
   prob <- 0 
   for (i in (1:nrow(ttree))) { 
     if (is.na(ttree[i,2])) {prob<-prob+log(1-pi)} else 

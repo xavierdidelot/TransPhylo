@@ -1,5 +1,5 @@
 #' Simulate a transmission tree
-#' (assumes generation distribution w is Gamma(2,1))
+#' (assumes generation distribution w is Gamma(2,1)) TODO relax this
 #' @param R the basic reproduction number
 #' @param pi probability of sampling an infected individual
 #' @return A N*3 matrix in the following format with one row per infected host, first column is time of infection, second column is time of sampling, third column is infector
@@ -47,6 +47,8 @@ makeTTree <-function(R,pi) {
   while (TRUE) {
     if (nrow(ttree)==1 && is.na(ttree[1,2])) {return(list(ttree=NULL,prob=NULL))} #Nothing left
     if (is.na(ttree[1,2])&&length(which(ttree[,3]==1))==1) {
+      ttree[,2]<-ttree[,2]-ttree[2,1]
+      ttree[,1]<-ttree[,1]-ttree[2,1]
       ttree<-ttree[-1,,drop=FALSE]
       ttree[,3]=ttree[,3]-1
     } else {break}

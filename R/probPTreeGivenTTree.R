@@ -5,7 +5,7 @@
 probPTreeGivenTTree = function(fulltree,neg)  {
   n <- max(fulltree[,4])
   prob <- 0 
-  fathers <- rep(0, nrow(fulltree) + 1) 
+  fathers <- rep(NA, nrow(fulltree)) 
   fathers[fulltree[ ,2] + 1] <- 1:nrow(fulltree) 
   fathers[fulltree[ ,3] + 1] <- 1:nrow(fulltree) 
   fathers <- fathers[-1] 
