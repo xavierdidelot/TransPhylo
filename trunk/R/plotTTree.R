@@ -19,7 +19,7 @@ plotTTree = function(ttree) {
   ma=max(ttree[!is.na(ttree[,2]),2])
   xstep=(ma-mi)/2000
   plot(c(),c(),xlim=c(mi-(ma-mi)*0.05,ma+(ma-mi)*0.05),ylim=c(0,n+1),xlab='',ylab='')
-  maxcol=max(dgamma(seq(mi,ma,xstep),2,1))
+  maxcol=max(dgamma(seq(mi,ma,xstep),2,1))#' (assumes w is Gamma(2,1)) #TODO relax this here and below
   for (i in 1:n) {
     as=seq(ttree[i,1],ma,xstep)
     bs=rep(ys[i],length(as))

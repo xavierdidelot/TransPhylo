@@ -1,7 +1,7 @@
 \name{probTTree}
 \alias{probTTree}
 \title{Calculates the log-probability of a transmission tree
-(assumes w is Gamma(2,1))}
+(assumes w is Gamma(2,1)) #TODO relax this}
 \usage{
 probTTree(ttree, R, pi)
 }
@@ -17,6 +17,6 @@ Probability of the transmission tree
 }
 \description{
 Calculates the log-probability of a transmission tree
-(assumes w is Gamma(2,1))
+(assumes w is Gamma(2,1)) #TODO relax this
 }
 

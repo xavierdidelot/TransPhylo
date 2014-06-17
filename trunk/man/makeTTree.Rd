@@ -1,7 +1,7 @@
 \name{makeTTree}
 \alias{makeTTree}
 \title{Simulate a transmission tree
-(assumes generation distribution w is Gamma(2,1))}
+(assumes generation distribution w is Gamma(2,1)) TODO relax this}
 \usage{
 makeTTree(R, pi)
 }
@@ -17,6 +17,6 @@ column is time of sampling, third column is infector
 }
 \description{
 Simulate a transmission tree (assumes generation
-distribution w is Gamma(2,1))
+distribution w is Gamma(2,1)) TODO relax this
 }
 

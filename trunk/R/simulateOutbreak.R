@@ -27,6 +27,5 @@ simulateOutbreak = function(R=1,neg=0.25,ninf=10,pi=0.5) {
   #Glue these trees together
   truth<-.glueTrees(ttree,wtree)
   #truth[,1]<-truth[,1]+2005#Epidemic started in 2005
-  for (i in 1:100) truth<-.proposal(truth) #TO REMOVE THIS IS ONLY FOR TESTING
   return(truth)
 }  

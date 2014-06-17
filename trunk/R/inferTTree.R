@@ -29,10 +29,11 @@ inferTTree = function(ptree,mcmcIterations=1000,startNeg=100/365,startR=1,startP
     record[[i]]$source <- fulltree[fulltree[which(fulltree[,1]==0),2],4] 
     
     #Metropolis update for transmission tree 
-    fulltree2 <- .proposal(fulltree) 
+    prop <- .proposal(fulltree) 
+    fulltree2 <- prop$tree
     pTTree2 <- probTTree(ttreeFromFullTree(fulltree2),R,pi) 
     pPTree2 <- probPTreeGivenTTree(fulltree2,neg) 
-    if (log(runif(1)) < pTTree2 + pPTree2-pTTree-pPTree)  { 
+    if (log(runif(1)) < log(prop$qr)+pTTree2 + pPTree2-pTTree-pPTree)  { 
       fulltree <- fulltree2 
       pTTree <- pTTree2 
       pPTree <- pPTree2 
