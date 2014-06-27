@@ -1,5 +1,6 @@
 #Proposal distribution used in rjMCMC to update the transmission tree
 #Returns the proposed tree as well as qr=proposal ratio part of the Metropolis-Hastings ratio
+#TODO: add a move proposing to move a star a bit up or down
 .proposal = function(tree)  {
   pmove1=0.2
   nsam <- sum(tree[ ,2] == 0&tree[ ,3] == 0) 
