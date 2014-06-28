@@ -19,7 +19,7 @@
   tree=rbind(tree,c(tree[fathers[bra],1]+loc,bra,0,0))
   tree[fathers[bra],1+which(tree[fathers[bra],2:3]==bra)]=nrow(tree)
   tree=.reordernodes(tree)
-  return(list(tree=tree,qr=1))
+  return(list(tree=tree,qr=totbralen))
 }
 
 .move2 = function(tree) {
@@ -31,6 +31,7 @@
   #Choose a transmission event that can be removed
   host <- tree[ ,4]
   fathers<-.makeFathers(tree)
+  totbralen=sum(head(tree[,1],-2)-head(tree[fathers,1],-1))
   w=0
   while (w==0||w==nrow(tree)||(infector<=nsam && infected<=nsam)){
   w <- sample(which( tree[ ,2] > 0&tree[ ,3] == 0 ) ,1)
@@ -42,7 +43,7 @@
   tree[which(tree[,3]>w),3]=tree[which(tree[,3]>w),3]-1
   tree=tree[-w,]
   tree=.reordernodes(tree)
-  return(list(tree=tree,qr=1))
+  return(list(tree=tree,qr=1/totbralen))
 }
 
 .move3 = function(tree) {
