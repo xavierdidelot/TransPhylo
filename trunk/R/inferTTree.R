@@ -11,11 +11,13 @@
 #' @return posterior sample set of transmission trees
 inferTTree = function(ptree,mcmcIterations=1000,startNeg=100/365,startR=1,startPi=0.5,updateNeg=TRUE,updateR=TRUE,updatePi=TRUE,testing=FALSE) {
   if (testing) {
+    v=ceiling(nrow(ptree)/2+1):nrow(ptree)
+    totbralen=-sum(ptree[v,1]-ptree[ptree[v,2],1])-sum(ptree[v,1]-ptree[ptree[v,3],1])
     probPTreeGivenTTree = function(fulltree,neg) {return(0)} 
     probTTree = function(ttree,R,pi) {#In test mode, the prob of a ttree is just prob of number of sampled cases given pi
       nsam=length(which(!is.na(ttree[,2])))
       n=nrow(ttree)
-      return(log(dbinom(nsam,n,pi)))}
+      return(log(dbinom(nsam,n,pi))-log(totbralen)*(n-1))}
   }
   #MCMC algorithm
   neg <- startNeg
