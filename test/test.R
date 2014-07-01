@@ -1,8 +1,10 @@
-set.seed(1)
+set.seed(2)
 simu <- simulateOutbreak(R=1,neg=100/365,pi=0.5)
 #simu[,1]=simu[,1]*10
 pi=0.5
+start <- Sys.time ()
 record<-inferTTree(ptreeFromFullTree(simu),mcmcIterations=10000,startPi=pi,updatePi=FALSE,testing=TRUE)
+cat('Time spent: ',Sys.time()-start,'\n')
 #par(mfrow=c(2,2))
 #plot(sapply(record,function(x) x$pTTree+x$pPTree),ylab='Posterior probability',xlab='MCMC iterations',type='l')
 #hist(sapply(record,function(x) x$pi),xlab='Posterior of pi',main='Prior is Unif(0,1)')

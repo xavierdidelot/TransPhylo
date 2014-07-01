@@ -17,7 +17,7 @@ inferTTree = function(ptree,mcmcIterations=1000,startNeg=100/365,startR=1,startP
     probTTree = function(ttree,R,pi) {#In test mode, the prob of a ttree is just prob of number of sampled cases given pi
       nsam=length(which(!is.na(ttree[,2])))
       n=nrow(ttree)
-      return(log(dbinom(nsam,n,pi))-log(totbralen)*(n-1))}
+      return(dbinom(nsam,n,pi,log=TRUE)-log(totbralen)*(n-1)+lfactorial(n-nsam))}
   }
   #MCMC algorithm
   neg <- startNeg
