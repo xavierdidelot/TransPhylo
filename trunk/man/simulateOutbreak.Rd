@@ -2,7 +2,8 @@
 \alias{simulateOutbreak}
 \title{Simulate an outbreak}
 \usage{
-simulateOutbreak(R = 1, neg = 0.25, ninf = 10, pi = 0.5)
+simulateOutbreak(R = 1, neg = 0.25, ninf = NA, pi = 0.5,
+  dateLastSample = 2014)
 }
 \arguments{
   \item{R}{the basic reproduction number}
@@ -10,7 +11,8 @@ simulateOutbreak(R = 1, neg = 0.25, ninf = 10, pi = 0.5)
   \item{neg}{the within-host effective population size (Ne)
   times generation duration (g)}
 
-  \item{ninf}{number of infected individuals}
+  \item{ninf}{number of sampled infected individuals, or NA
+  for any}
 
   \item{pi}{probability of sampling an infected individual}
 }

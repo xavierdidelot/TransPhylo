@@ -2,12 +2,14 @@
 \alias{inferTTree}
 \title{Infer transmission tree given a phylogenetic tree}
 \usage{
-inferTTree(ptree, mcmcIterations = 1000, startNeg = 100/365, startR = 1,
-  startPi = 0.5, updateNeg = TRUE, updateR = TRUE, updatePi = TRUE,
-  testing = FALSE)
+inferTTree(ptree, dateLastSample = 2014, mcmcIterations = 1000,
+  startNeg = 100/365, startR = 1, startPi = 0.5, updateNeg = TRUE,
+  updateR = TRUE, updatePi = TRUE, testing = FALSE)
 }
 \arguments{
   \item{ptree}{Phylogenetic tree}
+
+  \item{dateLastSample}{Date of the last sample}
 
   \item{mcmcIterations}{Number of MCMC iterations to run
   the algorithm for}
