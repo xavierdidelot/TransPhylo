@@ -11,6 +11,8 @@
 .move1 = function(tree) {
   fathers <- rep(NA, nrow(tree));fathers[tree[ ,2:3] + 1] <- 1:nrow(tree);fathers <- fathers[-1] 
   totbralen=sum(head(tree[,1],-2)-head(tree[fathers,1],-1))
+  if (totbralen==0) return(list(tree=tree,qr=1))
+  print('move1')
   loc=runif(1)*totbralen
   bra=1
   while (loc>(tree[bra,1]-tree[fathers[bra],1])) {
@@ -36,7 +38,8 @@
   totbralen=sum(head(tree[,1],-2)-head(tree[fathers,1],-1))
   w=0
   while (w==0||w==nrow(tree)||(infector<=nsam && infected<=nsam)){
-    w <- sample(which( tree[ ,2] > 0&tree[ ,3] == 0 ) ,1)
+    w<-which( tree[ ,2] > 0&tree[ ,3] == 0 )
+    if (length(w)>1) w <- sample(w ,1)
     infector <- host[w] 
     infected <- host[tree[w,2]]}
   
@@ -51,10 +54,13 @@
 .move3 = function(tree) {
   nsam <- sum(tree[ ,2] == 0&tree[ ,3] == 0) 
   host <- tree[ ,4]
+  print(nrow(tree))
+  print(tree)
   fathers <- rep(NA, nrow(tree));fathers[tree[ ,2:3] + 1] <- 1:nrow(tree);fathers <- fathers[-1] 
   
   #Choose a transmission event
-  w <- sample(which( tree[ ,2] > 0&tree[ ,3] == 0 ) ,1)
+  w<-which( tree[ ,2] > 0&tree[ ,3] == 0 ) 
+  if (length(w)>1) w <- sample(w,1)
   infector <- host[w] 
   infected <- host[tree[w,2]]   
   
