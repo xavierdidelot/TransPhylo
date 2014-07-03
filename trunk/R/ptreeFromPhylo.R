@@ -3,12 +3,12 @@
 #' @param dateLastSample date of the last sample
 #' @return phylogenetic tree
 ptreeFromPhylo <- function(tr,dateLastSample=2014) {
-  n<-tr$Nnode+1
+  n<-length(tr$tip.label)#tr$Nnode+1
   ed<-tr$edge
   le<-tr$edge.length
   tra<-c(1:n,(2*n-1):(n+1))
   ptree<-matrix(0,2*n-1,3)
-  if (n==1) {ptree}
+  if (n==1) {ptree[1,1]=dateLastSample;return(ptree)}
   for (i in 1:nrow(ed)) {
     father<-tra[ed[i,1]]
     son<-tra[ed[i,2]]
