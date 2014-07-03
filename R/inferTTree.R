@@ -1,6 +1,5 @@
 #' Infer transmission tree given a phylogenetic tree
 #' @param ptree Phylogenetic tree
-#' @param dateLastSample Date of the last sample
 #' @param mcmcIterations Number of MCMC iterations to run the algorithm for
 #' @param startNeg Starting value of within-host coalescent parameter Ne*g
 #' @param startR Starting value of basic reproduction number R
@@ -10,7 +9,7 @@
 #' @param updatePi Whether or not to update the parameter pi
 #' @param testing Whether or not to apply the test mode without likelihood
 #' @return posterior sample set of transmission trees
-inferTTree = function(ptree,dateLastSample=2014,mcmcIterations=1000,startNeg=100/365,startR=1,startPi=0.5,updateNeg=TRUE,updateR=TRUE,updatePi=TRUE,testing=FALSE) {
+inferTTree = function(ptree,mcmcIterations=1000,startNeg=100/365,startR=1,startPi=0.5,updateNeg=TRUE,updateR=TRUE,updatePi=TRUE,testing=FALSE) {
   if (testing) {
     v=ceiling(nrow(ptree)/2+1):nrow(ptree)
     totbralen=-sum(ptree[v,1]-ptree[ptree[v,2],1])-sum(ptree[v,1]-ptree[ptree[v,3],1])
@@ -24,7 +23,7 @@ inferTTree = function(ptree,dateLastSample=2014,mcmcIterations=1000,startNeg=100
   neg <- startNeg
   R <- startR
   pi <- startPi
-  fulltree <- makeFullTreeFromPTree(ptree,dateLastSample);#Starting point 
+  fulltree <- makeFullTreeFromPTree(ptree);#Starting point 
   record <- vector('list',mcmcIterations)
   pTTree <- probTTree(ttreeFromFullTree(fulltree),R,pi) 
   pPTree <- probPTreeGivenTTree(fulltree,neg) 

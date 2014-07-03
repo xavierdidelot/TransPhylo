@@ -18,6 +18,6 @@ ptreeFromFullTree = function(tree)  {
     tree <- tree[-tra, , drop=FALSE] 
     tra <- n + 1 
   } 
-  ptree <- tree[,1:(ncol(tree)-1)] 
+  ptree <- tree[,1:(ncol(tree)-1),drop=FALSE] 
   return(ptree)
 } 
