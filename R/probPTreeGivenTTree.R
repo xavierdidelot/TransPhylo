@@ -6,6 +6,7 @@ probPTreeGivenTTree = function(fulltree,neg)  {
   n <- max(fulltree[,4])
   prob <- 0 
   for (i in (1:n)) { 
+    if (length(which(fulltree[,4]==i))==1) next
     subtree <- .extractSubtree(fulltree,i) 
     prob <- prob + .probSubtree(subtree,neg) 
   } 

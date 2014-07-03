@@ -15,7 +15,7 @@ ptreeFromFullTree = function(tree)  {
     f <- which( t > tra ) 
     t[f] <- t[f]-1 
     tree[ ,2:3] <- t 
-    tree <- tree[-tra, ] 
+    tree <- tree[-tra, , drop=FALSE] 
     tra <- n + 1 
   } 
   ptree <- tree[,1:(ncol(tree)-1)] 

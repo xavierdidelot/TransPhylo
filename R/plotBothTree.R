@@ -9,7 +9,7 @@ plotBothTree = function(tree)  {
   par(yaxt='n',bty='n')
   plot(0,0,type='l',xlim=c(min(tree[,1]),max(tree[,1])),ylim=c(0,nsam+1),xlab='',ylab='')
   host <- tree[ ,4] 
-  palette(rainbow(ntot))#Need as many unique colors as there are hosts
+  if (ntot>1) palette(rainbow(ntot))#Need as many unique colors as there are hosts
   
   #Determine ys for leaves
   root<-which(host==0)

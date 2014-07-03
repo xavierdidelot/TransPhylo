@@ -7,14 +7,15 @@
 probTTree = function(ttree,R,pi)  {
   #TODO need to account for unobserved branches, cf writelatex file
   prob <- 0 
-  for (i in (1:nrow(ttree))) { 
+  n <- nrow(ttree)
+  for (i in (1:n)) { 
     if (is.na(ttree[i,2])) {prob<-prob+log(1-pi)} else 
     {prob<-prob+log(pi);
-    prob <- prob + log(dgamma((ttree[i,2]-ttree[i,1]), shape = 2, scale = 1))} 
+    prob <- prob + dgamma((ttree[i,2]-ttree[i,1]), shape = 2, scale = 1, log=TRUE)} 
     offspring <- which( cbind(ttree[ ,3]) == i ) 
-    prob <- prob + log(dpois(length(offspring),R)) 
+    prob <- prob + dpois(length(offspring),R,log=TRUE)
     for (j in (offspring)) {
-      prob <- prob + log(dgamma((ttree[j,1]-ttree[i,1]), shape = 2, scale = 1)) 
+      prob <- prob + dgamma((ttree[j,1]-ttree[i,1]), shape = 2, scale = 1,log=TRUE) 
     } 
   } 
   return(prob)

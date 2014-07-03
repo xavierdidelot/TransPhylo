@@ -60,51 +60,58 @@
   
   if (w == nrow(tree))  { 
     #Update age of transmission to the index case 
-    r <- (runif(1)-0.5)/1 
-    mini <- -tree[nrow(tree)-1,1] 
+    r <- (runif(1)-0.5)/1
+    mini <- tree[nrow(tree),1]-tree[nrow(tree)-1,1]
     if (r < mini)  { 
       r <- mini + (mini-r) 
     } 
-    tree[1:(nrow(tree)-1),1] <- tree[1:(nrow(tree)-1),1] + r 
+    #tree[1:(nrow(tree)-1),1] <- tree[1:(nrow(tree)-1),1] + r 
+    tree[nrow(tree),1]<-tree[nrow(tree),1]-r
+    if (tree[nrow(tree),1]>tree[nrow(tree)-1,1]) print('error with root age')
+    return(list(tree=tree,qr=1))          
+  } 
     
-  } else if (infector<=nsam && infected<=nsam) {
-    #Update transmission event from sampled case to sampled case
-    
-    #Remove the transmission node 
-    tree=.treeRem(tree,w,fathers[w])
-    fathers <- rep(NA, nrow(tree));fathers[tree[ ,2:3] + 1] <- 1:nrow(tree);fathers <- fathers[-1] 
-
-    #Choose where to add it back on the path from infector to infected 
-    islocs <- rep(0, nrow(tree)) 
-    path <- infector 
+  #Remove the transmission node 
+  tree=.treeRem(tree,w,fathers[w])
+  host=host[-w]
+  fathers <- rep(NA, nrow(tree));fathers[tree[ ,2:3] + 1] <- 1:nrow(tree);fathers <- fathers[-1] 
+  
+  #Choose where to add it back
+  islocs <- rep(0, nrow(tree)) #Where is the star allowed to be moved to
+  
+  if (infector<=nsam && infected<=nsam) {
+  #If transmission event is from a sampled case to a sampled case, it has to be stay on the path from one leaf to another
+  path <- infector 
+  islocs[path] <- 1 
+  while (path < nrow(tree))  { 
+    path <- fathers[path] 
     islocs[path] <- 1 
-    while (path < nrow(tree))  { 
-      path <- fathers[path] 
-      islocs[path] <- 1 
-    } 
-    path <- infected 
-    islocs[path] <- 1 
-    while (path < nrow(tree))  { 
-      path <- fathers[path] 
-      islocs[path] <- 1-islocs[path] 
-    } 
-    locs <- which(islocs==1) 
-    lens <- rep(0,length(locs)) 
-    for (i in 1:length(locs)) { 
-      lens[i] <- tree[locs[i],1]-tree[fathers[locs[i]],1] 
-    } 
-    r <- runif(1) * sum(lens) 
-    i=1
-    while (r>lens[i]) {r<-r-lens[i];i=i+1}
-    
-    #Add it back
-    tree=.treeAdd(tree,tree[locs[i],1]-r,locs[i],fathers[locs[i]])
-    tree <- cbind(tree[ ,1:3],.hostFromFulltree(tree)) 
-    
+  } 
+  path <- infected 
+  islocs[path] <- 1 
+  while (path < nrow(tree))  { 
+    path <- fathers[path] 
+    islocs[path] <- 1-islocs[path] 
+  } 
   } else {
-    #Update of transmission event involving an unsampled individual
-    #TODO: add a move proposing to move a star a bit up or down
+  #Otherwise it can move anywhere within infector or infected (except on the root)
+    islocs[which(host==infected|host==infector)]<-1
+    islocs[length(islocs)-1]<-0
   }
+  
+  #Choose where to add it back in the set of possible locations
+  locs <- which(islocs==1) 
+  lens <- rep(0,length(locs)) 
+  for (i in 1:length(locs)) { 
+    lens[i] <- tree[locs[i],1]-tree[fathers[locs[i]],1] 
+  } 
+  r <- runif(1) * sum(lens) 
+  i=1
+  while (r>lens[i]) {r<-r-lens[i];i=i+1}
+  
+  #Add it back
+  tree=.treeAdd(tree,tree[locs[i],1]-r,locs[i],fathers[locs[i]])
+  tree <- cbind(tree[ ,1:3],.hostFromFulltree(tree)) 
   
   return(list(tree=tree,qr=1))  
 }
