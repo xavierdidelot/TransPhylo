@@ -1,9 +1,10 @@
 #' Simulate a transmission tree
-#' (assumes generation distribution w is Gamma(2,1)) TODO relax this
 #' @param R the basic reproduction number
 #' @param pi probability of sampling an infected individual
+#' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
+#' @param w.scape Scale parameter of the Gamma probability density function representing the generation length w 
 #' @return A N*3 matrix in the following format with one row per infected host, first column is time of infection, second column is time of sampling, third column is infector
-makeTTree <-function(R,pi) { 
+makeTTree <-function(R,pi,w.shape,w.scale) { 
   ttree<-matrix(0,1,3)
   prob<-0
   todo<-1
@@ -12,9 +13,9 @@ makeTTree <-function(R,pi) {
     if (rand<pi) {
       #This individual is sampled
       prob<-prob+log(pi)
-      draw<-rgamma(1,2,1)
+      draw<-rgamma(1,shape=w.shape,scale=w.scale)
       ttree[todo[1],2]<-ttree[todo[1],1]+draw
-      prob<-prob+log(dgamma(draw,2,1))}
+      prob<-prob+log(dgamma(draw,shape=w.shape,scale=w.scale))}
     else {
       #This individual is not sampled
       prob<-prob+log(1-pi)
@@ -23,8 +24,8 @@ makeTTree <-function(R,pi) {
     prob<-prob+log(dpois(offspring,R))
     if (offspring>0) {
       for (i in 1:offspring) {
-        draw<-rgamma(1,2,1)
-        prob<-prob+log(dgamma(draw,2,1))
+        draw<-rgamma(1,shape=w.shape,scale=w.scale)
+        prob<-prob+log(dgamma(draw,shape=w.shape,scale=w.scale))
         ttree<-rbind(ttree,c(ttree[todo[1],1]+draw,0,todo[1]))
         todo<-c(todo,nrow(ttree))
         if (nrow(ttree)>100) {return(list(ttree=NULL,prob=NULL))}

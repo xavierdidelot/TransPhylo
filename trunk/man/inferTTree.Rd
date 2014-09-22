@@ -2,12 +2,18 @@
 \alias{inferTTree}
 \title{Infer transmission tree given a phylogenetic tree}
 \usage{
-inferTTree(ptree, mcmcIterations = 1000, startNeg = 100/365, startR = 1,
-  startPi = 0.5, updateNeg = TRUE, updateR = TRUE, updatePi = TRUE,
-  testing = FALSE)
+inferTTree(ptree, w.shape, w.scale, mcmcIterations = 1000,
+  startNeg = 100/365, startR = 1, startPi = 0.5, updateNeg = TRUE,
+  updateR = TRUE, updatePi = TRUE, testing = FALSE)
 }
 \arguments{
   \item{ptree}{Phylogenetic tree}
+
+  \item{w.shape}{Shape parameter of the Gamma probability
+  density function representing the generation length w}
+
+  \item{w.scape}{Scale parameter of the Gamma probability
+  density function representing the generation length w}
 
   \item{mcmcIterations}{Number of MCMC iterations to run
   the algorithm for}

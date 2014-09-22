@@ -3,15 +3,18 @@
 #' @param neg the within-host effective population size (Ne) times  generation duration (g)
 #' @param ninf number of sampled infected individuals, or NA for any
 #' @param pi probability of sampling an infected individual
+#' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
+#' @param w.scape Scale parameter of the Gamma probability density function representing the generation length w 
+#' @param dateLastSample Date given to the last sample
 #' @return Combined phylogenetic and transmission tree
 #' @examples
 #' plotBothTree(simulateOutbreak())
-simulateOutbreak = function(R=1,neg=0.25,ninf=NA,pi=0.5,dateLastSample=2014) {
+simulateOutbreak = function(R=1,neg=0.25,ninf=NA,pi=0.5,w.shape=2,w.scale=1,dateLastSample=2014) {
   #Create a transmission tree with ninf infected sampled individuals
   nsam<-0
   nh<-0
   while (is.na(ninf)||nsam!=ninf) {
-    ttree<-makeTTree(R,pi)[[1]]
+    ttree<-makeTTree(R,pi,w.shape,w.scale)[[1]]
     if (is.null(ttree)) {nsam<-0;nh=0} else {
       nsam<-length(which(!is.na(ttree[,2])))
       nh=nrow(ttree)-nsam

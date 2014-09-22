@@ -2,8 +2,8 @@
 \alias{simulateOutbreak}
 \title{Simulate an outbreak}
 \usage{
-simulateOutbreak(R = 1, neg = 0.25, ninf = NA, pi = 0.5,
-  dateLastSample = 2014)
+simulateOutbreak(R = 1, neg = 0.25, ninf = NA, pi = 0.5, w.shape = 2,
+  w.scale = 1, dateLastSample = 2014)
 }
 \arguments{
   \item{R}{the basic reproduction number}
@@ -15,6 +15,14 @@ simulateOutbreak(R = 1, neg = 0.25, ninf = NA, pi = 0.5,
   for any}
 
   \item{pi}{probability of sampling an infected individual}
+
+  \item{w.shape}{Shape parameter of the Gamma probability
+  density function representing the generation length w}
+
+  \item{w.scape}{Scale parameter of the Gamma probability
+  density function representing the generation length w}
+
+  \item{dateLastSample}{Date given to the last sample}
 }
 \value{
 Combined phylogenetic and transmission tree

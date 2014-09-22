@@ -1,6 +1,8 @@
 #' Plot a transmission tree
 #' @param ttree Transmission tree
-plotTTree = function(ttree) {
+#' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
+#' @param w.scape Scale parameter of the Gamma probability density function representing the generation length w 
+plotTTree = function(ttree,w.shape,w.scale) {
   n=nrow(ttree)
   #Determine ys 
   ys <- rep(0, n)
@@ -19,11 +21,11 @@ plotTTree = function(ttree) {
   ma=max(ttree[which(!is.na(ttree[,2])),2])
   xstep=(ma-mi)/2000
   plot(c(),c(),xlim=c(mi-(ma-mi)*0.05,ma+(ma-mi)*0.05),ylim=c(0,n+1),xlab='',ylab='')
-  maxcol=max(dgamma(seq(0,ma-mi,xstep),2,1))#' (assumes w is Gamma(2,1)) #TODO relax this here and below
+  maxcol=max(dgamma(seq(0,ma-mi,xstep),shape=w.shape,scale=w.scale))
   for (i in 1:n) {
     as=seq(ttree[i,1],ma,xstep)
     bs=rep(ys[i],length(as))
-    cs=abs((maxcol-dgamma(as-ttree[i,1],2,1))/maxcol)
+    cs=abs((maxcol-dgamma(as-ttree[i,1],shape=w.shape,scale=w.scale))/maxcol)
     cs=gray(cs)
     segments(as,bs,x1=as+xstep,col=cs)
     points(ttree[i,2],ys[i],col = 'red') 
