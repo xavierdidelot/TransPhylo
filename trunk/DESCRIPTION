@@ -5,5 +5,6 @@ Version: 1.0
 Date: 2014-02-18
 Author: Xavier Didelot <xavier.didelot@gmail.com>
 Maintainer: Xavier Didelot <xavier.didelot@gmail.com>
+Depends: gsl
 Description: Inference of transmission tree under a within-host evolution model
 License: GPL (>=2)
