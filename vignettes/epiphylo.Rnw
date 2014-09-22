@@ -16,9 +16,9 @@ set.seed(1)
 
 \section{Simulation}
 
-A pathogen has an effective within-host population size of $N_e=100$ and a generation time $g=1$ day, so that $N_e g=100/365$ years. The basic reproduction number is $R=1$. To following command simulates an outbreak of this pathogen with 10 sampled cases: 
+A pathogen has an effective within-host population size of $N_e=100$ and a generation time $g=1$ day, so that $N_e g=100/365$ years. The basic reproduction number is $R=1$. The following command simulates an outbreak of this pathogen with 10 sampled cases: 
 <<>>=
-simu <- simulateOutbreak(R=1,neg=100/365,ninf=10,pi=0.5)
+simu <- simulateOutbreak(R=1,neg=100/365,ninf=20,pi=0.1,w.shape=20,w.scale=0.1)
 @
 
 This simulation contains both the transmission tree between infected hosts and the within-host phlogenetic tree of each host. This can be visualised as a colored phlogenetic tree, where each host is represented by a unique color:
@@ -33,7 +33,7 @@ The transmission tree can be extracted and plotted separately from the phylogeny
 
 <<fig=TRUE>>=
 ttree<-ttreeFromFullTree(simu)
-plotTTree(ttree)
+plotTTree(ttree,w.shape=20,w.scale=0.1)
 @
 
 The phylogenetic tree can be extracted and converted into a phylo object from the ape package:
@@ -58,7 +58,7 @@ plotBothTree(full)
 The MCMC procedure to infer the transmission tree given the phylogenetic tree can be run as follows:
 
 <<results=hide>>=
-record<-inferTTree(ptree,mcmcIterations=100)
+record<-inferTTree(ptree,mcmcIterations=1000,w.shape=20,w.scale=0.1,updateNeg=F,updateR=F)
 @
 
 This returns a record of all MCMC iterations. This is what the transmission tree looks like at the end of the MCMC:

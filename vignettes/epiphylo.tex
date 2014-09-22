@@ -13,10 +13,10 @@
 
 \section{Simulation}
 
-A pathogen has an effective within-host population size of $N_e=100$ and a generation time $g=1$ day, so that $N_e g=100/365$ years. The basic reproduction number is $R=1$. To following command simulates an outbreak of this pathogen with 10 sampled cases: 
+A pathogen has an effective within-host population size of $N_e=100$ and a generation time $g=1$ day, so that $N_e g=100/365$ years. The basic reproduction number is $R=1$. The following command simulates an outbreak of this pathogen with 10 sampled cases: 
 \begin{Schunk}
 \begin{Sinput}
-> simu <- simulateOutbreak(R=1,neg=100/365,ninf=10,pi=0.5)
+> simu <- simulateOutbreak(R=1,neg=100/365,ninf=20,pi=0.1,w.shape=20,w.scale=0.1)
 \end{Sinput}
 \end{Schunk}
 
@@ -36,7 +36,7 @@ The transmission tree can be extracted and plotted separately from the phylogeny
 \begin{Schunk}
 \begin{Sinput}
 > ttree<-ttreeFromFullTree(simu)
-> plotTTree(ttree)
+> plotTTree(ttree,w.shape=20,w.scale=0.1)
 \end{Sinput}
 \end{Schunk}
 \includegraphics{epiphylo-004}
@@ -70,7 +70,7 @@ The MCMC procedure to infer the transmission tree given the phylogenetic tree ca
 
 \begin{Schunk}
 \begin{Sinput}
-> record<-inferTTree(ptree,mcmcIterations=100)
+> record<-inferTTree(ptree,mcmcIterations=1000,w.shape=20,w.scale=0.1,updateNeg=F,updateR=F)
 \end{Sinput}
 \end{Schunk}
 

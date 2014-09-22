@@ -1,5 +1,7 @@
 #' Infer transmission tree given a phylogenetic tree
 #' @param ptree Phylogenetic tree
+#' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
+#' @param w.scape Scale parameter of the Gamma probability density function representing the generation length w 
 #' @param mcmcIterations Number of MCMC iterations to run the algorithm for
 #' @param startNeg Starting value of within-host coalescent parameter Ne*g
 #' @param startR Starting value of basic reproduction number R
@@ -9,7 +11,7 @@
 #' @param updatePi Whether or not to update the parameter pi
 #' @param testing Whether or not to apply the test mode without likelihood
 #' @return posterior sample set of transmission trees
-inferTTree = function(ptree,mcmcIterations=1000,startNeg=100/365,startR=1,startPi=0.5,updateNeg=TRUE,updateR=TRUE,updatePi=TRUE,testing=FALSE) {
+inferTTree = function(ptree,w.shape,w.scale,mcmcIterations=1000,startNeg=100/365,startR=1,startPi=0.5,updateNeg=TRUE,updateR=TRUE,updatePi=TRUE,testing=FALSE) {
   if (testing) {
     v=ceiling(nrow(ptree)/2+1):nrow(ptree)
     totbralen=-sum(ptree[v,1]-ptree[ptree[v,2],1])-sum(ptree[v,1]-ptree[ptree[v,3],1])
@@ -25,7 +27,7 @@ inferTTree = function(ptree,mcmcIterations=1000,startNeg=100/365,startR=1,startP
   pi <- startPi
   fulltree <- makeFullTreeFromPTree(ptree);#Starting point 
   record <- vector('list',mcmcIterations)
-  pTTree <- probTTree(ttreeFromFullTree(fulltree),R,pi) 
+  pTTree <- probTTree(ttreeFromFullTree(fulltree),R,pi,w.shape,w.scale) 
   pPTree <- probPTreeGivenTTree(fulltree,neg) 
   for (i in 1:mcmcIterations) {#Main MCMC loop
     if (i%%100 == 0) print(i) 
@@ -41,7 +43,7 @@ inferTTree = function(ptree,mcmcIterations=1000,startNeg=100/365,startR=1,startP
     #Metropolis update for transmission tree 
     prop <- .proposal(fulltree) 
     fulltree2 <- prop$tree
-    pTTree2 <- probTTree(ttreeFromFullTree(fulltree2),R,pi) 
+    pTTree2 <- probTTree(ttreeFromFullTree(fulltree2),R,pi,w.shape,w.scale) 
     pPTree2 <- probPTreeGivenTTree(fulltree2,neg) 
     if (log(runif(1)) < log(prop$qr)+pTTree2 + pPTree2-pTTree-pPTree)  { 
       fulltree <- fulltree2 
@@ -59,7 +61,7 @@ inferTTree = function(ptree,mcmcIterations=1000,startNeg=100/365,startR=1,startP
     if (updateR) {
       #Metropolis update for R, assuming Exp(1) prior 
       R2 <- abs(R + (runif(1)-0.5)*0.1)
-      pTTree2 <- probTTree(ttreeFromFullTree(fulltree),R2,pi) 
+      pTTree2 <- probTTree(ttreeFromFullTree(fulltree),R2,pi,w.shape,w.scale) 
       if (log(runif(1)) < pTTree2-pTTree-R2+R)  {R <- R2;pTTree <- pTTree2}
     }
     
@@ -67,7 +69,7 @@ inferTTree = function(ptree,mcmcIterations=1000,startNeg=100/365,startR=1,startP
       #Metropolis update for pi, assuming Unif(0,1) prior 
       pi2 <- abs(pi + (runif(1)-0.5)*0.1)
       if (pi2>1) pi2=2-pi2
-      pTTree2 <- probTTree(ttreeFromFullTree(fulltree),R,pi2) 
+      pTTree2 <- probTTree(ttreeFromFullTree(fulltree),R,pi2,w.shape,w.scale) 
       if (log(runif(1)) < pTTree2-pTTree)  {pi <- pi2;pTTree <- pTTree2}       
     }
     
