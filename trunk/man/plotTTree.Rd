@@ -2,7 +2,7 @@
 \alias{plotTTree}
 \title{Plot a transmission tree}
 \usage{
-plotTTree(ttree, w.shape, w.scale)
+plotTTree(ttree, w.shape = 2, w.scale = 1)
 }
 \arguments{
   \item{ttree}{Transmission tree}

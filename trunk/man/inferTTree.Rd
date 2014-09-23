@@ -2,7 +2,7 @@
 \alias{inferTTree}
 \title{Infer transmission tree given a phylogenetic tree}
 \usage{
-inferTTree(ptree, w.shape, w.scale, mcmcIterations = 1000,
+inferTTree(ptree, w.shape = 2, w.scale = 1, mcmcIterations = 1000,
   startNeg = 100/365, startR = 1, startPi = 0.5, updateNeg = TRUE,
   updateR = TRUE, updatePi = TRUE, testing = FALSE)
 }

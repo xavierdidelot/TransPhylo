@@ -11,12 +11,12 @@
 #' @param updatePi Whether or not to update the parameter pi
 #' @param testing Whether or not to apply the test mode without likelihood
 #' @return posterior sample set of transmission trees
-inferTTree = function(ptree,w.shape,w.scale,mcmcIterations=1000,startNeg=100/365,startR=1,startPi=0.5,updateNeg=TRUE,updateR=TRUE,updatePi=TRUE,testing=FALSE) {
+inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100/365,startR=1,startPi=0.5,updateNeg=TRUE,updateR=TRUE,updatePi=TRUE,testing=FALSE) {
   if (testing) {
     v=ceiling(nrow(ptree)/2+1):nrow(ptree)
     totbralen=-sum(ptree[v,1]-ptree[ptree[v,2],1])-sum(ptree[v,1]-ptree[ptree[v,3],1])
     probPTreeGivenTTree = function(fulltree,neg) {return(0)} 
-    probTTree = function(ttree,R,pi) {#In test mode, the prob of a ttree is just prob of number of sampled cases given pi
+    probTTree = function(ttree,R,pi,w.shape,w.scale) {#In test mode, the prob of a ttree is just prob of number of sampled cases given pi
       nsam=length(which(!is.na(ttree[,2])))
       n=nrow(ttree)
       return(dbinom(nsam,n,pi,log=TRUE)-log(totbralen)*(n-1)+lfactorial(n-nsam))}
