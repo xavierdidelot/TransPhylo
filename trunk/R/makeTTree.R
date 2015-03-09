@@ -3,8 +3,9 @@
 #' @param pi probability of sampling an infected individual
 #' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
 #' @param w.scape Scale parameter of the Gamma probability density function representing the generation length w 
+#' @param maxTime Duration of simulation (can be Inf)
 #' @return A N*3 matrix in the following format with one row per infected host, first column is time of infection, second column is time of sampling, third column is infector
-makeTTree <-function(R,pi,w.shape,w.scale) { 
+makeTTree <-function(R,pi,w.shape,w.scale,maxTime) { 
   ttree<-matrix(0,1,3)
   prob<-0
   todo<-1
@@ -14,7 +15,9 @@ makeTTree <-function(R,pi,w.shape,w.scale) {
       #This individual is sampled
       prob<-prob+log(pi)
       draw<-rgamma(1,shape=w.shape,scale=w.scale)
+      if (ttree[todo[1],1]+draw<maxTime)
       ttree[todo[1],2]<-ttree[todo[1],1]+draw
+      else ttree[todo[1],2]<-NA
       prob<-prob+log(dgamma(draw,shape=w.shape,scale=w.scale))}
     else {
       #This individual is not sampled
@@ -26,9 +29,9 @@ makeTTree <-function(R,pi,w.shape,w.scale) {
       for (i in 1:offspring) {
         draw<-rgamma(1,shape=w.shape,scale=w.scale)
         prob<-prob+log(dgamma(draw,shape=w.shape,scale=w.scale))
+        if (ttree[todo[1],1]+draw>maxTime) next
         ttree<-rbind(ttree,c(ttree[todo[1],1]+draw,0,todo[1]))
         todo<-c(todo,nrow(ttree))
-        if (nrow(ttree)>100) {return(list(ttree=NULL,prob=NULL))}
       }
     }
     todo<-todo[-1] 
