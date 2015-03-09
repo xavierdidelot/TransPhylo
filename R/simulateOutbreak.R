@@ -5,21 +5,21 @@
 #' @param pi probability of sampling an infected individual
 #' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
 #' @param w.scape Scale parameter of the Gamma probability density function representing the generation length w 
-#' @param dateLastSample Date given to the last sample
+#' @param dateStartOutbreak Date when index case becomes infected
+#' @param dataPresent Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @return Combined phylogenetic and transmission tree
 #' @examples
 #' plotBothTree(simulateOutbreak())
-simulateOutbreak = function(R=1,neg=0.25,ninf=NA,pi=0.5,w.shape=2,w.scale=1,dateLastSample=2014) {
+simulateOutbreak = function(R=1,neg=0.25,ninf=NA,pi=0.5,w.shape=2,w.scale=1,dateStartOutbreak=2000,datePresent=Inf) {
   #Create a transmission tree with ninf infected sampled individuals
   nsam<-0
   nh<-0
   while (is.na(ninf)||nsam!=ninf) {
-    ttree<-makeTTree(R,pi,w.shape,w.scale)[[1]]
-    if (is.null(ttree)) {nsam<-0;nh=0} else {
-      nsam<-length(which(!is.na(ttree[,2])))
-      nh=nrow(ttree)-nsam
-      if (is.na(ninf)) ninf=nsam
-    }
+    ttree=NULL
+    while (is.null(ttree)) ttree<-makeTTree(R,pi,w.shape,w.scale,datePresent-dateStartOutbreak)[[1]]
+    nsam<-length(which(!is.na(ttree[,2])))
+    nh=nrow(ttree)-nsam
+    if (is.na(ninf)) ninf=nsam
   }
   n<-nsam+nh
   
@@ -33,6 +33,6 @@ simulateOutbreak = function(R=1,neg=0.25,ninf=NA,pi=0.5,w.shape=2,w.scale=1,date
   
   #Glue these trees together
   truth<-.glueTrees(ttree,wtree)
-  truth[,1]<-truth[,1]-max(truth[,1])+dateLastSample
+  truth[,1]<-truth[,1]+dateStartOutbreak
   return(truth)
 }  

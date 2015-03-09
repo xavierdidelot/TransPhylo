@@ -13,10 +13,10 @@
 
 \section{Simulation}
 
-A pathogen has an effective within-host population size of $N_e=100$ and a generation time $g=1$ day, so that $N_e g=100/365$ years. The basic reproduction number is $R=1$. The following command simulates an outbreak of this pathogen with 10 sampled cases: 
+A pathogen has an effective within-host population size of $N_e=100$ and a generation time $g=1$ day, so that $N_e g=100/365$ years. The basic reproduction number is $R=1$. The following command simulates an outbreak of this pathogen: 
 \begin{Schunk}
 \begin{Sinput}
-> simu <- simulateOutbreak(R=1,neg=100/365,ninf=10,pi=0.2)
+> simu <- simulateOutbreak(R=1,neg=100/365,pi=0.2)
 \end{Sinput}
 \end{Schunk}
 
