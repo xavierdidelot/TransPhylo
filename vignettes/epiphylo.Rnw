@@ -1,15 +1,23 @@
 \documentclass[a4paper]{article}
+\usepackage{geometry}
+\geometry{tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
 
-\title{Documentation of the R package epiphylo}
+\title{Documentation of the R package EpiPhylo}
 \author{Xavier Didelot}
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
+
+<<include=FALSE>>=
+library(knitr)
+opts_chunk$set(fig.width=5,fig.height=5,out.width="4in",out.height="4in",fig.align = "center")
+@
+
 %\VignetteIndexEntry{Using epiphylo}
+
 
 \maketitle
 
-<<echo=FALSE>>=
+<<include=FALSE>>=
 library('epiphylo')
 set.seed(15)
 @
@@ -24,21 +32,21 @@ simu <- simulateOutbreak(R=1,neg=100/365,pi=0.2)
 This simulation contains both the transmission tree between infected hosts and the within-host phlogenetic tree of each host. This can be visualised as a colored phlogenetic tree, where each host is represented by a unique color:
 
 \begin{center}
-<<fig=TRUE>>=
+<<>>=
 plotBothTree(simu)
 @
 \end{center}
 
 The transmission tree can be extracted and plotted separately from the phylogeny:
 
-<<fig=TRUE>>=
+<<>>=
 ttree<-ttreeFromFullTree(simu)
 plotTTree(ttree)
 @
 
 The phylogenetic tree can be extracted and converted into a phylo object from the ape package:
 
-<<fig=TRUE>>=
+<<>>=
 library(ape)
 ptree<-ptreeFromFullTree(simu)
 p<-phyloFromPtree(ptree)
@@ -49,7 +57,7 @@ plot(p)
 
 A phylo object can be turned  into a phylogenetic tree and complemented with a wild guess at the transmission tree in order to provide the starting point of the MCMC procedure:
 
-<<fig=TRUE>>=
+<<>>=
 ptree<-ptreeFromPhylo(p,dateLastSample=max(simu[,1]))
 full<-makeFullTreeFromPTree(ptree)
 plotBothTree(full)
@@ -57,20 +65,20 @@ plotBothTree(full)
 
 The MCMC procedure to infer the transmission tree given the phylogenetic tree can be run as follows:
 
-<<results=hide>>=
+<<results='hide'>>=
 record<-inferTTree(ptree,mcmcIterations=1000)
 @
 
 This returns a record of all MCMC iterations. This is what the transmission tree looks like at the end of the MCMC:
 
-<<fig=TRUE>>=
+<<>>=
 lastIteration<-record[[length(record)]]
 plotBothTree(lastIteration$tree)
 @
 
 Traces of the MCMC:
 
-<<echo=FALSE,fig=TRUE>>=
+<<echo=FALSE>>=
 par(mfrow=c(2,2))
 plot(sapply(record,function(x) x$pTTree+x$pPTree),ylab='Posterior probability',xlab='MCMC iterations',type='l')
 plot(sapply(record,function(x) x$pi),ylab='Sampling proportion pi',xlab='MCMC iterations',type='l')

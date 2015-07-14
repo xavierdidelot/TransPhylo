@@ -1,0 +1,15 @@
+.Rproj.user
+.Rhistory
+.RData
+
+vignettes/epiphylo-concordance.tex
+
+*.pdf
+
+*.pdf
+
+*.tex
+
+*.gz
+
+*.pdf
