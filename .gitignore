@@ -13,3 +13,5 @@ vignettes/epiphylo-concordance.tex
 *.gz
 
 *.pdf
+
+vignettes/epiphylo.log
