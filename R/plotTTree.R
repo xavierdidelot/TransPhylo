@@ -1,7 +1,7 @@
 #' Plot a transmission tree
 #' @param ttree Transmission tree
 #' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
-#' @param w.scape Scale parameter of the Gamma probability density function representing the generation length w 
+#' @param w.scale Scale parameter of the Gamma probability density function representing the generation length w 
 plotTTree = function(ttree,w.shape=2,w.scale=1) {
   n=nrow(ttree)
   #Determine ys 

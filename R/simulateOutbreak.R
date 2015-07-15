@@ -1,22 +1,23 @@
 #' Simulate an outbreak
-#' @param R the basic reproduction number
+#' @param off.r First parameter of the negative binomial distribution for offspring number
+#' @param off.p Second parameter of the negative binomial distribution for offspring number
 #' @param neg the within-host effective population size (Ne) times  generation duration (g)
 #' @param ninf number of sampled infected individuals, or NA for any
 #' @param pi probability of sampling an infected individual
 #' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
-#' @param w.scape Scale parameter of the Gamma probability density function representing the generation length w 
+#' @param w.scale Scale parameter of the Gamma probability density function representing the generation length w 
 #' @param dateStartOutbreak Date when index case becomes infected
-#' @param dataPresent Date when process stops (this can be Inf for fully simulated outbreaks)
+#' @param datePresent Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @return Combined phylogenetic and transmission tree
 #' @examples
 #' plotBothTree(simulateOutbreak())
-simulateOutbreak = function(R=1,neg=0.25,ninf=NA,pi=0.5,w.shape=2,w.scale=1,dateStartOutbreak=2000,datePresent=Inf) {
+simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,ninf=NA,pi=0.5,w.shape=2,w.scale=1,dateStartOutbreak=2000,datePresent=Inf) {
   #Create a transmission tree with ninf infected sampled individuals
   nsam<-0
   nh<-0
   while (is.na(ninf)||nsam!=ninf) {
     ttree=NULL
-    while (is.null(ttree)) ttree<-makeTTree(R,pi,w.shape,w.scale,datePresent-dateStartOutbreak)[[1]]
+    while (is.null(ttree)) ttree<-makeTTree(off.r,off.p,pi,w.shape,w.scale,datePresent-dateStartOutbreak)[[1]]
     nsam<-length(which(!is.na(ttree[,2])))
     nh=nrow(ttree)-nsam
     if (is.na(ninf)) ninf=nsam

@@ -1,7 +1,7 @@
 #' Infer transmission tree given a phylogenetic tree
 #' @param ptree Phylogenetic tree
 #' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
-#' @param w.scape Scale parameter of the Gamma probability density function representing the generation length w 
+#' @param w.scale Scale parameter of the Gamma probability density function representing the generation length w 
 #' @param mcmcIterations Number of MCMC iterations to run the algorithm for
 #' @param startNeg Starting value of within-host coalescent parameter Ne*g
 #' @param startR Starting value of basic reproduction number R
@@ -30,7 +30,7 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100
   pTTree <- probTTree(ttreeFromFullTree(fulltree),R,pi,w.shape,w.scale) 
   pPTree <- probPTreeGivenTTree(fulltree,neg) 
   for (i in 1:mcmcIterations) {#Main MCMC loop
-    if (i%%100 == 0) print(i) 
+    if (i%%100 == 0) message(i) 
     #Record things 
     record[[i]]$tree <- fulltree
     record[[i]]$pTTree <- pTTree 

@@ -1,8 +1,8 @@
 set.seed(0)
-simu <- simulateOutbreak(R=1,neg=100/365,pi=0.5,ninf=20)
+simu <- simulateOutbreak(neg=100/365,pi=0.5,ninf=20)
 
 pi=0.5
-start <- Sys.time ()
+start <- Sys.time()
 record<-inferTTree(ptreeFromFullTree(simu),mcmcIterations=10000,startPi=pi,updatePi=FALSE,testing=TRUE)
 print(Sys.time()-start)
 

@@ -3,7 +3,7 @@
 #' @param R Basic reproduction number
 #' @param pi probability of sampling an infected individual
 #' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
-#' @param w.scape Scale parameter of the Gamma probability density function representing the generation length w 
+#' @param w.scale Scale parameter of the Gamma probability density function representing the generation length w 
 #' @return Probability of the transmission tree
 probTTree = function(ttree,R,pi,w.shape,w.scale)  {
   prob <- 0 
@@ -15,7 +15,7 @@ probTTree = function(ttree,R,pi,w.shape,w.scale)  {
       prob<-prob+log(pi)+dgamma((ttree[i,2]-ttree[i,1]),shape=w.shape,scale=w.scale,log=TRUE) 
     offspring <- which( ttree[ ,3] == i ) 
     d0 <- length(offspring)
-    if (is.na(pd0[d0+1])) pd0[d0+1]=R*(p0-1)-d0*log(p0)+pgamma(R*p0,d0,log=T)    
+    if (is.na(pd0[d0+1])) pd0[d0+1]=R*(p0-1)-d0*log(p0)+pgamma(R*p0,d0,log.p=T)    
     prob <- prob + pd0[d0+1]
     #prob <- prob + dpois(length(offspring),R,log=TRUE)    
     for (j in offspring) {

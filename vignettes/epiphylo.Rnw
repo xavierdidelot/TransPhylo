@@ -24,9 +24,9 @@ set.seed(15)
 
 \section{Simulation}
 
-A pathogen has an effective within-host population size of $N_e=100$ and a generation time $g=1$ day, so that $N_e g=100/365$ years. The basic reproduction number is $R=1$. The following command simulates an outbreak of this pathogen: 
+A pathogen has an effective within-host population size of $N_e=100$ and a generation time $g=1$ day, so that $N_e g=100/365$ years. The default basic reproduction number is $R=1$. The following command simulates an outbreak of this pathogen: 
 <<>>=
-simu <- simulateOutbreak(R=1,neg=100/365,pi=0.2)
+simu <- simulateOutbreak(neg=100/365,pi=0.2)
 @
 
 This simulation contains both the transmission tree between infected hosts and the within-host phlogenetic tree of each host. This can be visualised as a colored phlogenetic tree, where each host is represented by a unique color:
@@ -65,7 +65,7 @@ plotBothTree(full)
 
 The MCMC procedure to infer the transmission tree given the phylogenetic tree can be run as follows:
 
-<<results='hide'>>=
+<<message=FALSE>>=
 record<-inferTTree(ptree,mcmcIterations=1000)
 @
 
