@@ -7,13 +7,13 @@
 
 \begin{document}
 
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Using epiphylo}
+
 <<include=FALSE>>=
 library(knitr)
 opts_chunk$set(fig.width=5,fig.height=5,out.width="4in",out.height="4in",fig.align = "center")
 @
-
-%\VignetteIndexEntry{Using epiphylo}
-
 
 \maketitle
 
@@ -83,7 +83,7 @@ par(mfrow=c(2,2))
 plot(sapply(record,function(x) x$pTTree+x$pPTree),ylab='Posterior probability',xlab='MCMC iterations',type='l')
 plot(sapply(record,function(x) x$pi),ylab='Sampling proportion pi',xlab='MCMC iterations',type='l')
 plot(sapply(record,function(x) x$neg),ylab='Within-host coalescent rate Ne*g',xlab='MCMC iterations',type='l')
-plot(sapply(record,function(x) x$R),ylab='Basic reproduction number R',xlab='MCMC iterations',type='l')
+plot(sapply(record,function(x) x$off.r*x$off.p/(1-x$off.p)),ylab='Basic reproduction number R',xlab='MCMC iterations',type='l')
 @
 
 \end{document}

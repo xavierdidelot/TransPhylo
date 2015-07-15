@@ -5,7 +5,7 @@ Version: 1.0
 Date: 2014-02-18
 Author: Xavier Didelot <xavier.didelot@gmail.com>
 Maintainer: Xavier Didelot <xavier.didelot@gmail.com>
-Depends: gsl
-Suggests: ape
+Suggests: ape, knitr
 Description: Inference of transmission tree under a within-host evolution model.
+VignetteBuilder: knitr
 License: GPL (>=2)

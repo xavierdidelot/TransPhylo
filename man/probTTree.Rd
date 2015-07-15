@@ -4,12 +4,14 @@
 \alias{probTTree}
 \title{Calculates the log-probability of a transmission tree}
 \usage{
-probTTree(ttree, R, pi, w.shape, w.scale)
+probTTree(ttree, off.r, off.p, pi, w.shape, w.scale)
 }
 \arguments{
 \item{ttree}{Transmission tree}
 
-\item{R}{Basic reproduction number}
+\item{off.r}{First parameter of the negative binomial distribution for offspring number}
+
+\item{off.p}{Second parameter of the negative binomial distribution for offspring number}
 
 \item{pi}{probability of sampling an infected individual}
 

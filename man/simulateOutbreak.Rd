@@ -13,7 +13,7 @@ simulateOutbreak(off.r = 1, off.p = 0.5, neg = 0.25, ninf = NA,
 
 \item{off.p}{Second parameter of the negative binomial distribution for offspring number}
 
-\item{neg}{the within-host effective population size (Ne) times  generation duration (g)}
+\item{neg}{the within-host effective population size (Ne) timesgeneration duration (g)}
 
 \item{ninf}{number of sampled infected individuals, or NA for any}
 

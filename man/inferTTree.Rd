@@ -5,8 +5,9 @@
 \title{Infer transmission tree given a phylogenetic tree}
 \usage{
 inferTTree(ptree, w.shape = 2, w.scale = 1, mcmcIterations = 1000,
-  startNeg = 100/365, startR = 1, startPi = 0.5, updateNeg = TRUE,
-  updateR = TRUE, updatePi = TRUE, testing = FALSE)
+  startNeg = 100/365, startOff.r = 1, startOff.p = 0.5, startPi = 0.5,
+  updateNeg = TRUE, updateOff.r = TRUE, updateOff.p = TRUE,
+  updatePi = TRUE, testing = FALSE)
 }
 \arguments{
 \item{ptree}{Phylogenetic tree}
@@ -19,13 +20,17 @@ inferTTree(ptree, w.shape = 2, w.scale = 1, mcmcIterations = 1000,
 
 \item{startNeg}{Starting value of within-host coalescent parameter Ne*g}
 
-\item{startR}{Starting value of basic reproduction number R}
+\item{startOff.r}{Starting value of parameter off.r}
+
+\item{startOff.p}{Starting value of parameter off.p}
 
 \item{startPi}{Starting value of sampling proportion pi}
 
 \item{updateNeg}{Whether of not to update the parameter Ne*g}
 
-\item{updateR}{Whether or not to update the parameter R}
+\item{updateOff.r}{Whether or not to update the parameter off.r}
+
+\item{updateOff.p}{Whether or not to update the parameter off.p}
 
 \item{updatePi}{Whether or not to update the parameter pi}
 

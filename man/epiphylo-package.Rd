@@ -29,7 +29,3 @@ Maintainer: Xavier Didelot <xavier.didelot@gmail.com>
 ~~ Literature or other references for background information ~~
 }
 \keyword{ package }
-\seealso{
-}
-\examples{
-}

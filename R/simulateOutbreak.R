@@ -1,7 +1,7 @@
 #' Simulate an outbreak
 #' @param off.r First parameter of the negative binomial distribution for offspring number
 #' @param off.p Second parameter of the negative binomial distribution for offspring number
-#' @param neg the within-host effective population size (Ne) times  generation duration (g)
+#' @param neg the within-host effective population size (Ne) timesgeneration duration (g)
 #' @param ninf number of sampled infected individuals, or NA for any
 #' @param pi probability of sampling an infected individual
 #' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
