@@ -34,7 +34,7 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,T)  {
     
   } else {
     #This is the case of an ongoing outbreak
-    dt=1;L=1000
+    dt=0.5;L=1000
     omega=rep(NA,L);omega[1]=1;omegabar=rep(NA,L);omegabar[1]=1
     dgammastore=dgamma(dt*(1:(L-1)),shape=w.shape,scale=w.scale)
     coef=c(0.5,rep(1,L-1))
@@ -43,7 +43,8 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,T)  {
       omegabar[k+1]=sum(coef[1:k]*dgammastore[seq(k,1,-1)]*omega[1:k]*dt)+1-pgamma(k*dt,shape=w.shape,scale=w.scale)
       omega[k+1]=(1-pi*pgamma(k*dt,shape=w.shape,scale=w.scale))*((1-off.p)/(1-off.p*omegabar[k+1]))^off.r
       if (abs(omegabar[k+1]-omegaStar)<0.01) {omegabar[k+2:L]=omegaStar;omega[k+2:L]=omegaStar;break} 
-      if (k==(L-1)) warning('Convergence not reached')
+      if (k==L-1) {warning('Convergence not reached')
+        print(sprintf('omegaStar=%f,omegabar[L]=%f,w.shape=%f,w.scale=%f,pi=%f,off.r=%f,off.p=%f',omegaStar,omegabar[L],w.shape,w.scale,pi,off.r,off.p))}
     }
     #pit      =function(t) {pi*pgamma((T-t),shape=w.shape,scale=w.scale) }#This is Equation (6), but replaced with pi*trunc
     fomega   =function(x) {omega   [max(1,min(L,round((T-x)/dt)))] }
@@ -52,8 +53,9 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,T)  {
     for (i in (1:n)) { 
       tinf=ttree[i,1]
       trunc=pgamma(T-tinf,shape=w.shape,scale=w.scale)
+      ltrunc=log(trunc)
       if (is.na(ttree[i,2])) prob<-prob+log(1-pi*trunc) #This is the first term in the product in Equation (9)
-      else prob<-prob+log(pi*trunc)+dgamma((ttree[i,2]-ttree[i,1]),shape=w.shape,scale=w.scale,log=TRUE)/(1-trunc) #This is the second term in the product in Equation (9)
+      else prob<-prob+log(pi*trunc)+dgamma((ttree[i,2]-ttree[i,1]),shape=w.shape,scale=w.scale,log=TRUE)-ltrunc #This is the second term in the product in Equation (9)
       offspring <- which( ttree[ ,3] == i ) 
       d <- length(offspring)
       alpha=0
@@ -62,7 +64,7 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,T)  {
       alpha=log(alpha)
       prob <- prob + alpha #This is the third term in the product in Equation (9)
       for (j in offspring) {
-        prob <- prob + dgamma((ttree[j,1]-ttree[i,1]),shape=w.shape,scale=w.scale,log=TRUE)/(1-trunc) #This is the fourth term in the product in Equation (9)
+        prob <- prob + dgamma((ttree[j,1]-ttree[i,1]),shape=w.shape,scale=w.scale,log=TRUE)-ltrunc #This is the fourth term in the product in Equation (9)
       } 
     } 
   }

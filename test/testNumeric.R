@@ -1,10 +1,10 @@
 rm(list=ls())
 w.shape=2;w.scale=1
-pi=0.1
+pi=0.5
 T=2010
-off.r=2;off.p=0.5
+off.r=0.247352;off.p=0.5
 
-dt=0.1;L=1000
+dt=0.5;L=1000
 omega=rep(NA,L);omega[1]=1;omegabar=rep(NA,L);omegabar[1]=1
 dgammastore=dgamma(dt*(1:(L-1)),w.shape,w.scale)
 coef=c(0.5,rep(1,L-1))
