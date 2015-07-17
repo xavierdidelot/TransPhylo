@@ -14,6 +14,8 @@
 #' @param datePresent Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @return posterior sample set of transmission trees
 inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100/365,startOff.r=1,startOff.p=0.5,startPi=0.5,updateNeg=TRUE,updateOff.r=TRUE,updateOff.p=TRUE,updatePi=TRUE,datePresent=Inf) {
+  forget(.getOmegabar)
+  forget(.probSubtree)
   #if (testing) {
   #  v=ceiling(nrow(ptree)/2+1):nrow(ptree)
   #  totbralen=-sum(ptree[v,1]-ptree[ptree[v,2],1])-sum(ptree[v,1]-ptree[ptree[v,3],1])

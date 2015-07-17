@@ -1,10 +1,11 @@
 Package: epiphylo
 Type: Package
 Title: Inference of transmission tree under a within-host evolution model
-Version: 1.0
-Date: 2014-02-18
+Version: 0.1
+Date: 2015-07-17
 Author: Xavier Didelot <xavier.didelot@gmail.com>
 Maintainer: Xavier Didelot <xavier.didelot@gmail.com>
+Depends: memoise
 Suggests: ape, knitr
 Description: Inference of transmission tree under a within-host evolution model.
 VignetteBuilder: knitr
