@@ -1,9 +1,16 @@
+rm(list=ls())
 set.seed(0)
-simu <- simulateOutbreak(neg=100/365,pi=0.5,ninf=20)
-
+neg=100/365
 pi=0.5
+simu <- simulateOutbreak(neg=neg,pi=pi,off.r=2,dateStartOutbreak = 2000,datePresent = 2010)
+length(simu)
+
+#library('lineprof')
 start <- Sys.time()
-record<-inferTTree(ptreeFromFullTree(simu),mcmcIterations=10000,startPi=pi,updatePi=FALSE,testing=TRUE)
+lp<-lineprof(
+  record<-inferTTree(ptreeFromFullTree(simu),mcmcIterations=1000,startNeg=neg,startPi=pi,updatePi=FALSE,updateNeg=F,updateOff.p=F,datePresent=2010)
+  )
+shine(lp)
 print(Sys.time()-start)
 
 #par(mfrow=c(2,2))
