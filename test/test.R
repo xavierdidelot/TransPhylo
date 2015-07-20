@@ -3,7 +3,7 @@ set.seed(0)
 neg=100/365
 pi=0.5
 R=3
-simu <- simulateOutbreak(neg=neg,pi=pi,off.r=R,dateStartOutbreak = 2000,datePresent = 2010,nSampled=50)
+simu <- simulateOutbreak(neg=neg,pi=pi,off.r=R,dateStartOutbreak = 2000,datePresent = 2010,nSampled=100)
 length(simu)
 
 library('lineprof')

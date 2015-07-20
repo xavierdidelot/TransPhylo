@@ -21,9 +21,8 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,T)  {
       offspring <- which( ttree[ ,3] == i ) 
       d <- length(offspring)
       if (is.na(alphaStar[d+1])) {
-        alphaStar[d+1]=0
         notinf=d+2*off.r*off.p/(1-off.p)
-        for (k in d:notinf) alphaStar[d+1]=alphaStar[d+1]+choose(k,d)*dnbinom(k,off.r,off.p)*omegaStar^{k-d} #This is in Equation (2)
+        alphaStar[d+1]=sum(choose(d:notinf,d)*dnbinom(d:notinf,off.r,off.p)*omegaStar^{0:(notinf-d)})#This is in Equation (2)
         alphaStar[d+1]=log(alphaStar[d+1])
       }
       prob <- prob + alphaStar[d+1] #This is the third term in the product in Equation (5)
@@ -47,9 +46,8 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,T)  {
       else prob<-prob+log(pi*trunc)+dgamma((ttree[i,2]-ttree[i,1]),shape=w.shape,scale=w.scale,log=TRUE)-ltrunc #This is the second term in the product in Equation (9)
       offspring <- which( ttree[ ,3] == i ) 
       d <- length(offspring)
-      alpha=0
       notinf=d+2*off.r*off.p/(1-off.p)
-      for (k in d:notinf) alpha=alpha+choose(k,d)*dnbinom(k,off.r,off.p)*fomegabar(tinf)^{k-d} #This is in Equation (8)
+      alpha=sum(choose(d:notinf,d)*dnbinom(d:notinf,off.r,off.p)*fomegabar(tinf)^{0:(notinf-d)}) #This is in Equation (8)
       alpha=log(alpha)
       prob <- prob + alpha #This is the third term in the product in Equation (9)
       for (j in offspring) {
