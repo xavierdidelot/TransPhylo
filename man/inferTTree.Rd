@@ -7,7 +7,7 @@
 inferTTree(ptree, w.shape = 2, w.scale = 1, mcmcIterations = 1000,
   startNeg = 100/365, startOff.r = 1, startOff.p = 0.5, startPi = 0.5,
   updateNeg = TRUE, updateOff.r = TRUE, updateOff.p = TRUE,
-  updatePi = TRUE, testing = FALSE)
+  updatePi = TRUE, datePresent = Inf)
 }
 \arguments{
 \item{ptree}{Phylogenetic tree}
@@ -34,7 +34,7 @@ inferTTree(ptree, w.shape = 2, w.scale = 1, mcmcIterations = 1000,
 
 \item{updatePi}{Whether or not to update the parameter pi}
 
-\item{testing}{Whether or not to apply the test mode without likelihood}
+\item{datePresent}{Date when process stops (this can be Inf for fully simulated outbreaks)}
 }
 \value{
 posterior sample set of transmission trees

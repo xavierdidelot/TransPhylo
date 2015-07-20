@@ -6,13 +6,13 @@ R=3
 simu <- simulateOutbreak(neg=neg,pi=pi,off.r=R,dateStartOutbreak = 2000,datePresent = 2010)
 length(simu)
 
-#library('lineprof')
+library('lineprof')
 start <- Sys.time()
-#lp<-lineprof(
-  record<-inferTTree(ptreeFromFullTree(simu),mcmcIterations=10000,startNeg=neg,startPi=pi,updatePi=F,updateNeg=F,updateOff.p=F,datePresent=2010)
-#  )
-#shine(lp)
+lp<-lineprof(
+  record<-inferTTree(ptreeFromFullTree(simu),mcmcIterations=300,startNeg=neg,startPi=pi,updatePi=F,updateNeg=F,updateOff.p=F,datePresent=2010)
+  )
 print(Sys.time()-start)
+shine(lp)
 
 plot(sapply(record,function(x) x$off.r),type='l',xlab='Iteration',ylab='off.r')
 

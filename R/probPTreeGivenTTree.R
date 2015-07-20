@@ -28,7 +28,8 @@ probPTreeGivenTTree = function(fulltree,neg)  {
   return(subtree)
 } 
 
-.probSubtree0 = function(tab,rate)  {
+.probSubtree=memoise(.probSubtree0)
+.probSubtree0=function(tab,rate)  {
   #tab(:,1)=times at bottom;tab(:,2)=father;rate=coalescence rate 
   #Return the log-prior probability of a subtree 
   #This is an extension to Eq1 of Drummond et al(2002) Genetics 161:1307-1320 that accounts for condition TMRCA<INCUBATION_PERIOD 
@@ -88,4 +89,3 @@ probPTreeGivenTTree = function(fulltree,neg)  {
   return(p)
 }
 
-.probSubtree=memoise(.probSubtree0)

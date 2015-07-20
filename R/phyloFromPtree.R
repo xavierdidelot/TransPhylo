@@ -3,7 +3,7 @@
 #' @return phylo object
 phyloFromPtree <- function(ptree) {
   n<-ceiling(nrow(ptree)/2)
-  if (n==1) return(read.tree(text='(1);'))
+  if (n==1) return(ape::read.tree(text='(1);'))
   tr<-list()
   tr$Nnode<-n-1
   tr$tip.label<-as.character(1:n)

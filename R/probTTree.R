@@ -10,7 +10,7 @@
 probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,T)  {
   prob <- 0 
   n <- nrow(ttree)
-  
+
   if (T==Inf) {
     # This is the case of a finished outbreak
     omegaStar <- uniroot(function(x) {x-(1-pi)*((1-off.p)/(1-off.p*x))^off.r},c(0,1))$root #This is Equation (1)
@@ -61,7 +61,9 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,T)  {
   return(prob)
 } 
 
-.getOmegabar0=function(L,dt,off.r,off.p,pi,w.shape,w.scale,T) {
+.getOmegabar=memoise(.getOmegabar0)
+.getOmegabar0=
+  function(L,dt,off.r,off.p,pi,w.shape,w.scale,T) {
   omega=rep(NA,L);omega[1]=1;omegabar=rep(NA,L);omegabar[1]=1
   dgammastore=dgamma(dt*(1:(L-1)),shape=w.shape,scale=w.scale)
   coef=c(0.5,rep(1,L-1))
@@ -75,5 +77,3 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,T)  {
   }
   return(omegabar)
 }
-
-.getOmegabar=memoise(.getOmegabar0)

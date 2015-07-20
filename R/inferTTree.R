@@ -14,8 +14,10 @@
 #' @param datePresent Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @return posterior sample set of transmission trees
 inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100/365,startOff.r=1,startOff.p=0.5,startPi=0.5,updateNeg=TRUE,updateOff.r=TRUE,updateOff.p=TRUE,updatePi=TRUE,datePresent=Inf) {
-  forget(.getOmegabar)
-  forget(.probSubtree)
+  #print(is.memoised(.getOmegabar))
+  memoise::forget(.getOmegabar)
+  #print(is.memoised(.probSubtree))
+  memoise::forget(.probSubtree)
   #if (testing) {
   #  v=ceiling(nrow(ptree)/2+1):nrow(ptree)
   #  totbralen=-sum(ptree[v,1]-ptree[ptree[v,2],1])-sum(ptree[v,1]-ptree[ptree[v,3],1])
@@ -30,9 +32,10 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100
   off.r <- startOff.r
   off.p <- startOff.p
   pi <- startPi
-  fulltree <- makeFullTreeFromPTree(ptree);#Starting point 
+  fulltree <- makeFullTreeFromPTree(ptree)#Starting point 
+  ttree <- ttreeFromFullTree(fulltree)
   record <- vector('list',mcmcIterations)
-  pTTree <- probTTree(ttreeFromFullTree(fulltree),off.r,off.p,pi,w.shape,w.scale,datePresent) 
+  pTTree <- probTTree(ttree,off.r,off.p,pi,w.shape,w.scale,datePresent) 
   pPTree <- probPTreeGivenTTree(fulltree,neg) 
   for (i in 1:mcmcIterations) {#Main MCMC loop
     if (i%%100 == 0) message(i) 
@@ -44,15 +47,19 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100
     record[[i]]$off.r <- off.r
     record[[i]]$off.p <- off.p
     record[[i]]$pi <- pi
+    record[[i]]$w.shape <- w.shape
+    record[[i]]$w.scale <- w.scale
     record[[i]]$source <- fulltree[fulltree[which(fulltree[,1]==0),2],4] 
     
     #Metropolis update for transmission tree 
     prop <- .proposal(fulltree) 
     fulltree2 <- prop$tree
-    pTTree2 <- probTTree(ttreeFromFullTree(fulltree2),off.r,off.p,pi,w.shape,w.scale,datePresent) 
+    ttree2 <- ttreeFromFullTree(fulltree2)
+    pTTree2 <- probTTree(ttree2,off.r,off.p,pi,w.shape,w.scale,datePresent) 
     pPTree2 <- probPTreeGivenTTree(fulltree2,neg) 
     if (log(runif(1)) < log(prop$qr)+pTTree2 + pPTree2-pTTree-pPTree)  { 
       fulltree <- fulltree2 
+      ttree <- ttree2
       pTTree <- pTTree2 
       pPTree <- pPTree2 
     } 
@@ -66,8 +73,8 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100
     
     if (updateOff.r) {
       #Metropolis update for off.r, assuming Exp(1) prior 
-      off.r2 <- abs(off.r + (runif(1)-0.5)*0.1)
-      pTTree2 <- probTTree(ttreeFromFullTree(fulltree),off.r2,off.p,pi,w.shape,w.scale,datePresent) 
+      off.r2 <- abs(off.r + (runif(1)-0.5)*0.5)
+      pTTree2 <- probTTree(ttree,off.r2,off.p,pi,w.shape,w.scale,datePresent) 
       if (log(runif(1)) < pTTree2-pTTree-off.r2+off.r)  {off.r <- off.r2;pTTree <- pTTree2}
     }
     
@@ -75,7 +82,7 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100
       #Metropolis update for off.p, assuming Unif(0,1) prior 
       off.p2 <- abs(off.p + (runif(1)-0.5)*0.1)
       if (off.p2>1) off.p2=2-off.p2
-      pTTree2 <- probTTree(ttreeFromFullTree(fulltree),off.r,off.p2,pi,w.shape,w.scale,datePresent) 
+      pTTree2 <- probTTree(ttree,off.r,off.p2,pi,w.shape,w.scale,datePresent) 
       if (log(runif(1)) < pTTree2-pTTree)  {off.p <- off.p2;pTTree <- pTTree2}
     }
 
@@ -83,7 +90,7 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100
       #Metropolis update for pi, assuming Unif(0,1) prior 
       pi2 <- abs(pi + (runif(1)-0.5)*0.1)
       if (pi2>1) pi2=2-pi2
-      pTTree2 <- probTTree(ttreeFromFullTree(fulltree),off.r,off.p,pi2,w.shape,w.scale,datePresent) 
+      pTTree2 <- probTTree(ttree,off.r,off.p,pi2,w.shape,w.scale,datePresent) 
       if (log(runif(1)) < pTTree2-pTTree)  {pi <- pi2;pTTree <- pTTree2}       
     }
     
