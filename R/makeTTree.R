@@ -5,8 +5,9 @@
 #' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
 #' @param w.scale Scale parameter of the Gamma probability density function representing the generation length w 
 #' @param maxTime Duration of simulation (can be Inf)
+#' @param nSampled Number of sampled individuals (can be NA for any)
 #' @return A N*3 matrix in the following format with one row per infected host, first column is time of infection, second column is time of sampling, third column is infector
-makeTTree <-function(off.r,off.p,pi,w.shape,w.scale,maxTime) { 
+makeTTree <-function(off.r,off.p,pi,w.shape,w.scale,maxTime,nSampled) { 
   ttree<-matrix(0,1,3)
   prob<-0
   todo<-1
@@ -24,6 +25,7 @@ makeTTree <-function(off.r,off.p,pi,w.shape,w.scale,maxTime) {
       #This individual is not sampled
       prob<-prob+log(1-pi)
       ttree[todo[1],2]<-NA}
+    
     offspring<-rnbinom(1,off.r,off.p)
     prob<-prob+log(dnbinom(offspring,off.r,off.p))
     if (offspring>0) {
@@ -38,9 +40,19 @@ makeTTree <-function(off.r,off.p,pi,w.shape,w.scale,maxTime) {
     todo<-todo[-1] 
   }
   
+  #Prune down number of sampled individuals if needed (only for ongoing outbreaks)
+  pruned=0
+  samTimes=ttree[which(!is.na(ttree[,2])),2]
+  if (!is.na(nSampled)&&maxTime<Inf&&nSampled<length(samTimes)) {
+    samTimes=sort(samTimes)
+    cutoff=(samTimes[nSampled]+samTimes[nSampled+1])/2
+    pruned=maxTime-cutoff
+    ttree[ttree[,2]>cutoff,2]=NA
+  }
+  
   #Remove infected individuals who are not sampled and have no children
   while (TRUE) {
-    if (nrow(ttree)==1 && is.na(ttree[1,2])) {return(list(ttree=NULL,prob=NULL))} #Nothing left
+    if (nrow(ttree)==1 && is.na(ttree[1,2])) {return(list(ttree=NULL,prob=NULL,pruned=0))} #Nothing left
     torem=c()
     for (i in 1:nrow(ttree)) {if (is.na(ttree[i,2])&&length(which(ttree[,3]==i))==0) {torem=c(torem,i)}}
     if (length(torem)==0) {break}
@@ -50,7 +62,7 @@ makeTTree <-function(off.r,off.p,pi,w.shape,w.scale,maxTime) {
   
   #Remove root if not sampled and only has one child
   while (TRUE) {
-    if (nrow(ttree)==1 && is.na(ttree[1,2])) {return(list(ttree=NULL,prob=NULL))} #Nothing left
+    if (nrow(ttree)==1 && is.na(ttree[1,2])) {return(list(ttree=NULL,prob=NULL,pruned=0))} #Nothing left
     if (is.na(ttree[1,2])&&length(which(ttree[,3]==1))==1) {
       ttree[,2]<-ttree[,2]-ttree[2,1]
       ttree[,1]<-ttree[,1]-ttree[2,1]
@@ -58,11 +70,11 @@ makeTTree <-function(off.r,off.p,pi,w.shape,w.scale,maxTime) {
       ttree[,3]=ttree[,3]-1
     } else {break}
   }
-
+  
   #Reorder so that sampled hosts are first
   order<-c(which(!is.na(ttree[,2])),which(is.na(ttree[,2])))
   invorder=1:length(order);invorder[order]=1:length(order)
   ttree<-ttree[order,,drop=FALSE]
   ttree[ttree[,3]>0,3]=invorder[ttree[ttree[,3]>0,3]]
-  return(list(ttree=ttree,prob=prob))
+  return(list(ttree=ttree,prob=prob,pruned=pruned))
 }

@@ -3,13 +3,13 @@ set.seed(0)
 neg=100/365
 pi=0.5
 R=3
-simu <- simulateOutbreak(neg=neg,pi=pi,off.r=R,dateStartOutbreak = 2000,datePresent = 2010)
+simu <- simulateOutbreak(neg=neg,pi=pi,off.r=R,dateStartOutbreak = 2000,datePresent = 2010,nSampled=50)
 length(simu)
 
 library('lineprof')
 start <- Sys.time()
 lp<-lineprof(
-  record<-inferTTree(ptreeFromFullTree(simu),mcmcIterations=300,startNeg=neg,startPi=pi,updatePi=F,updateNeg=F,updateOff.p=F,datePresent=2010)
+  record<-inferTTree(ptreeFromFullTree(simu),mcmcIterations=1000,startNeg=neg,startPi=pi,updatePi=F,updateNeg=F,updateOff.p=F,datePresent=2010)
   )
 print(Sys.time()-start)
 shine(lp)

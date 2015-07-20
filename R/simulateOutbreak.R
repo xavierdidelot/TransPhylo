@@ -2,7 +2,7 @@
 #' @param off.r First parameter of the negative binomial distribution for offspring number
 #' @param off.p Second parameter of the negative binomial distribution for offspring number
 #' @param neg the within-host effective population size (Ne) timesgeneration duration (g)
-#' @param ninf number of sampled infected individuals, or NA for any
+#' @param nSampled number of sampled infected individuals, or NA for any
 #' @param pi probability of sampling an infected individual
 #' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
 #' @param w.scale Scale parameter of the Gamma probability density function representing the generation length w 
@@ -11,17 +11,27 @@
 #' @return Combined phylogenetic and transmission tree
 #' @examples
 #' plotBothTree(simulateOutbreak())
-simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,ninf=NA,pi=0.5,w.shape=2,w.scale=1,dateStartOutbreak=2000,datePresent=Inf) {
-  #Create a transmission tree with ninf infected sampled individuals
+simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shape=2,w.scale=1,dateStartOutbreak=2000,datePresent=Inf) {
+  #Create a transmission tree with nSampled infected sampled individuals
   nsam<-0
   nh<-0
-  while (is.na(ninf)||nsam!=ninf) {
+  rejected=-1
+  while (is.na(nSampled)||nsam!=nSampled) {
     ttree=NULL
-    while (is.null(ttree)) ttree<-makeTTree(off.r,off.p,pi,w.shape,w.scale,datePresent-dateStartOutbreak)[[1]]
+    while (is.null(ttree)) {
+      mtt<-makeTTree(off.r,off.p,pi,w.shape,w.scale,datePresent-dateStartOutbreak,nSampled)
+      rejected=rejected+1
+      ttree<-mtt$ttree
+      if (mtt$pruned>0) {
+        dateStartOutbreak=dateStartOutbreak+mtt$pruned
+        cat(sprintf('Note that simulated outbreak was pruned: in order to have %d sampled by present date %f, the start date was set to %f\n',nSampled,datePresent,dateStartOutbreak))
+      }
+      }
     nsam<-length(which(!is.na(ttree[,2])))
     nh=nrow(ttree)-nsam
-    if (is.na(ninf)) ninf=nsam
+    if (is.na(nSampled)) nSampled=nsam
   }
+  if (rejected>0) cat(sprintf('Note that rejection sampling was used %d times to simulate outbreak with %d sampled individuals\n',rejected,nSampled))
   n<-nsam+nh
   
   #Create a within-host phylogenetic tree for each infected host
@@ -29,7 +39,7 @@ simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,ninf=NA,pi=0.5,w.shape=2,
   for (i in (1:n)) {
     if (is.na(ttree[i,2])) {times<-c(           ttree[which(ttree[,3]==i),1])-ttree[i,1]}
                       else {times<-c(ttree[i,2],ttree[which(ttree[,3]==i),1])-ttree[i,1]}
-    wtree[[i]]<-.withinhost(times,neg)[[1]];
+    wtree[[i]]<-.withinhost(times,neg)[[1]]
   }
   
   #Glue these trees together
