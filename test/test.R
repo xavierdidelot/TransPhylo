@@ -1,20 +1,26 @@
 rm(list=ls())
 set.seed(0)
 neg=100/365
-pi=0.5
-R=3
-simu <- simulateOutbreak(neg=neg,pi=pi,off.r=R,dateStartOutbreak = 2000,datePresent = 2010,nSampled=100)
+pi=0.05
+R=5
+w.shape=10
+w.scale=0.1
+simu <- simulateOutbreak(neg=neg,w.shape=w.shape,w.scale=w.scale,pi=pi,off.r=R,dateStartOutbreak = 2005,datePresent = 2010)
 length(simu)
 
-library('lineprof')
+#library('lineprof')
 start <- Sys.time()
-lp<-lineprof(
-  record<-inferTTree(ptreeFromFullTree(simu),mcmcIterations=1000,startNeg=neg,startPi=pi,updatePi=F,updateNeg=F,updateOff.p=F,datePresent=2010)
-  )
+#lp<-lineprof(
+record<-inferTTree(ptreeFromFullTree(simu),w.shape=w.shape,w.scale=w.scale,mcmcIterations=1000,startNeg=neg,startPi=pi,startOff.r=R,updateOff.r=F,updatePi=T,updateNeg=F,updateOff.p=F,datePresent=2010,updateTTree = T,optiStart=T)
+#  )
 print(Sys.time()-start)
-shine(lp)
+#shine(lp)
 
-plot(sapply(record,function(x) x$off.r),type='l',xlab='Iteration',ylab='off.r')
+par(mfrow=c(3,1))
+plot(sapply(record,function(x) x$pTTree+x$pPTree),ylab='Posterior probability',xlab='MCMC iterations',type='l')
+plot(sapply(record,function(x) x$pTTree),ylab='Ttree probability',xlab='MCMC iterations',type='l')
+#plot(sapply(record,function(x) x$off.r),type='l',xlab='Iteration',ylab='off.r')
+plot(sapply(record,function(x) x$pi),type='l',xlab='Iteration',ylab='pi')
 
 #par(mfrow=c(2,2))
 #plot(sapply(record,function(x) x$pTTree+x$pPTree),ylab='Posterior probability',xlab='MCMC iterations',type='l')

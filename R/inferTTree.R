@@ -11,28 +11,18 @@
 #' @param updateOff.r Whether or not to update the parameter off.r
 #' @param updateOff.p Whether or not to update the parameter off.p
 #' @param updatePi Whether or not to update the parameter pi
+#' @param optiStart Whether or not to optimise the MCMC start point
 #' @param datePresent Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @return posterior sample set of transmission trees
-inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100/365,startOff.r=1,startOff.p=0.5,startPi=0.5,updateNeg=TRUE,updateOff.r=TRUE,updateOff.p=TRUE,updatePi=TRUE,startFulltree=NA,updateTTree=TRUE,datePresent=Inf) {
-  #print(is.memoised(.getOmegabar))
+inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100/365,startOff.r=1,startOff.p=0.5,startPi=0.5,updateNeg=T,updateOff.r=T,updateOff.p=T,updatePi=T,startFulltree=NA,updateTTree=TRUE,optiStart=T,datePresent=Inf) {
   memoise::forget(.getOmegabar)
-  #print(is.memoised(.probSubtree))
   memoise::forget(.probSubtree)
-  #if (testing) {
-  #  v=ceiling(nrow(ptree)/2+1):nrow(ptree)
-  #  totbralen=-sum(ptree[v,1]-ptree[ptree[v,2],1])-sum(ptree[v,1]-ptree[ptree[v,3],1])
-  #  probPTreeGivenTTree = function(fulltree,neg) {return(0)} 
-  #  probTTree = function(ttree,pi.r,pi.p,pi,w.shape,w.scale) {#In test mode, the prob of a ttree is just prob of number of sampled cases given pi
-  #    nsam=length(which(!is.na(ttree[,2])))
-  #    n=nrow(ttree)
-  #    return(dbinom(nsam,n,pi,log=TRUE)-log(totbralen)*(n-1)+lfactorial(n-nsam))}
-  #}
   #MCMC algorithm
   neg <- startNeg
   off.r <- startOff.r
   off.p <- startOff.p
   pi <- startPi
-  if (is.na(sum(startFulltree))) fulltree <- makeFullTreeFromPTree(ptree)#Starting point 
+  if (is.na(sum(startFulltree))) fulltree <- makeFullTreeFromPTree(ptree,ifelse(optiStart,off.r,NA),off.p,neg,pi,w.shape,w.scale,datePresent)#Starting point 
   else fulltree<-startFulltree
   ttree <- ttreeFromFullTree(fulltree)
   record <- vector('list',mcmcIterations)
@@ -90,8 +80,9 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100
     }
 
         if (updatePi) {
-      #Metropolis update for pi, assuming Unif(0,1) prior 
-      pi2 <- abs(pi + (runif(1)-0.5)*0.1)
+      #Metropolis update for pi, assuming Unif(0.01,1) prior 
+      pi2 <- pi + (runif(1)-0.5)*0.1
+      if (pi2<0.01) pi2=0.02-pi2
       if (pi2>1) pi2=2-pi2
       pTTree2 <- probTTree(ttree,off.r,off.p,pi2,w.shape,w.scale,datePresent) 
       if (log(runif(1)) < pTTree2-pTTree)  {pi <- pi2;pTTree <- pTTree2}       
