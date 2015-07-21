@@ -22,7 +22,8 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,T)  {
       d <- length(offspring)
       if (is.na(alphaStar[d+1])) {
         notinf=d+2*off.r*off.p/(1-off.p)
-        alphaStar[d+1]=sum(choose(d:notinf,d)*dnbinom(d:notinf,off.r,off.p)*omegaStar^{0:(notinf-d)})#This is in Equation (2)
+        alphaStar[d+1]=sum(choose(d:notinf,d)*dnbinom(d:notinf,off.r,off.p)*omegaStar^{0:(notinf-d)})#This is Equation (2)
+        #alphaStar[d+1]=sum(factorial(d:notinf)/factorial(0:(notinf-d))*dnbinom(d:notinf,off.r,off.p)*omegaStar^{0:(notinf-d)})#This is Equation (2)
         alphaStar[d+1]=log(alphaStar[d+1])
       }
       prob <- prob + alphaStar[d+1] #This is the third term in the product in Equation (5)
@@ -33,7 +34,7 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,T)  {
     
   } else {
     #This is the case of an ongoing outbreak
-    dt=0.5;L=1000
+    dt=0.1;L=1000
     omegabar=.getOmegabar(L,dt,off.r,off.p,pi,w.shape,w.scale,T)
     #pit      =function(t) {pi*pgamma((T-t),shape=w.shape,scale=w.scale) }#This is Equation (6), but replaced with pi*trunc
     #fomega   =function(x) {omega   [max(1,min(L,round((T-x)/dt)))] }
@@ -43,16 +44,14 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,T)  {
       trunc=pgamma(T-tinf,shape=w.shape,scale=w.scale)
       ltrunc=log(trunc)
       if (is.na(ttree[i,2])) prob<-prob+log(1-pi*trunc) #This is the first term in the product in Equation (9)
-      else prob<-prob+log(pi*trunc)+dgamma((ttree[i,2]-ttree[i,1]),shape=w.shape,scale=w.scale,log=TRUE)-ltrunc #This is the second term in the product in Equation (9)
-      offspring <- which( ttree[ ,3] == i ) 
+      else prob<-prob+log(pi)+dgamma((ttree[i,2]-tinf),shape=w.shape,scale=w.scale,log=TRUE) #This is the second term in the product in Equation (9)
+      offspring <- which(ttree[ ,3]==i)
       d <- length(offspring)
       notinf=d+2*off.r*off.p/(1-off.p)
-      alpha=sum(choose(d:notinf,d)*dnbinom(d:notinf,off.r,off.p)*fomegabar(tinf)^{0:(notinf-d)}) #This is in Equation (8)
-      alpha=log(alpha)
-      prob <- prob + alpha #This is the third term in the product in Equation (9)
-      for (j in offspring) {
-        prob <- prob + dgamma((ttree[j,1]-ttree[i,1]),shape=w.shape,scale=w.scale,log=TRUE)-ltrunc #This is the fourth term in the product in Equation (9)
-      } 
+      alpha=sum(choose(d:notinf,d)*dnbinom(d:notinf,off.r,off.p)*fomegabar(tinf)^{0:(notinf-d)}) #This is Equation (8)
+#      alpha=sum(factorial(d:notinf)/factorial(0:(notinf-d))*dnbinom(d:notinf,off.r,off.p)*fomegabar(tinf)^{0:(notinf-d)}) #This is Equation (8)
+      prob <- prob + log(alpha) #This is the third term in the product in Equation (9)
+      prob <- prob + sum(dgamma((ttree[offspring,1]-tinf),shape=w.shape,scale=w.scale,log=TRUE)-ltrunc)#This is the fourth term in the product in Equation (9)
     } 
   }
   
@@ -60,8 +59,7 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,T)  {
 } 
 
 .getOmegabar=memoise(.getOmegabar0)
-.getOmegabar0=
-  function(L,dt,off.r,off.p,pi,w.shape,w.scale,T) {
+.getOmegabar0=function(L,dt,off.r,off.p,pi,w.shape,w.scale,T) {
   omega=rep(NA,L);omega[1]=1;omegabar=rep(NA,L);omegabar[1]=1
   dgammastore=dgamma(dt*(1:(L-1)),shape=w.shape,scale=w.scale)
   coef=c(0.5,rep(1,L-1))

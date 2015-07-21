@@ -13,7 +13,7 @@
 #' @param updatePi Whether or not to update the parameter pi
 #' @param datePresent Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @return posterior sample set of transmission trees
-inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100/365,startOff.r=1,startOff.p=0.5,startPi=0.5,updateNeg=TRUE,updateOff.r=TRUE,updateOff.p=TRUE,updatePi=TRUE,datePresent=Inf) {
+inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100/365,startOff.r=1,startOff.p=0.5,startPi=0.5,updateNeg=TRUE,updateOff.r=TRUE,updateOff.p=TRUE,updatePi=TRUE,startFulltree=NA,updateTTree=TRUE,datePresent=Inf) {
   #print(is.memoised(.getOmegabar))
   memoise::forget(.getOmegabar)
   #print(is.memoised(.probSubtree))
@@ -32,7 +32,8 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100
   off.r <- startOff.r
   off.p <- startOff.p
   pi <- startPi
-  fulltree <- makeFullTreeFromPTree(ptree)#Starting point 
+  if (is.na(sum(startFulltree))) fulltree <- makeFullTreeFromPTree(ptree)#Starting point 
+  else fulltree<-startFulltree
   ttree <- ttreeFromFullTree(fulltree)
   record <- vector('list',mcmcIterations)
   pTTree <- probTTree(ttree,off.r,off.p,pi,w.shape,w.scale,datePresent) 
@@ -51,6 +52,7 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100
     record[[i]]$w.scale <- w.scale
     record[[i]]$source <- fulltree[fulltree[which(fulltree[,1]==0),2],4] 
     
+    if (updateTTree) {
     #Metropolis update for transmission tree 
     prop <- .proposal(fulltree) 
     fulltree2 <- prop$tree
@@ -63,6 +65,7 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100
       pTTree <- pTTree2 
       pPTree <- pPTree2 
     } 
+    }
     
     if (updateNeg) {
       #Metropolis update for Ne*g, assuming Exp(1) prior 

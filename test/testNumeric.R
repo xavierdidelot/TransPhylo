@@ -1,12 +1,12 @@
 rm(list=ls())
-w.shape=2;w.scale=1
-pi=0.5
+w.shape=10;w.scale=0.1
+pi=0.001
 T=2010
-off.r=0.247352;off.p=0.5
+off.r=2;off.p=0.5
 
-dt=0.5;L=1000
+dt=0.1;L=1000
 omega=rep(NA,L);omega[1]=1;omegabar=rep(NA,L);omegabar[1]=1
-dgammastore=dgamma(dt*(1:(L-1)),w.shape,w.scale)
+dgammastore=dgamma(dt*(1:(L-1)),shape=w.shape,scale=w.scale)
 coef=c(0.5,rep(1,L-1))
 omegaStar <- uniroot(function(x) {x-(1-pi)*((1-off.p)/(1-off.p*x))^off.r},c(0,1))$root #This is Equation (1)
 for (k in 1:(L-1)) {
