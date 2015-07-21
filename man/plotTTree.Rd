@@ -4,7 +4,7 @@
 \alias{plotTTree}
 \title{Plot a transmission tree}
 \usage{
-plotTTree(ttree, w.shape = 2, w.scale = 1)
+plotTTree(ttree, w.shape, w.scale, showLabels = TRUE)
 }
 \arguments{
 \item{ttree}{Transmission tree}
@@ -12,6 +12,8 @@ plotTTree(ttree, w.shape = 2, w.scale = 1)
 \item{w.shape}{Shape parameter of the Gamma probability density function representing the generation length w}
 
 \item{w.scale}{Scale parameter of the Gamma probability density function representing the generation length w}
+
+\item{showLabels}{Whether or not to show the labels}
 }
 \description{
 Plot a transmission tree

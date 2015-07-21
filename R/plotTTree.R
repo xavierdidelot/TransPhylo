@@ -2,7 +2,8 @@
 #' @param ttree Transmission tree
 #' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
 #' @param w.scale Scale parameter of the Gamma probability density function representing the generation length w 
-plotTTree = function(ttree,w.shape=2,w.scale=1) {
+#' @param showLabels Whether or not to show the labels 
+plotTTree = function(ttree,w.shape,w.scale,showLabels=TRUE) {
   n=nrow(ttree)
   #Determine ys 
   ys <- rep(0, n)
@@ -29,7 +30,7 @@ plotTTree = function(ttree,w.shape=2,w.scale=1) {
     cs=gray(cs)
     segments(as,bs,x1=as+xstep,col=cs)
     points(ttree[i,2],ys[i],col = 'red') 
-    text(ma+(ma-mi)*0.05,ys[i],i)
+    if (showLabels) text(ma+(ma-mi)*0.05,ys[i],i)
     if (ttree[i,3]==0) {next}
     arrows(ttree[i,1],ys[ttree[i,3]],ttree[i,1],ys[i],length=0.1)
   }

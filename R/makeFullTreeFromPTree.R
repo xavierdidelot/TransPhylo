@@ -2,6 +2,7 @@
 #' @param tree Phylogenetic tree
 #' @param off.r First parameter of the negative binomial distribution for offspring number
 #' @param off.p Second parameter of the negative binomial distribution for offspring number
+#' @param neg the within-host effective population size (Ne) timesgeneration duration (g)
 #' @param pi probability of sampling an infected individual
 #' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
 #' @param w.scale Scale parameter of the Gamma probability density function representing the generation length w 

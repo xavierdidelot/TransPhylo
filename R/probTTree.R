@@ -63,7 +63,7 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,datePresent)  {
   coef=c(0.5,rep(1,L-1))
   omegaStar <- uniroot(function(x) {x-(1-pi)*((1-off.p)/(1-off.p*x))^off.r},c(0,1))$root #This is Equation (1)
   for (k in 1:(L-1)) {
-    omegabar[k+1]=sum(coef[1:k]*dgammastore[seq(k,1,-1)]*omega[1:k]*dt)+1-pgamma(k*dt,shape=w.shape,scale=w.scale)
+    omegabar[k+1]=min(1,sum(coef[1:k]*dgammastore[seq(k,1,-1)]*omega[1:k]*dt)+1-pgamma(k*dt,shape=w.shape,scale=w.scale))
     omega[k+1]=(1-pi*pgamma(k*dt,shape=w.shape,scale=w.scale))*((1-off.p)/(1-off.p*omegabar[k+1]))^off.r
     if (abs(omegabar[k+1]-omegaStar)<0.01) {omegabar[k+2:L]=omegaStar;omega[k+2:L]=omegaStar;break} 
     if (k==L-1) {warning('Convergence not reached')

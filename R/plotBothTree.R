@@ -1,8 +1,9 @@
 #' Plot both phylogenetic and transmission trees using colors on the phylogeny
 #' @param tree Combined phylogenetic/transmission tree
+#' @param showLabels Whether or not to show the labels 
 #' @examples
 #' plotBothTree(simulateOutbreak())
-plotBothTree = function(tree)  {
+plotBothTree = function(tree,showLabels=TRUE)  {
   nsam <- sum(tree[ ,2]+tree[ ,3] == 0) 
   nh <- nrow(tree)-3*nsam+1
   ntot <- nsam+nh
@@ -54,7 +55,7 @@ plotBothTree = function(tree)  {
     if (tree[w,2] == 0 && tree[w,3] == 0)  { 
       #Leaf node 
       lines(c(x,tree[w,1]),c(y,y),col=col,lwd=2) 
-      text(tree[w,1] + (max(cbind(tree[ ,1]))-min(cbind(tree[ ,1])))/100,y,w)
+      if (showLabels) text(tree[w,1] + (max(cbind(tree[ ,1]))-min(cbind(tree[ ,1])))/100,y,w)
     } else if (tree[w,3] == 0)  { 
       #Transmission node 
       lines(c(x,tree[w,1]),c(y,y),col=col,lwd=2) 

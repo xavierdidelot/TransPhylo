@@ -4,7 +4,7 @@
 \alias{simulateOutbreak}
 \title{Simulate an outbreak}
 \usage{
-simulateOutbreak(off.r = 1, off.p = 0.5, neg = 0.25, ninf = NA,
+simulateOutbreak(off.r = 1, off.p = 0.5, neg = 0.25, nSampled = NA,
   pi = 0.5, w.shape = 2, w.scale = 1, dateStartOutbreak = 2000,
   datePresent = Inf)
 }
@@ -15,7 +15,7 @@ simulateOutbreak(off.r = 1, off.p = 0.5, neg = 0.25, ninf = NA,
 
 \item{neg}{the within-host effective population size (Ne) timesgeneration duration (g)}
 
-\item{ninf}{number of sampled infected individuals, or NA for any}
+\item{nSampled}{number of sampled infected individuals, or NA for any}
 
 \item{pi}{probability of sampling an infected individual}
 

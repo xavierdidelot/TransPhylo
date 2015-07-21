@@ -4,10 +4,12 @@
 \alias{plotBothTree}
 \title{Plot both phylogenetic and transmission trees using colors on the phylogeny}
 \usage{
-plotBothTree(tree)
+plotBothTree(tree, showLabels = TRUE)
 }
 \arguments{
 \item{tree}{Combined phylogenetic/transmission tree}
+
+\item{showLabels}{Whether or not to show the labels}
 }
 \description{
 Plot both phylogenetic and transmission trees using colors on the phylogeny

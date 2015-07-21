@@ -2,17 +2,32 @@
 % Please edit documentation in R/makeFullTreeFromPTree.R
 \name{makeFullTreeFromPTree}
 \alias{makeFullTreeFromPTree}
-\title{Deterministically create a transmission tree compatible with the provided phylogenetic tree}
+\title{Create a transmission tree compatible with the provided phylogenetic tree}
 \usage{
-makeFullTreeFromPTree(tree)
+makeFullTreeFromPTree(tree, off.r = NA, off.p = NA, neg = NA, pi = NA,
+  w.shape = NA, w.scale = NA, T = NA)
 }
 \arguments{
-\item{tree}{phylogenetic tree}
+\item{tree}{Phylogenetic tree}
+
+\item{off.r}{First parameter of the negative binomial distribution for offspring number}
+
+\item{off.p}{Second parameter of the negative binomial distribution for offspring number}
+
+\item{neg}{the within-host effective population size (Ne) timesgeneration duration (g)}
+
+\item{pi}{probability of sampling an infected individual}
+
+\item{w.shape}{Shape parameter of the Gamma probability density function representing the generation length w}
+
+\item{w.scale}{Scale parameter of the Gamma probability density function representing the generation length w}
+
+\item{T}{Date when process stops (this can be Inf for fully simulated outbreaks)}
 }
 \value{
-A non-zero probability phylogenetic+transmission tree
+A minimal non-zero probability phylogenetic+transmission tree, or an optimised version if parameters are provided
 }
 \description{
-Deterministically create a transmission tree compatible with the provided phylogenetic tree
+Create a transmission tree compatible with the provided phylogenetic tree
 }
 

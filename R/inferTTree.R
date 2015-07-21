@@ -11,6 +11,8 @@
 #' @param updateOff.r Whether or not to update the parameter off.r
 #' @param updateOff.p Whether or not to update the parameter off.p
 #' @param updatePi Whether or not to update the parameter pi
+#' @param startFulltree Optional combined tree to start from
+#' @param updateTTree Whether or not to update the transmission tree
 #' @param optiStart Whether or not to optimise the MCMC start point
 #' @param datePresent Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @return posterior sample set of transmission trees
