@@ -3,6 +3,7 @@
 #' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
 #' @param w.scale Scale parameter of the Gamma probability density function representing the generation length w 
 #' @param mcmcIterations Number of MCMC iterations to run the algorithm for
+#' @param thining MCMC thining interval between two sampled iterations
 #' @param startNeg Starting value of within-host coalescent parameter Ne*g
 #' @param startOff.r Starting value of parameter off.r
 #' @param startOff.p Starting value of parameter off.p
@@ -16,7 +17,7 @@
 #' @param optiStart Whether or not to optimise the MCMC start point
 #' @param datePresent Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @return posterior sample set of transmission trees
-inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100/365,startOff.r=1,startOff.p=0.5,startPi=0.5,updateNeg=T,updateOff.r=T,updateOff.p=T,updatePi=T,startFulltree=NA,updateTTree=TRUE,optiStart=T,datePresent=Inf) {
+inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,thining=1,startNeg=100/365,startOff.r=1,startOff.p=0.5,startPi=0.5,updateNeg=T,updateOff.r=T,updateOff.p=T,updatePi=T,startFulltree=NA,updateTTree=TRUE,optiStart=T,datePresent=Inf) {
   memoise::forget(.getOmegabar)
   memoise::forget(.probSubtree)
   #MCMC algorithm
@@ -27,22 +28,24 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,startNeg=100
   if (is.na(sum(startFulltree))) fulltree <- makeFullTreeFromPTree(ptree,ifelse(optiStart,off.r,NA),off.p,neg,pi,w.shape,w.scale,datePresent)#Starting point 
   else fulltree<-startFulltree
   ttree <- ttreeFromFullTree(fulltree)
-  record <- vector('list',mcmcIterations)
+  record <- vector('list',mcmcIterations/thining)
   pTTree <- probTTree(ttree,off.r,off.p,pi,w.shape,w.scale,datePresent) 
   pPTree <- probPTreeGivenTTree(fulltree,neg) 
   for (i in 1:mcmcIterations) {#Main MCMC loop
-    if (i%%100 == 0) message(i) 
-    #Record things 
-    record[[i]]$tree <- fulltree
-    record[[i]]$pTTree <- pTTree 
-    record[[i]]$pPTree <- pPTree 
-    record[[i]]$neg <- neg 
-    record[[i]]$off.r <- off.r
-    record[[i]]$off.p <- off.p
-    record[[i]]$pi <- pi
-    record[[i]]$w.shape <- w.shape
-    record[[i]]$w.scale <- w.scale
-    record[[i]]$source <- fulltree[fulltree[which(fulltree[,1]==0),2],4] 
+    if (i%%thining == 0) {
+      #Record things 
+      message(i/thining) 
+      record[[i/thining]]$tree <- fulltree
+      record[[i/thining]]$pTTree <- pTTree 
+      record[[i/thining]]$pPTree <- pPTree 
+      record[[i/thining]]$neg <- neg 
+      record[[i/thining]]$off.r <- off.r
+      record[[i/thining]]$off.p <- off.p
+      record[[i/thining]]$pi <- pi
+      record[[i/thining]]$w.shape <- w.shape
+      record[[i/thining]]$w.scale <- w.scale
+      record[[i/thining]]$source <- fulltree[fulltree[which(fulltree[,1]==0),2],4] 
+    }
     
     if (updateTTree) {
     #Metropolis update for transmission tree 
