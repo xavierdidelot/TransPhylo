@@ -20,6 +20,7 @@
 inferTTree = function(ptree,w.shape=2,w.scale=1,mcmcIterations=1000,thining=1,startNeg=100/365,startOff.r=1,startOff.p=0.5,startPi=0.5,updateNeg=T,updateOff.r=T,updateOff.p=T,updatePi=T,startFulltree=NA,updateTTree=TRUE,optiStart=T,datePresent=Inf) {
   memoise::forget(.getOmegabar)
   memoise::forget(.probSubtree)
+  ptree[,1]=ptree[,1]+runif(nrow(ptree))*1e-10#Ensure that all leaves have unique times
   #MCMC algorithm
   neg <- startNeg
   off.r <- startOff.r

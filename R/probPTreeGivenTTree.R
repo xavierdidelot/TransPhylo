@@ -63,7 +63,7 @@ probPTreeGivenTTree = function(fulltree,neg)  {
         curage <- tab[l,1] 
         next
       } 
-      if (ex[i]==0) next 
+      if (ex[i]==0) next #Ignore non-existent nodes
       if (start)  { 
         if (!found)  { 
           bra1 <- bra1 + k*(tab[i,1]-curage) 
@@ -77,6 +77,7 @@ probPTreeGivenTTree = function(fulltree,neg)  {
     p <- p-log(rate)-bra1/rate-log(1-exp(-bra2/rate))
     if (k != 1) print('errorHere')
     if (bra1 >= bra2)  print('errorThere')
+    #Make all ancestors of current node active
     cur <- l
     while (TRUE) {
       if (ex[cur] == 1) {ex[cur] <- 2;break}
@@ -84,7 +85,7 @@ probPTreeGivenTTree = function(fulltree,neg)  {
       cur <- tab[cur,2]
     } 
   }
-  if (min(ex)==0) print('error: some nodes have not been activated')
+  if (min(ex)==0) {print('error: some nodes have not been activated');print(tab)}
   if (length(which(ex==2))!=(length(iso)-1)) print('error: some internal nodes have not been activated twice')
   return(p)
 }

@@ -83,7 +83,7 @@
   islocs <- rep(0, nrow(tree)) #Where is the star allowed to be moved to
   
   if (infector<=nsam && infected<=nsam) {
-  #If transmission event is from a sampled case to a sampled case, it has to be stay on the path from one leaf to another
+  #If transmission event is from a sampled case to a sampled case, it has to stay on the path from one leaf to another
   path <- infector 
   islocs[path] <- 1 
   while (path < nrow(tree))  { 
