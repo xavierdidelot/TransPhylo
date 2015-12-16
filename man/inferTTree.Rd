@@ -4,7 +4,8 @@
 \alias{inferTTree}
 \title{Infer transmission tree given a phylogenetic tree}
 \usage{
-inferTTree(ptree, w.shape = 2, w.scale = 1, mcmcIterations = 1000,
+inferTTree(ptree, w.shape = 2, w.scale = 1, ws.shape = w.shape,
+  ws.scale = w.scale, mcmcIterations = 1000, thining = 1,
   startNeg = 100/365, startOff.r = 1, startOff.p = 0.5, startPi = 0.5,
   updateNeg = T, updateOff.r = T, updateOff.p = T, updatePi = T,
   startFulltree = NA, updateTTree = TRUE, optiStart = T,
@@ -13,11 +14,17 @@ inferTTree(ptree, w.shape = 2, w.scale = 1, mcmcIterations = 1000,
 \arguments{
 \item{ptree}{Phylogenetic tree}
 
-\item{w.shape}{Shape parameter of the Gamma probability density function representing the generation length w}
+\item{w.shape}{Shape parameter of the Gamma probability density function representing the generation time}
 
-\item{w.scale}{Scale parameter of the Gamma probability density function representing the generation length w}
+\item{w.scale}{Scale parameter of the Gamma probability density function representing the generation time}
+
+\item{ws.shape}{Shape parameter of the Gamma probability density function representing the sampling time}
+
+\item{ws.scale}{Scale parameter of the Gamma probability density function representing the sampling time}
 
 \item{mcmcIterations}{Number of MCMC iterations to run the algorithm for}
+
+\item{thining}{MCMC thining interval between two sampled iterations}
 
 \item{startNeg}{Starting value of within-host coalescent parameter Ne*g}
 

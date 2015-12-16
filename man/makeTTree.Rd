@@ -4,7 +4,8 @@
 \alias{makeTTree}
 \title{Simulate a transmission tree}
 \usage{
-makeTTree(off.r, off.p, pi, w.shape, w.scale, maxTime, nSampled)
+makeTTree(off.r, off.p, pi, w.shape, w.scale, ws.shape, ws.scale, maxTime,
+  nSampled)
 }
 \arguments{
 \item{off.r}{First parameter of the negative binomial distribution for offspring number}
@@ -13,9 +14,13 @@ makeTTree(off.r, off.p, pi, w.shape, w.scale, maxTime, nSampled)
 
 \item{pi}{probability of sampling an infected individual}
 
-\item{w.shape}{Shape parameter of the Gamma probability density function representing the generation length w}
+\item{w.shape}{Shape parameter of the Gamma probability density function representing the generation time}
 
-\item{w.scale}{Scale parameter of the Gamma probability density function representing the generation length w}
+\item{w.scale}{Scale parameter of the Gamma probability density function representing the generation time}
+
+\item{ws.shape}{Shape parameter of the Gamma probability density function representing the sampling time}
+
+\item{ws.scale}{Scale parameter of the Gamma probability density function representing the sampling time}
 
 \item{maxTime}{Duration of simulation (can be Inf)}
 

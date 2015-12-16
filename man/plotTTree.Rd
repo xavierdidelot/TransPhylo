@@ -9,9 +9,9 @@ plotTTree(ttree, w.shape, w.scale, showLabels = TRUE)
 \arguments{
 \item{ttree}{Transmission tree}
 
-\item{w.shape}{Shape parameter of the Gamma probability density function representing the generation length w}
+\item{w.shape}{Shape parameter of the Gamma probability density function representing the generation time}
 
-\item{w.scale}{Scale parameter of the Gamma probability density function representing the generation length w}
+\item{w.scale}{Scale parameter of the Gamma probability density function representing the generation time}
 
 \item{showLabels}{Whether or not to show the labels}
 }
