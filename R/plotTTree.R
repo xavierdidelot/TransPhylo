@@ -1,7 +1,7 @@
 #' Plot a transmission tree
 #' @param ttree Transmission tree
-#' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
-#' @param w.scale Scale parameter of the Gamma probability density function representing the generation length w 
+#' @param w.shape Shape parameter of the Gamma probability density function representing the generation time
+#' @param w.scale Scale parameter of the Gamma probability density function representing the generation time 
 #' @param showLabels Whether or not to show the labels 
 plotTTree = function(ttree,w.shape,w.scale,showLabels=TRUE) {
   n=nrow(ttree)

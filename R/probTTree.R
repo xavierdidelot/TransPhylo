@@ -3,11 +3,13 @@
 #' @param off.r First parameter of the negative binomial distribution for offspring number
 #' @param off.p Second parameter of the negative binomial distribution for offspring number
 #' @param pi probability of sampling an infected individual
-#' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
-#' @param w.scale Scale parameter of the Gamma probability density function representing the generation length w 
+#' @param w.shape Shape parameter of the Gamma probability density function representing the generation time
+#' @param w.scale Scale parameter of the Gamma probability density function representing the generation time 
+#' @param ws.shape Shape parameter of the Gamma probability density function representing the sampling time
+#' @param ws.scale Scale parameter of the Gamma probability density function representing the sampling time 
 #' @param datePresent Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @return Probability of the transmission tree
-probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,datePresent)  {
+probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,datePresent)  {
   prob <- 0 
   n <- nrow(ttree)
 
@@ -17,7 +19,7 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,datePresent)  {
     alphaStar <- rep(NA, n+1)
     for (i in (1:n)) { 
       if (is.na(ttree[i,2])) prob<-prob+log(1-pi) #This is the first term in the product in Equation (5)
-      else prob<-prob+log(pi)+dgamma((ttree[i,2]-ttree[i,1]),shape=w.shape,scale=w.scale,log=TRUE) #This is the second term in the product in Equation (5)
+      else prob<-prob+log(pi)+dgamma((ttree[i,2]-ttree[i,1]),shape=ws.shape,scale=ws.scale,log=TRUE) #This is the second term in the product in Equation (5)
       offspring <- which( ttree[ ,3] == i ) 
       d <- length(offspring)
       if (is.na(alphaStar[d+1])) {
@@ -43,7 +45,7 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,datePresent)  {
       trunc=pgamma(datePresent-tinf,shape=w.shape,scale=w.scale)
       ltrunc=log(trunc)
       if (is.na(ttree[i,2])) prob<-prob+log(1-pi*trunc) #This is the first term in the product in Equation (9)
-      else prob<-prob+log(pi)+dgamma((ttree[i,2]-tinf),shape=w.shape,scale=w.scale,log=TRUE) #This is the second term in the product in Equation (9)
+      else prob<-prob+log(pi)+dgamma((ttree[i,2]-tinf),shape=ws.shape,scale=ws.scale,log=TRUE) #This is the second term in the product in Equation (9)
       offspring <- which(ttree[ ,3]==i)
       d <- length(offspring)
       notinf=d+2*off.r*off.p/(1-off.p)

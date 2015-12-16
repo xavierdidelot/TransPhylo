@@ -4,14 +4,16 @@
 #' @param neg the within-host effective population size (Ne) timesgeneration duration (g)
 #' @param nSampled number of sampled infected individuals, or NA for any
 #' @param pi probability of sampling an infected individual
-#' @param w.shape Shape parameter of the Gamma probability density function representing the generation length w
-#' @param w.scale Scale parameter of the Gamma probability density function representing the generation length w 
+#' @param w.shape Shape parameter of the Gamma probability density function representing the generation time
+#' @param w.scale Scale parameter of the Gamma probability density function representing the generation time 
+#' @param ws.shape Shape parameter of the Gamma probability density function representing the sampling time
+#' @param ws.scale Scale parameter of the Gamma probability density function representing the sampling time 
 #' @param dateStartOutbreak Date when index case becomes infected
 #' @param datePresent Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @return Combined phylogenetic and transmission tree
 #' @examples
 #' plotBothTree(simulateOutbreak())
-simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shape=2,w.scale=1,dateStartOutbreak=2000,datePresent=Inf) {
+simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scale,dateStartOutbreak=2000,datePresent=Inf) {
   #Create a transmission tree with nSampled infected sampled individuals
   nsam<-0
   nh<-0
@@ -19,7 +21,7 @@ simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shap
   while (is.na(nSampled)||nsam!=nSampled) {
     ttree=NULL
     while (is.null(ttree)) {
-      mtt<-makeTTree(off.r,off.p,pi,w.shape,w.scale,datePresent-dateStartOutbreak,nSampled)
+      mtt<-makeTTree(off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,datePresent-dateStartOutbreak,nSampled)
       rejected=rejected+1
       ttree<-mtt$ttree
       if (mtt$pruned>0) {
