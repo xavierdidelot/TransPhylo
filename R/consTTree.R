@@ -11,10 +11,9 @@ consTTree = function(record,burnin=0.5)
   #Record partitions in sampled transmission tree
   hash=vector('list',n*m*10)
   a=floor(n*10*runif(n))+1
-  for (i in 1) #DEBUGGING: WHEN ONLY ONE TTREE, OUTPUT SHOULD BE SAME
+  for (i in 1:length(record))
   {
     ttree=ttreeFromFullTree(record[[i]]$tree)
-    ttree=t(matrix(c(0,0,0,0,0,1,0,0,1),3,3));n=3
     #Find children of nodes
     todo=1:n
     children=matrix(NA,nrow(ttree),n)
@@ -86,6 +85,7 @@ consTTree = function(record,burnin=0.5)
   }
   comb=comb[keep]
   
+  #Build tree from selected partitions
   parents=rep(NA,length(comb))
   for (i in 1:length(comb)) {
     ci=which(comb[[i]]$c==1)
@@ -96,14 +96,16 @@ consTTree = function(record,burnin=0.5)
       if (length(setdiff(ci,cj))>0) next
       if (length(setdiff(cj,ci))<bestscore) {bestscore=length(setdiff(cj,ci));parents[i]=j}
     }
+    if (bestscore==Inf) root=i
   }
   
   tr=list()
   tr$Nnode=length(comb)-n
   tr$tip.label=as.character(1:n)
-  tr$edge=cbind(parents[which(!is.na(parents))],which(!is.na(parents)))
+  edge=cbind(parents[which(!is.na(parents))],which(!is.na(parents)))
+  tr$edge=edge;tr$edge[edge==n+1]=root;tr$edge[edge==root]=n+1#Make the root the (n+1)-th
   tr$edge.length=rep(NA,nrow(tr$edge))
   for (i in 1:nrow(tr$edge)) tr$edge.length[i]=median(comb[[tr$edge[i,2]]]$w)
   class(tr)<-'phylo'
-  return(list(comb=comb,tr=tr))
+  return(tr)
 }
