@@ -1,14 +1,43 @@
-#' Plot a transmission tree without showing all missing links
+#' Plot a transmission tree with the option of collapsing unsampled nodes
 #' @param ttree Transmission tree
 #' @param showLabels Whether or not to show the labels 
 plotTTree2 = function(ttree,showLabels=TRUE) {
-  tr=list()
-  tr$Nnode=length(comb)-n
-  tr$tip.label=as.character(1:n)
-  edge=cbind(parents[which(!is.na(parents))],which(!is.na(parents)))
-  tr$edge=edge;tr$edge[edge==n+1]=root;tr$edge[edge==root]=n+1#Make the root the (n+1)-th
-  tr$edge.length=rep(NA,nrow(tr$edge))
-  for (i in 1:nrow(tr$edge)) tr$edge.length[i]=median(comb[[tr$edge[i,2]]]$w)
-  class(tr)<-'phylo'
-  plot(tr)
+  #Determine ys 
+  n=nrow(ttree)
+  ys <- rep(0, n)
+  scale <- rep(1,n)
+  todo=c(which(ttree[,3]==0))
+  while (length(todo)>0) {
+    f=which(ttree[,3]==todo[1])
+    nchild=rep(NA,length(f));for (i in 1:length(f)) nchild[i]=length(which(ttree[,3]==f[i]))
+    nchild=(nchild>0)*100
+    o=rank(nchild-ttree[f,2],ties.method = 'random')
+    f[o]=f
+    for (i in f) {ys[i]=ys[todo[1]]+scale[todo[1]]*which(f==i)/(length(f)+1);scale[i]=scale[todo[1]]/(length(f)+1);todo=c(todo,i)}
+    todo=todo[-1]
+  }
+  ys=rank(ys)
+  
+  #Do the plot
+  par(yaxt='n',bty='n')
+  #mi=min(ttree[,2])#,ttree[,1])
+  mi=min(ttree[which(!is.na(ttree[,1])),1])
+  ma=max(ttree[which(!is.na(ttree[,1])),1])
+  plot(c(),c(),xlim=c(mi-(ma-mi)*0.05,ma+(ma-mi)*0.05),ylim=c(0,n+1),xlab='',ylab='')
+  pal=c('black','red','green','blue','cyan','magenta','orange','red','green','blue','cyan','magenta','orange')
+  cols=rep(0,nrow(ttree))
+  for (i in 1:n) {
+    if (ttree[i,3]!=0) {
+      if (1<1.5) dircol='black' else dircol='grey'
+      #arrows(ttree[i,1],ys[ttree[i,3]],ttree[i,1],ys[i],length=0)
+      arrows(ttree[ttree[i,3],1],ys[ttree[i,3]],ttree[i,1],ys[i],length=0,col=dircol)
+    }
+    #ma=max(ttree[i,1],ttree[which(ttree[,3]==i),1])
+    #mi=min(ttree[i,1],ttree[i,1],ttree[which(ttree[,3]==i),1])
+    if (showLabels && !is.na(ttree[i,2])) text(ttree[i,1],ys[i],i,pos=4,cex=0.5)
+    #lines(c(mi,ma),c(ys[i],ys[i]))
+  }
+  for (i in 1:n) {
+    points(ttree[i,1],ys[i],pch=21+(cols[i]>7),bg=pal[cols[i]],cex=0.2+0.6*(cols[i]>1))
+  }
 }
