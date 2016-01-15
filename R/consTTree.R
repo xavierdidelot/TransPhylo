@@ -37,12 +37,13 @@ consTTree = function(record,burnin=0.5)
         hh=hh+1
         if (hh>length(hash)) hh=1
       }
-      if (is.null(hash[[hh]])) {hash[[hh]]$c=c;hash[[hh]]$n=0;hash[[hh]]$w=c();hash[[hh]]$last=0}
-      if (hash[[hh]]$last==i) hash[[hh]]$w[1]=hash[[hh]]$w[1]+1
+      if (is.null(hash[[hh]])) {hash[[hh]]$c=c;hash[[hh]]$n=0;hash[[hh]]$w=c();hash[[hh]]$last=0;hash[[hh]]$t=c()}
+      if (hash[[hh]]$last==i) {hash[[hh]]$w[1]=hash[[hh]]$w[1]+1;hash[[hh]]$t[1]=max(hash[[hh]]$t[1],ttree[j,1])}
       else {
         hash[[hh]]$last=i
         hash[[hh]]$n=hash[[hh]]$n+1
         hash[[hh]]$w=c(1,hash[[hh]]$w)
+        hash[[hh]]$t=c(ttree[j,1],hash[[hh]]$t)
       }
     }
     
@@ -58,9 +59,10 @@ consTTree = function(record,burnin=0.5)
         hh=hh+1
         if (hh>length(hash)) hh=1
       }
-      if (is.null(hash[[hh]])) {hash[[hh]]$c=c;hash[[hh]]$n=0;hash[[hh]]$w=c();hash[[hh]]$last=0}
+      if (is.null(hash[[hh]])) {hash[[hh]]$c=c;hash[[hh]]$n=0;hash[[hh]]$w=c();hash[[hh]]$last=0;hash[[hh]]$t=c()}
       hash[[hh]]$n=hash[[hh]]$n+1
       hash[[hh]]$w=c(0,hash[[hh]]$w)
+      hash[[hh]]$t=c(ttree[j,1],hash[[hh]]$t)
     }
   }
   
@@ -84,10 +86,14 @@ consTTree = function(record,burnin=0.5)
     if (exclude==F) keep=c(keep,i)
   }
   comb=comb[keep]
-  
-  #Build tree from selected partitions
+
+  #Build list of parents from selected partitions
   parents=rep(NA,length(comb))
+  bralen =rep(NA,length(comb))
+  inftim =rep(NA,length(comb))
   for (i in 1:length(comb)) {
+    bralen[i]=median(comb[[i]]$w)
+    inftim[i]=sum(comb[[i]]$t)/comb[[i]]$n
     ci=which(comb[[i]]$c==1)
     bestscore=Inf
     for (j in 1:length(comb)) {
@@ -99,13 +105,42 @@ consTTree = function(record,burnin=0.5)
     if (bestscore==Inf) root=i
   }
   
-  tr=list()
-  tr$Nnode=length(comb)-n
-  tr$tip.label=as.character(1:n)
-  edge=cbind(parents[which(!is.na(parents))],which(!is.na(parents)))
-  tr$edge=edge;tr$edge[edge==n+1]=root;tr$edge[edge==root]=n+1#Make the root the (n+1)-th
-  tr$edge.length=rep(NA,nrow(tr$edge))
-  for (i in 1:nrow(tr$edge)) tr$edge.length[i]=median(comb[[tr$edge[i,2]]]$w)
-  class(tr)<-'phylo'
-  return(tr)
+#   #Temporary plot
+#   tr=list()
+#   tr$Nnode=length(comb)-n
+#   tr$tip.label=as.character(1:n)
+#   edge=cbind(parents[which(!is.na(parents))],which(!is.na(parents)))
+#   tr$edge=edge;tr$edge[edge==n+1]=root;tr$edge[edge==root]=n+1#Make the root the (n+1)-th
+#   tr$edge.length=rep(NA,nrow(tr$edge))
+#   for (i in 1:nrow(tr$edge)) tr$edge.length[i]=median(comb[[tr$edge[i,2]]]$w)
+#   class(tr)<-'phylo'
+#   plot(tr)
+  
+  #Update vectors parents and bralen and inftim so that branches of length zero are remove and branches of length>1 are deduplicated
+  i=1
+  while (i<length(parents)) {
+    if (bralen[i]==0) {
+    torem=parents[i]
+    parents[i]=parents[torem]
+    bralen[i]=bralen[torem]
+    parents[which(parents==torem)]=i;parents=parents[-torem]
+    bralen=bralen[-torem]
+    inftim=inftim[-torem]
+    parents[which(parents>torem)]=parents[which(parents>torem)]-1} 
+    else if (bralen[i]>1) {
+      bralen[i]=bralen[i]-1
+      bralen=c(bralen,1)
+      parents=c(parents,parents[i])
+      inftim=c(inftim,inftim[i]-0.1)
+      parents[i]=length(bralen)
+    }
+    i=i+1}
+
+  #Build transmission tree
+  cons=matrix(NA,length(parents),3)
+  cons[,1]=inftim
+  parents[which(is.na(parents))]=0
+  cons[,3]=parents
+  cons[1:n,2]=ttree[1:n,2]#copy sampling dates from any ttree
+  return(cons)
 }
