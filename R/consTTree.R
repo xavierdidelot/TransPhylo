@@ -128,10 +128,11 @@ consTTree = function(record,burnin=0.5)
     inftim=inftim[-torem]
     parents[which(parents>torem)]=parents[which(parents>torem)]-1} 
     else if (bralen[i]>1) {
-      bralen[i]=bralen[i]-1
-      bralen=c(bralen,1)
+      dt=abs(inftim[i]-inftim[parents[i]])
+      inftim=c(inftim,inftim[i]-dt/bralen[i])
+      bralen=c(bralen,bralen[i]-1)
+      bralen[i]=1
       parents=c(parents,parents[i])
-      inftim=c(inftim,inftim[i]-0.1)
       parents[i]=length(bralen)
     }
     i=i+1}
