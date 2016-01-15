@@ -1,7 +1,21 @@
 #' Plot a transmission tree with the option of collapsing unsampled nodes
 #' @param ttree Transmission tree
 #' @param showLabels Whether or not to show the labels 
-plotTTree2 = function(ttree,showLabels=TRUE) {
+plotTTree2 = function(ttree,showLabels=TRUE,collapseUnsampled=TRUE) {
+  ttree=cbind(ttree,rep(1,nrow(ttree)))
+  if (collapseUnsampled) {
+    i=which(is.na(ttree[,2]))[1]
+    while (i<nrow(ttree)) {
+      w=which(ttree[,3]==i)
+      if (length(w)==1) {
+        ttree[w,3]=ttree[i,3]
+        ttree[w,4]=ttree[w,4]+ttree[i,4]
+        ttree=ttree[-i,]
+        ttree[which(ttree[,3]>i),3]=ttree[which(ttree[,3]>i),3]-1
+      } else i=i+1
+    }
+  }
+  
   #Determine ys 
   n=nrow(ttree)
   ys <- rep(0, n)
@@ -9,9 +23,7 @@ plotTTree2 = function(ttree,showLabels=TRUE) {
   todo=c(which(ttree[,3]==0))
   while (length(todo)>0) {
     f=which(ttree[,3]==todo[1])
-    nchild=rep(NA,length(f));for (i in 1:length(f)) nchild[i]=length(which(ttree[,3]==f[i]))
-    nchild=(nchild>0)*100
-    o=rank(nchild-ttree[f,2],ties.method = 'random')
+    o=rank(-ttree[f,1])
     f[o]=f
     for (i in f) {ys[i]=ys[todo[1]]+scale[todo[1]]*which(f==i)/(length(f)+1);scale[i]=scale[todo[1]]/(length(f)+1);todo=c(todo,i)}
     todo=todo[-1]
@@ -28,7 +40,7 @@ plotTTree2 = function(ttree,showLabels=TRUE) {
   cols=rep(0,nrow(ttree))
   for (i in 1:n) {
     if (ttree[i,3]!=0) {
-      if (1<1.5) dircol='black' else dircol='grey'
+      if (ttree[i,4]<1.5) dircol='black' else dircol='grey'
       #arrows(ttree[i,1],ys[ttree[i,3]],ttree[i,1],ys[i],length=0)
       arrows(ttree[ttree[i,3],1],ys[ttree[i,3]],ttree[i,1],ys[i],length=0,col=dircol)
     }
