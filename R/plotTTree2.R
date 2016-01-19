@@ -30,17 +30,18 @@ plotTTree2 = function(ttree,showLabels=TRUE,collapseUnsampled=TRUE) {
   }
   ys=rank(ys)
   
+  
   #Do the plot
   par(yaxt='n',bty='n')
   #mi=min(ttree[,2])#,ttree[,1])
   mi=min(ttree[which(!is.na(ttree[,1])),1])
   ma=max(ttree[which(!is.na(ttree[,1])),1])
   plot(c(),c(),xlim=c(mi-(ma-mi)*0.05,ma+(ma-mi)*0.05),ylim=c(0,n+1),xlab='',ylab='')
-  pal=c('black','red','green','blue','cyan','magenta','orange','red','green','blue','cyan','magenta','orange')
+  pal=gray.colors(max(ttree[,4]))
   cols=rep(0,nrow(ttree))
   for (i in 1:n) {
     if (ttree[i,3]!=0) {
-      if (ttree[i,4]<1.5) dircol='black' else dircol='grey'
+      dircol=pal[ttree[i,4]]
       #arrows(ttree[i,1],ys[ttree[i,3]],ttree[i,1],ys[i],length=0)
       arrows(ttree[ttree[i,3],1],ys[ttree[i,3]],ttree[i,1],ys[i],length=0,col=dircol)
     }
@@ -52,4 +53,5 @@ plotTTree2 = function(ttree,showLabels=TRUE,collapseUnsampled=TRUE) {
   for (i in 1:n) {
     points(ttree[i,1],ys[i],pch=21+(cols[i]>7),bg=pal[cols[i]],cex=0.2+0.6*(cols[i]>1))
   }
+  if (length(pal)>1) legend('topleft',legend = 0:(length(pal)-1),col = pal,lty=1,cex=0.5,title='Missing links')
 }
