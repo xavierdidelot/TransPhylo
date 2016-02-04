@@ -58,7 +58,6 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,date
   return(prob)
 } 
 
-.getOmegabar=memoise(.getOmegabar0)
 .getOmegabar0=function(L,dt,off.r,off.p,pi,w.shape,w.scale) {
   omega=rep(NA,L);omega[1]=1;omegabar=rep(NA,L);omegabar[1]=1
   dgammastore=dgamma(dt*(1:(L-1)),shape=w.shape,scale=w.scale)
@@ -73,3 +72,4 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,date
   }
   return(omegabar)
 }
+.getOmegabar=memoise(.getOmegabar0)

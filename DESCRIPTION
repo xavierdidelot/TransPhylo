@@ -5,8 +5,12 @@ Version: 0.1
 Date: 2015-07-17
 Author: Xavier Didelot <xavier.didelot@gmail.com>
 Maintainer: Xavier Didelot <xavier.didelot@gmail.com>
-Depends: memoise
-Suggests: ape, knitr
+Depends:
+    memoise
+Suggests:
+    ape,
+    knitr
 Description: Inference of transmission tree under a within-host evolution model.
 VignetteBuilder: knitr
 License: GPL (>=2)
+RoxygenNote: 5.0.1
