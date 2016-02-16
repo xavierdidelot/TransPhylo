@@ -9,8 +9,9 @@
 #' @param ws.shape Shape parameter of the Gamma probability density function representing the sampling time
 #' @param ws.scale Scale parameter of the Gamma probability density function representing the sampling time 
 #' @param T Date when process stops (this can be Inf for fully simulated outbreaks)
+#' @param allowTransPostSamp Whether or not to allow transmission after sampling of a host
 #' @return A minimal non-zero probability phylogenetic+transmission tree, or an optimised version if parameters are provided
-makeFullTreeFromPTree = function(tree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,w.scale=NA,ws.shape=NA,ws.scale=NA,T=NA)  {
+makeFullTreeFromPTree = function(tree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,w.scale=NA,ws.shape=NA,ws.scale=NA,T=NA,allowTransPostSamp=NA)  {
 
     if (is.na(off.r)) {
     #Simple minimal method
@@ -47,13 +48,13 @@ makeFullTreeFromPTree = function(tree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,
     #Optimisation method
     n <- ceiling( nrow(tree)/2 ) 
     ft=makeFullTreeFromPTree(tree)
-    pTTree <- probTTree(ttreeFromFullTree(ft),off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,T) 
+    pTTree <- probTTree(ttreeFromFullTree(ft),off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,T,allowTransPostSamp) 
     pPTree <- probPTreeGivenTTree(ft,neg) 
     try=0
     while (try<100) {
       try=try+1
       fulltree2 <- .move1(ft)$tree
-      pTTree2 <- probTTree(ttreeFromFullTree(fulltree2),off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,T) 
+      pTTree2 <- probTTree(ttreeFromFullTree(fulltree2),off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,T,allowTransPostSamp) 
       pPTree2 <- probPTreeGivenTTree(fulltree2,neg) 
       if (pTTree2 + pPTree2>pTTree+pPTree)  { 
         ft <- fulltree2 

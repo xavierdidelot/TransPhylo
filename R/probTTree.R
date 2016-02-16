@@ -8,11 +8,17 @@
 #' @param ws.shape Shape parameter of the Gamma probability density function representing the sampling time
 #' @param ws.scale Scale parameter of the Gamma probability density function representing the sampling time 
 #' @param datePresent Date when process stops (this can be Inf for fully simulated outbreaks)
+#' @param allowTransPostSamp Whether or not to allow transmission after sampling of a host
 #' @return Probability of the transmission tree
-probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,datePresent)  {
+probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,datePresent,allowTransPostSamp)  {
   prob <- 0 
   n <- nrow(ttree)
-
+  
+  #Check if there is unallowed transmission post sampling
+  if (allowTransPostSamp==F) {
+    for (i in 1:n) if (ttree[i,3]>0&&!is.na(ttree[ttree[i,3],2])&&ttree[i,1]>ttree[ttree[i,3],2]) return(-Inf)
+  }
+  
   if (datePresent==Inf) {
     # This is the case of a finished outbreak
     omegaStar <- uniroot(function(x) {x-(1-pi)*((1-off.p)/(1-off.p*x))^off.r},c(0,1))$root #This is Equation (1)
@@ -28,6 +34,7 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,date
         alphaStar[d+1]=log(alphaStar[d+1])
       }
       prob <- prob + alphaStar[d+1] #This is the third term in the product in Equation (5)
+      if (allowTransPostSamp==F && !is.na(ttree[i,2])) prob=prob+pgamma((ttree[i,2]-ttree[i,1]),shape=ws.shape,scale=ws.scale,log=TRUE)
       for (j in offspring) {
         prob <- prob + dgamma((ttree[j,1]-ttree[i,1]),shape=w.shape,scale=w.scale,log=TRUE) #This is the fourth term in the product in Equation (5)
       } 
@@ -51,6 +58,7 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,date
       notinf=d+2*off.r*off.p/(1-off.p)
       alpha=sum(choose(d:notinf,d)*dnbinom(d:notinf,off.r,off.p)*fomegabar(tinf)^{0:(notinf-d)}) #This is Equation (8)
       prob <- prob + log(alpha) #This is the third term in the product in Equation (9)
+      if (allowTransPostSamp==F && !is.na(ttree[i,2])) prob=prob+pgamma((ttree[i,2]-ttree[i,1]),shape=ws.shape,scale=ws.scale,log=TRUE)
       prob <- prob + sum(dgamma((ttree[offspring,1]-tinf),shape=w.shape,scale=w.scale,log=TRUE)-ltrunc)#This is the fourth term in the product in Equation (9)
     } 
   }

@@ -15,7 +15,7 @@ plotTTree2(ttree,T,T)
 ptree<-ptreeFromFullTree(simu)
 record<-inferTTree(ptree,mcmcIterations=1000,w.shape=w.shape,w.scale=w.scale,
                    startNeg=neg,startPi=0.5,startOff.p=off.p,startOff.r=1,
-                   updateOff.r=T,updatePi=T,updateNeg=T,updateOff.p=F,datePresent=2010)
+                   updateOff.r=T,updatePi=T,updateNeg=T,updateOff.p=F,datePresent=2009,allowTransPostSamp = F)
 cons=consTTree(record[seq(1,1000,10)])
 plotTTree2(cons,T,T)
 }
