@@ -3,7 +3,8 @@
 #' @param w.shape Shape parameter of the Gamma probability density function representing the generation time
 #' @param w.scale Scale parameter of the Gamma probability density function representing the generation time 
 #' @param showLabels Whether or not to show the labels 
-plotTTree = function(ttree,w.shape,w.scale,showLabels=TRUE) {
+#' @param maxTime Maximum value of time to show on x axis
+plotTTree = function(ttree,w.shape,w.scale,showLabels=TRUE,maxTime=NA) {
   n=nrow(ttree)
   #Determine ys 
   ys <- rep(0, n)
@@ -19,7 +20,7 @@ plotTTree = function(ttree,w.shape,w.scale,showLabels=TRUE) {
   ys=rank(ys)
   par(yaxt='n',bty='n')
   mi=min(ttree[,1])
-  ma=max(ttree[which(!is.na(ttree[,2])),2])
+  if (is.na(maxTime)) ma=max(ttree[which(!is.na(ttree[,2])),2]) else ma=maxTime
   xstep=(ma-mi)/2000
   plot(c(),c(),xlim=c(mi-(ma-mi)*0.05,ma+(ma-mi)*0.05),ylim=c(0,n+1),xlab='',ylab='')
   maxcol=max(dgamma(seq(0,ma-mi,xstep),shape=w.shape,scale=w.scale))

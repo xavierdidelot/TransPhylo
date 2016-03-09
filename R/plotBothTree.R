@@ -1,16 +1,21 @@
 #' Plot both phylogenetic and transmission trees using colors on the phylogeny
 #' @param tree Combined phylogenetic/transmission tree
 #' @param showLabels Whether or not to show the labels 
+#' @param cols Colors to use for hosts
+#' @param maxTime Maximum time to show on the x axis
 #' @examples
 #' plotBothTree(simulateOutbreak())
-plotBothTree = function(tree,showLabels=TRUE)  {
+plotBothTree = function(tree,showLabels=TRUE,cols=NA,maxTime=NA)  {
   nsam <- sum(tree[ ,2]+tree[ ,3] == 0) 
   nh <- nrow(tree)-3*nsam+1
   ntot <- nsam+nh
   par(yaxt='n',bty='n')
-  plot(0,0,type='l',xlim=c(min(tree[,1]),max(tree[,1])),ylim=c(0,nsam+1),xlab='',ylab='')
+  plot(0,0,type='l',xlim=c(min(tree[,1]),ifelse(is.na(maxTime),max(tree[,1]),maxTime)),ylim=c(0,nsam+1),xlab='',ylab='')
   host <- tree[ ,4] 
-  if (ntot>1) palette(rainbow(ntot))#Need as many unique colors as there are hosts
+  if (ntot>1) {
+    if (is.na(cols[1])) palette(rainbow(ntot))#Need as many unique colors as there are hosts
+    else palette(cols)
+    }
   
   #Determine ys for leaves
   root<-which(host==0)
