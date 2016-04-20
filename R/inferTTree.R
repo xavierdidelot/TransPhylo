@@ -70,7 +70,7 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scal
     
     if (updateNeg) {
       #Metropolis update for Ne*g, assuming Exp(1) prior 
-      neg2 <- abs(neg + (runif(1)-0.5)*0.1)
+      neg2 <- abs(neg + (runif(1)-0.5)*0.5)
       pPTree2 <- probPTreeGivenTTree(fulltree,neg2) 
       if (log(runif(1)) < pPTree2-pPTree-neg2+neg)  {neg <- neg2;pPTree <- pPTree2} 
     }
