@@ -9,7 +9,7 @@ inferTTree(ptree, w.shape = 2, w.scale = 1, ws.shape = w.shape,
   startNeg = 100/365, startOff.r = 1, startOff.p = 0.5, startPi = 0.5,
   updateNeg = T, updateOff.r = T, updateOff.p = T, updatePi = T,
   startFulltree = NA, updateTTree = TRUE, optiStart = T,
-  datePresent = Inf)
+  datePresent = Inf, allowTransPostSamp = T)
 }
 \arguments{
 \item{ptree}{Phylogenetic tree}
@@ -49,6 +49,8 @@ inferTTree(ptree, w.shape = 2, w.scale = 1, ws.shape = w.shape,
 \item{optiStart}{Whether or not to optimise the MCMC start point}
 
 \item{datePresent}{Date when process stops (this can be Inf for fully simulated outbreaks)}
+
+\item{allowTransPostSamp}{Whether or not to allow transmission after sampling of a host}
 }
 \value{
 posterior sample set of transmission trees

@@ -21,8 +21,8 @@
 #' @param allowTransPostSamp Whether or not to allow transmission after sampling of a host
 #' @return posterior sample set of transmission trees
 inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scale,mcmcIterations=1000,thining=1,startNeg=100/365,startOff.r=1,startOff.p=0.5,startPi=0.5,updateNeg=T,updateOff.r=T,updateOff.p=T,updatePi=T,startFulltree=NA,updateTTree=TRUE,optiStart=T,datePresent=Inf,allowTransPostSamp=T) {
-  memoise::forget(.getOmegabar)
-  memoise::forget(.probSubtree)
+#  memoise::forget(.getOmegabar)
+#  memoise::forget(.probSubtree)
   ptree[,1]=ptree[,1]+runif(nrow(ptree))*1e-10#Ensure that all leaves have unique times
   #MCMC algorithm
   neg <- startNeg
@@ -35,10 +35,12 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scal
   record <- vector('list',mcmcIterations/thining)
   pTTree <- probTTree(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,datePresent,allowTransPostSamp) 
   pPTree <- probPTreeGivenTTree(fulltree,neg) 
+  #pb <- txtProgressBar(min=0,max=mcmcIterations,style = 3)
   for (i in 1:mcmcIterations) {#Main MCMC loop
     if (i%%thining == 0) {
       #Record things 
-      message(i/thining) 
+      #setTxtProgressBar(pb, i)
+      message(sprintf('it=%d,neg=%f,off.r=%f,off.p=%f,pi=%f,pTTree=%e,pTTree=%f,n=%d',i,neg,off.r,off.p,pi,pTTree,pPTree,nrow(ttreeFromFullTree(fulltree))))
       record[[i/thining]]$tree <- fulltree
       record[[i/thining]]$pTTree <- pTTree 
       record[[i/thining]]$pPTree <- pPTree 
@@ -101,5 +103,6 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scal
     
   }#End of main MCMC loop
   
+  #close(pb)
   return(record)
 }

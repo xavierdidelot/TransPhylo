@@ -4,7 +4,7 @@
 \alias{ptreeFromPhylo}
 \title{Converts an ape phylo object into a phylogenetic tree}
 \usage{
-ptreeFromPhylo(tr, dateLastSample = 2014)
+ptreeFromPhylo(tr, dateLastSample)
 }
 \arguments{
 \item{tr}{phylo object}

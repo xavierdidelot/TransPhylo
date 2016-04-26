@@ -4,7 +4,7 @@
 \alias{plotTTree}
 \title{Plot a transmission tree}
 \usage{
-plotTTree(ttree, w.shape, w.scale, showLabels = TRUE)
+plotTTree(ttree, w.shape, w.scale, showLabels = TRUE, maxTime = NA)
 }
 \arguments{
 \item{ttree}{Transmission tree}
@@ -14,6 +14,8 @@ plotTTree(ttree, w.shape, w.scale, showLabels = TRUE)
 \item{w.scale}{Scale parameter of the Gamma probability density function representing the generation time}
 
 \item{showLabels}{Whether or not to show the labels}
+
+\item{maxTime}{Maximum value of time to show on x axis}
 }
 \description{
 Plot a transmission tree

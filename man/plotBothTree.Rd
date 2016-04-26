@@ -4,12 +4,16 @@
 \alias{plotBothTree}
 \title{Plot both phylogenetic and transmission trees using colors on the phylogeny}
 \usage{
-plotBothTree(tree, showLabels = TRUE)
+plotBothTree(tree, showLabels = TRUE, cols = NA, maxTime = NA)
 }
 \arguments{
 \item{tree}{Combined phylogenetic/transmission tree}
 
 \item{showLabels}{Whether or not to show the labels}
+
+\item{cols}{Colors to use for hosts}
+
+\item{maxTime}{Maximum time to show on the x axis}
 }
 \description{
 Plot both phylogenetic and transmission trees using colors on the phylogeny
