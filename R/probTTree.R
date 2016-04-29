@@ -29,7 +29,7 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,date
       offspring <- which( ttree[ ,3] == i ) 
       d <- length(offspring)
       if (is.na(alphaStar[d+1])) {
-        notinf=d+2*off.r*off.p/(1-off.p)
+        notinf=20
         alphaStar[d+1]=sum(choose(d:notinf,d)*dnbinom(d:notinf,off.r,off.p)*omegaStar^{0:(notinf-d)})#This is Equation (2)
         alphaStar[d+1]=log(alphaStar[d+1])
       }
@@ -55,7 +55,7 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,date
       else prob<-prob+log(pi)+dgamma((ttree[i,2]-tinf),shape=ws.shape,scale=ws.scale,log=TRUE) #This is the second term in the product in Equation (9)
       offspring <- which(ttree[ ,3]==i)
       d <- length(offspring)
-      notinf=d+2*off.r*off.p/(1-off.p)
+      notinf=20
       alpha=sum(choose(d:notinf,d)*dnbinom(d:notinf,off.r,off.p)*fomegabar(tinf)^{0:(notinf-d)}) #This is Equation (8)
       prob <- prob + log(alpha) #This is the third term in the product in Equation (9)
       if (allowTransPostSamp==F && !is.na(ttree[i,2])) prob=prob+pgamma((ttree[i,2]-ttree[i,1]),shape=ws.shape,scale=ws.scale,log=TRUE)

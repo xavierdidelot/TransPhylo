@@ -40,7 +40,7 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scal
     if (i%%thining == 0) {
       #Record things 
       #setTxtProgressBar(pb, i)
-      message(sprintf('it=%d,neg=%f,off.r=%f,off.p=%f,pi=%f,pTTree=%e,pTTree=%f,n=%d',i,neg,off.r,off.p,pi,pTTree,pPTree,nrow(ttreeFromFullTree(fulltree))))
+      message(sprintf('it=%d,neg=%f,off.r=%f,off.p=%f,pi=%f,Prior=%e,Likelihood=%f,n=%d',i,neg,off.r,off.p,pi,pTTree,pPTree,nrow(ttreeFromFullTree(fulltree))))
       record[[i/thining]]$tree <- fulltree
       record[[i/thining]]$pTTree <- pTTree 
       record[[i/thining]]$pPTree <- pPTree 
