@@ -50,7 +50,7 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,date
     for (i in (1:n)) { 
       tinf=ttree[i,1]
       ltruncW =pgamma(datePresent-tinf,shape= w.shape,scale= w.scale,log.p=T)
-       truncWS=pgamma(dataPresent-tinf,shape=ws.shape,scale=ws.scale)
+       truncWS=pgamma(datePresent-tinf,shape=ws.shape,scale=ws.scale)
       #ltrunc=log(trunc)
       if (is.na(ttree[i,2])) prob<-prob+log(1-pi*truncWS) #This is the first term in the product in Equation (9)
       else prob<-prob+log(pi)+dgamma((ttree[i,2]-tinf),shape=ws.shape,scale=ws.scale,log=TRUE) #This is the second term in the product in Equation (9) Note simplification of truncWS/truncWS
