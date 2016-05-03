@@ -12,6 +12,7 @@
 #' @return Probability of the transmission tree
 probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,datePresent,allowTransPostSamp)  {
   prob <- 0 
+  notinf=20
   n <- nrow(ttree)
   
   #Check if there is unallowed transmission post sampling
@@ -29,7 +30,6 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,date
       offspring <- which( ttree[ ,3] == i ) 
       d <- length(offspring)
       if (is.na(alphaStar[d+1])) {
-        notinf=20
         alphaStar[d+1]=sum(choose(d:notinf,d)*dnbinom(d:notinf,off.r,off.p)*omegaStar^{0:(notinf-d)})#This is Equation (2)
         alphaStar[d+1]=log(alphaStar[d+1])
       }
@@ -49,20 +49,19 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,date
     fomegabar=function(x) {omegabar[max(1,min(L,round((datePresent-x)/dt)))] }
     for (i in (1:n)) { 
       tinf=ttree[i,1]
-      trunc=pgamma(datePresent-tinf,shape=w.shape,scale=w.scale)
-      ltrunc=log(trunc)
-      if (is.na(ttree[i,2])) prob<-prob+log(1-pi*trunc) #This is the first term in the product in Equation (9)
-      else prob<-prob+log(pi)+dgamma((ttree[i,2]-tinf),shape=ws.shape,scale=ws.scale,log=TRUE) #This is the second term in the product in Equation (9)
+      ltruncW =pgamma(datePresent-tinf,shape= w.shape,scale= w.scale,log.p=T)
+       truncWS=pgamma(dataPresent-tinf,shape=ws.shape,scale=ws.scale)
+      #ltrunc=log(trunc)
+      if (is.na(ttree[i,2])) prob<-prob+log(1-pi*truncWS) #This is the first term in the product in Equation (9)
+      else prob<-prob+log(pi)+dgamma((ttree[i,2]-tinf),shape=ws.shape,scale=ws.scale,log=TRUE) #This is the second term in the product in Equation (9) Note simplification of truncWS/truncWS
       offspring <- which(ttree[ ,3]==i)
       d <- length(offspring)
-      notinf=20
       alpha=sum(choose(d:notinf,d)*dnbinom(d:notinf,off.r,off.p)*fomegabar(tinf)^{0:(notinf-d)}) #This is Equation (8)
       prob <- prob + log(alpha) #This is the third term in the product in Equation (9)
       if (allowTransPostSamp==F && !is.na(ttree[i,2])) prob=prob+pgamma((ttree[i,2]-ttree[i,1]),shape=ws.shape,scale=ws.scale,log=TRUE)
-      prob <- prob + sum(dgamma((ttree[offspring,1]-tinf),shape=w.shape,scale=w.scale,log=TRUE)-ltrunc)#This is the fourth term in the product in Equation (9)
+      prob <- prob + sum(dgamma((ttree[offspring,1]-tinf),shape=w.shape,scale=w.scale,log=TRUE)-ltruncW)#This is the fourth term in the product in Equation (9)
     } 
   }
-  
   return(prob)
 } 
 
