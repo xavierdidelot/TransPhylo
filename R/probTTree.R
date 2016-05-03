@@ -34,7 +34,7 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,date
         alphaStar[d+1]=log(alphaStar[d+1])
       }
       prob <- prob + alphaStar[d+1] #This is the third term in the product in Equation (5)
-      if (allowTransPostSamp==F && !is.na(ttree[i,2])) prob=prob+pgamma((ttree[i,2]-ttree[i,1]),shape=ws.shape,scale=ws.scale,log=TRUE)
+      if (allowTransPostSamp==F && !is.na(ttree[i,2])) prob=prob+pgamma((ttree[i,2]-ttree[i,1]),shape=ws.shape,scale=ws.scale,log.p=TRUE)
       for (j in offspring) {
         prob <- prob + dgamma((ttree[j,1]-ttree[i,1]),shape=w.shape,scale=w.scale,log=TRUE) #This is the fourth term in the product in Equation (5)
       } 
@@ -51,14 +51,13 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,date
       tinf=ttree[i,1]
       ltruncW =pgamma(datePresent-tinf,shape= w.shape,scale= w.scale,log.p=T)
        truncWS=pgamma(datePresent-tinf,shape=ws.shape,scale=ws.scale)
-      #ltrunc=log(trunc)
       if (is.na(ttree[i,2])) prob<-prob+log(1-pi*truncWS) #This is the first term in the product in Equation (9)
       else prob<-prob+log(pi)+dgamma((ttree[i,2]-tinf),shape=ws.shape,scale=ws.scale,log=TRUE) #This is the second term in the product in Equation (9) Note simplification of truncWS/truncWS
       offspring <- which(ttree[ ,3]==i)
       d <- length(offspring)
       alpha=sum(choose(d:notinf,d)*dnbinom(d:notinf,off.r,off.p)*fomegabar(tinf)^{0:(notinf-d)}) #This is Equation (8)
       prob <- prob + log(alpha) #This is the third term in the product in Equation (9)
-      if (allowTransPostSamp==F && !is.na(ttree[i,2])) prob=prob+pgamma((ttree[i,2]-ttree[i,1]),shape=ws.shape,scale=ws.scale,log=TRUE)
+      if (allowTransPostSamp==F && !is.na(ttree[i,2])) prob=prob+pgamma((ttree[i,2]-ttree[i,1]),shape=ws.shape,scale=ws.scale,log.p=TRUE)
       prob <- prob + sum(dgamma((ttree[offspring,1]-tinf),shape=w.shape,scale=w.scale,log=TRUE)-ltruncW)#This is the fourth term in the product in Equation (9)
     } 
   }

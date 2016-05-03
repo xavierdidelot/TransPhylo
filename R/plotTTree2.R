@@ -1,6 +1,7 @@
 #' Plot a transmission tree with the option of collapsing unsampled nodes
 #' @param ttree Transmission tree
 #' @param showLabels Whether or not to show the labels 
+#' @param collapseUnsampled Whether or not to simplify chains of unsampled hosts
 plotTTree2 = function(ttree,showLabels=TRUE,collapseUnsampled=TRUE) {
   ttree=cbind(ttree,rep(1,nrow(ttree)))
   if (collapseUnsampled) {

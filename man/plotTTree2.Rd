@@ -10,6 +10,8 @@ plotTTree2(ttree, showLabels = TRUE, collapseUnsampled = TRUE)
 \item{ttree}{Transmission tree}
 
 \item{showLabels}{Whether or not to show the labels}
+
+\item{collapseUnsampled}{Whether or not to simplify chains of unsampled hosts}
 }
 \description{
 Plot a transmission tree with the option of collapsing unsampled nodes
