@@ -1,7 +1,8 @@
 #' Build a consensus transmission tree from a MCMC output
 #' @param record Output from inferTTree function
 #' @param burnin Proportion of the MCMC output to be discarded as burnin
-consTTree = function(record,burnin=0.5)
+#' @param minimum Minimum probability for inclusion in consensus
+consTTree = function(record,burnin=0.5,minimum=0.5)
 {
   #Remove burnin
   record=record[round(length(record)*burnin):length(record)]
@@ -29,7 +30,7 @@ consTTree = function(record,burnin=0.5)
     #Add nodes one by one
     for (j in 1:nrow(ttree)) {
       c=children[j,]
-      hh=1+(sum(a[c])%%(length(hash)))
+      hh=1+(sum(a[which(c==1)])%%(length(hash)))
       found=0
       while (1) {
         if (is.null(hash[[hh]])) break
@@ -51,7 +52,7 @@ consTTree = function(record,burnin=0.5)
     for (j in 1:n) {
       if ((sum(children[j,]))==1) next
       c=rep(0,n);c[j]=1
-      hh=1+(sum(a[c])%%(length(hash)))
+      hh=1+(sum(a[which(c==1)])%%(length(hash)))
       found=0
       while (1) {
         if (is.null(hash[[hh]])) break
@@ -68,6 +69,7 @@ consTTree = function(record,burnin=0.5)
   
   #Choose partitions to include in consensus transmission tree
   comb=hash[!sapply(hash,is.null)]
+  comb=comb[sapply(comb,'[[',2)>(minimum*m)]
   comb=comb[order(sapply(comb,'[[',2),decreasing=T)]
   keep=c()
   for (i in 1:n) {
@@ -80,8 +82,7 @@ consTTree = function(record,burnin=0.5)
     exclude=F
     for (j in keep) {
       c2=which(comb[[j]]$c==1)
-      if (length(intersect(c1,c2)>0) && length(setdiff(c1,c2))>0 && length(setdiff(c2,c1))>0) {exclude=T;print('excluded');break}
-      #if (length(intersect(c1,c2)>0) && length(union(c1,c2))==n) {exclude=T;print('excluded');break}
+      if (length(intersect(c1,c2))>0 && length(setdiff(c1,c2))>0 && length(setdiff(c2,c1))>0) {exclude=T;break}
     }
     if (exclude==F) keep=c(keep,i)
   }
@@ -92,7 +93,7 @@ consTTree = function(record,burnin=0.5)
   bralen =rep(NA,length(comb))
   inftim =rep(NA,length(comb))
   for (i in 1:length(comb)) {
-    bralen[i]=median(comb[[i]]$w)
+    bralen[i]=floor(mean(comb[[i]]$w))
     inftim[i]=sum(comb[[i]]$t)/comb[[i]]$n
     ci=which(comb[[i]]$c==1)
     bestscore=Inf
