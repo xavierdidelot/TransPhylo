@@ -5,7 +5,7 @@
 #' @param ws.shape Shape parameter of the Gamma probability density function representing the sampling time
 #' @param ws.scale Scale parameter of the Gamma probability density function representing the sampling time 
 #' @param mcmcIterations Number of MCMC iterations to run the algorithm for
-#' @param thinning MCMC thinning interval between two sampled iterations
+#' @param thining MCMC thining interval between two sampled iterations
 #' @param startNeg Starting value of within-host coalescent parameter Ne*g
 #' @param startOff.r Starting value of parameter off.r
 #' @param startOff.p Starting value of parameter off.p
@@ -20,7 +20,7 @@
 #' @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @param allowTransPostSamp Whether or not to allow transmission after sampling of a host
 #' @return posterior sample set of transmission trees
-inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scale,mcmcIterations=1000,thinning=1,startNeg=100/365,startOff.r=1,startOff.p=0.5,startPi=0.5,updateNeg=T,updateOff.r=T,updateOff.p=T,updatePi=T,startFulltree=NA,updateTTree=TRUE,optiStart=T,dateT=Inf,allowTransPostSamp=T) {
+inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scale,mcmcIterations=1000,thining=1,startNeg=100/365,startOff.r=1,startOff.p=0.5,startPi=0.5,updateNeg=T,updateOff.r=T,updateOff.p=T,updatePi=T,startFulltree=NA,updateTTree=TRUE,optiStart=T,dateT=Inf,allowTransPostSamp=T) {
 #  memoise::forget(.getOmegabar)
 #  memoise::forget(.probSubtree)
   ptree[,1]=ptree[,1]+runif(nrow(ptree))*1e-10#Ensure that all leaves have unique times
@@ -32,27 +32,27 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scal
   if (is.na(sum(startFulltree))) fulltree <- makeFullTreeFromPTree(ptree,ifelse(optiStart,off.r,NA),off.p,neg,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,allowTransPostSamp)#Starting point 
   else fulltree<-startFulltree
   ttree <- ttreeFromFullTree(fulltree)
-  record <- vector('list',mcmcIterations/thinning)
+  record <- vector('list',mcmcIterations/thining)
   pTTree <- probTTree(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,allowTransPostSamp) 
   pPTree <- probPTreeGivenTTree(fulltree,neg) 
   #pb <- txtProgressBar(min=0,max=mcmcIterations,style = 3)
   for (i in 1:mcmcIterations) {#Main MCMC loop
-    if (i%%thinning == 0) {
+    if (i%%thining == 0) {
       #Record things 
       #setTxtProgressBar(pb, i)
       message(sprintf('it=%d,neg=%f,off.r=%f,off.p=%f,pi=%f,Prior=%e,Likelihood=%f,n=%d',i,neg,off.r,off.p,pi,pTTree,pPTree,nrow(ttreeFromFullTree(fulltree))))
-      record[[i/thinning]]$tree <- fulltree
-      record[[i/thinning]]$pTTree <- pTTree 
-      record[[i/thinning]]$pPTree <- pPTree 
-      record[[i/thinning]]$neg <- neg 
-      record[[i/thinning]]$off.r <- off.r
-      record[[i/thinning]]$off.p <- off.p
-      record[[i/thinning]]$pi <- pi
-      record[[i/thinning]]$w.shape <- w.shape
-      record[[i/thinning]]$w.scale <- w.scale
-      record[[i/thinning]]$ws.shape <- ws.shape
-      record[[i/thinning]]$ws.scale <- ws.scale
-      record[[i/thinning]]$source <- fulltree[fulltree[which(fulltree[,1]==0),2],4] 
+      record[[i/thining]]$tree <- fulltree
+      record[[i/thining]]$pTTree <- pTTree 
+      record[[i/thining]]$pPTree <- pPTree 
+      record[[i/thining]]$neg <- neg 
+      record[[i/thining]]$off.r <- off.r
+      record[[i/thining]]$off.p <- off.p
+      record[[i/thining]]$pi <- pi
+      record[[i/thining]]$w.shape <- w.shape
+      record[[i/thining]]$w.scale <- w.scale
+      record[[i/thining]]$ws.shape <- ws.shape
+      record[[i/thining]]$ws.scale <- ws.scale
+      record[[i/thining]]$source <- fulltree[fulltree[which(fulltree[,1]==0),2],4] 
     }
     
     if (updateTTree) {

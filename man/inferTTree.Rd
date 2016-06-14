@@ -5,7 +5,7 @@
 \title{Infer transmission tree given a phylogenetic tree}
 \usage{
 inferTTree(ptree, w.shape = 2, w.scale = 1, ws.shape = w.shape,
-  ws.scale = w.scale, mcmcIterations = 1000, thining = 1,
+  ws.scale = w.scale, mcmcIterations = 1000, thinning = 1,
   startNeg = 100/365, startOff.r = 1, startOff.p = 0.5, startPi = 0.5,
   updateNeg = T, updateOff.r = T, updateOff.p = T, updatePi = T,
   startFulltree = NA, updateTTree = TRUE, optiStart = T, dateT = Inf,
@@ -24,7 +24,7 @@ inferTTree(ptree, w.shape = 2, w.scale = 1, ws.shape = w.shape,
 
 \item{mcmcIterations}{Number of MCMC iterations to run the algorithm for}
 
-\item{thining}{MCMC thining interval between two sampled iterations}
+\item{thinning}{MCMC thinning interval between two sampled iterations}
 
 \item{startNeg}{Starting value of within-host coalescent parameter Ne*g}
 
