@@ -2,7 +2,7 @@
 \usepackage{geometry}
 \geometry{tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
 
-\title{Documentation of the R package TransPhylo}
+\title{Vignette introducing the R package TransPhylo}
 \author{Xavier Didelot}
 
 \begin{document}
@@ -24,7 +24,7 @@ set.seed(0)
 
 \section{Simulation}
 
-A pathogen has an effective within-host population size of $N_e=100$ and a generation time $g=1$ day, so that $N_e g=100/365$ years. The offspring distribution is negative binomial with parameters (5,0.5) so that basic reproduction number is $R=5$. The generation time is Gamma distributed with parameters (10,0.1). The probability is sampling an 'old' individual is $\pi=0.25$. The following commands specify these parameters:
+A pathogen has an effective within-host population size of $N_e=100$ and a generation time $g=1$ day, so that $N_e g=100/365$ year. The offspring distribution is negative binomial with parameters (5,0.5) so that the basic reproduction number is $R=5$. Both the generation time and the sampling time are Gamma distributed with parameters (10,0.1) which has a mean of 1 year. The density of sampling is $\pi=0.25$. The following commands specify these parameters:
 <<>>=
 neg=100/365
 off.r=5
@@ -34,18 +34,18 @@ w.scale=0.1
 pi=0.25
 @
 
-We simulate an outbreak that starts in 2005 and which and is observed up to 2010:
+We simulate an outbreak that starts in 2005 and which and is observed up to 2008:
 
 <<>>=
 simu <- simulateOutbreak(neg=neg,pi=pi,off.r=off.r,off.p=off.p,w.shape=w.shape,
                          w.scale=w.scale,dateStartOutbreak=2005,dateT=2008)
 @
 
-This simulation contains both the transmission tree between infected hosts and the within-host phlogenetic tree of each host. This can be visualised as a colored phlogenetic tree, where each host is represented by a unique color:
+This simulation contains both the transmission tree between infected hosts and the within-host phylogenetic tree of each host. This can be visualised as a colored phlogenetic tree, where each host is represented by a unique color:
 
 \begin{center}
 <<>>=
-plotBothTree(simu,showLabels=F)
+plotBothTree(simu)
 @
 \end{center}
 
@@ -53,7 +53,7 @@ The transmission tree can be extracted and plotted separately from the phylogeny
 
 <<>>=
 ttree<-ttreeFromFullTree(simu)
-plotTTree(ttree,w.shape,w.scale,showLabels=F)
+plotTTree(ttree,w.shape,w.scale)
 @
 
 The phylogenetic tree can be extracted and converted into a phylo object from the ape package:
@@ -62,7 +62,7 @@ The phylogenetic tree can be extracted and converted into a phylo object from th
 library(ape)
 ptree<-ptreeFromFullTree(simu)
 p<-phyloFromPtree(ptree)
-plot(p,show.tip.label=F)
+plot(p)
 @
 
 \section{Inference of transmission tree given a phylogeny}
