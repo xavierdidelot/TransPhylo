@@ -2,13 +2,13 @@
 \usepackage{geometry}
 \geometry{tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
 
-\title{Documentation of the R package EpiPhylo}
+\title{Documentation of the R package TransPhylo}
 \author{Xavier Didelot}
 
 \begin{document}
 
 %\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Using epiphylo}
+%\VignetteIndexEntry{Using TransPhylo}
 
 <<include=FALSE>>=
 library(knitr)
@@ -18,7 +18,7 @@ opts_chunk$set(fig.width=5,fig.height=5,out.width="4in",out.height="4in",fig.ali
 \maketitle
 
 <<include=FALSE>>=
-library('epiphylo')
+library('TransPhylo')
 set.seed(0)
 @
 
