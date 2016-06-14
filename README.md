@@ -4,6 +4,6 @@ If you are looking for the Matlab version of TransPhylo described in MBE 2014 31
 
 This repository is a new version of TransPhylo developed in R and for which a preprint will soon be available.
 
-Install using:
+Install in R using:
 
-`devtools::install_github('xavierdidelot/EpiPhylo')`
+`devtools::install_github('xavierdidelot/TransPhylo')`
