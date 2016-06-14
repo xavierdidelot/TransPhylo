@@ -1,10 +1,10 @@
-\name{epiphylo-package}
-\alias{epiphylo-package}
-\alias{epiphylo}
+\name{TransPhylo-package}
+\alias{TransPhylo-package}
+\alias{TransPhylo}
 \docType{package}
 \title{
 Inference of transmission tree under a within-host evolution model
-~~ epiphylo ~~
+~~ TransPhylo ~~
 }
 \description{
 More about what it does (maybe more than one line)
@@ -12,7 +12,7 @@ More about what it does (maybe more than one line)
 }
 \details{
 \tabular{ll}{
-Package: \tab epiphylo\cr
+Package: \tab TransPhylo\cr
 Type: \tab Package\cr
 Version: \tab 1.0\cr
 Date: \tab 2014-02-18\cr
@@ -29,3 +29,4 @@ Maintainer: Xavier Didelot <xavier.didelot@gmail.com>
 ~~ Literature or other references for background information ~~
 }
 \keyword{ package }
+
