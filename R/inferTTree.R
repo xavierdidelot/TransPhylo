@@ -17,10 +17,10 @@
 #' @param startFulltree Optional combined tree to start from
 #' @param updateTTree Whether or not to update the transmission tree
 #' @param optiStart Whether or not to optimise the MCMC start point
-#' @param datePresent Date when process stops (this can be Inf for fully simulated outbreaks)
+#' @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @param allowTransPostSamp Whether or not to allow transmission after sampling of a host
 #' @return posterior sample set of transmission trees
-inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scale,mcmcIterations=1000,thining=1,startNeg=100/365,startOff.r=1,startOff.p=0.5,startPi=0.5,updateNeg=T,updateOff.r=T,updateOff.p=T,updatePi=T,startFulltree=NA,updateTTree=TRUE,optiStart=T,datePresent=Inf,allowTransPostSamp=T) {
+inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scale,mcmcIterations=1000,thining=1,startNeg=100/365,startOff.r=1,startOff.p=0.5,startPi=0.5,updateNeg=T,updateOff.r=T,updateOff.p=T,updatePi=T,startFulltree=NA,updateTTree=TRUE,optiStart=T,dateT=Inf,allowTransPostSamp=T) {
 #  memoise::forget(.getOmegabar)
 #  memoise::forget(.probSubtree)
   ptree[,1]=ptree[,1]+runif(nrow(ptree))*1e-10#Ensure that all leaves have unique times
@@ -29,11 +29,11 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scal
   off.r <- startOff.r
   off.p <- startOff.p
   pi <- startPi
-  if (is.na(sum(startFulltree))) fulltree <- makeFullTreeFromPTree(ptree,ifelse(optiStart,off.r,NA),off.p,neg,pi,w.shape,w.scale,ws.shape,ws.scale,datePresent,allowTransPostSamp)#Starting point 
+  if (is.na(sum(startFulltree))) fulltree <- makeFullTreeFromPTree(ptree,ifelse(optiStart,off.r,NA),off.p,neg,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,allowTransPostSamp)#Starting point 
   else fulltree<-startFulltree
   ttree <- ttreeFromFullTree(fulltree)
   record <- vector('list',mcmcIterations/thining)
-  pTTree <- probTTree(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,datePresent,allowTransPostSamp) 
+  pTTree <- probTTree(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,allowTransPostSamp) 
   pPTree <- probPTreeGivenTTree(fulltree,neg) 
   #pb <- txtProgressBar(min=0,max=mcmcIterations,style = 3)
   for (i in 1:mcmcIterations) {#Main MCMC loop
@@ -60,7 +60,7 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scal
     prop <- .proposal(fulltree) 
     fulltree2 <- prop$tree
     ttree2 <- ttreeFromFullTree(fulltree2)
-    pTTree2 <- probTTree(ttree2,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,datePresent,allowTransPostSamp) 
+    pTTree2 <- probTTree(ttree2,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,allowTransPostSamp) 
     pPTree2 <- probPTreeGivenTTree(fulltree2,neg) 
     if (log(runif(1)) < log(prop$qr)+pTTree2 + pPTree2-pTTree-pPTree)  { 
       fulltree <- fulltree2 
@@ -80,7 +80,7 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scal
     if (updateOff.r) {
       #Metropolis update for off.r, assuming Exp(1) prior 
       off.r2 <- abs(off.r + (runif(1)-0.5)*0.5)
-      pTTree2 <- probTTree(ttree,off.r2,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,datePresent,allowTransPostSamp) 
+      pTTree2 <- probTTree(ttree,off.r2,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,allowTransPostSamp) 
       if (log(runif(1)) < pTTree2-pTTree-off.r2+off.r)  {off.r <- off.r2;pTTree <- pTTree2}
     }
     
@@ -88,7 +88,7 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scal
       #Metropolis update for off.p, assuming Unif(0,1) prior 
       off.p2 <- abs(off.p + (runif(1)-0.5)*0.1)
       if (off.p2>1) off.p2=2-off.p2
-      pTTree2 <- probTTree(ttree,off.r,off.p2,pi,w.shape,w.scale,ws.shape,ws.scale,datePresent,allowTransPostSamp) 
+      pTTree2 <- probTTree(ttree,off.r,off.p2,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,allowTransPostSamp) 
       if (log(runif(1)) < pTTree2-pTTree)  {off.p <- off.p2;pTTree <- pTTree2}
     }
 
@@ -97,7 +97,7 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scal
       pi2 <- pi + (runif(1)-0.5)*0.1
       if (pi2<0.01) pi2=0.02-pi2
       if (pi2>1) pi2=2-pi2
-      pTTree2 <- probTTree(ttree,off.r,off.p,pi2,w.shape,w.scale,ws.shape,ws.scale,datePresent,allowTransPostSamp) 
+      pTTree2 <- probTTree(ttree,off.r,off.p,pi2,w.shape,w.scale,ws.shape,ws.scale,dateT,allowTransPostSamp) 
       if (log(runif(1)) < pTTree2-pTTree)  {pi <- pi2;pTTree <- pTTree2}       
     }
     

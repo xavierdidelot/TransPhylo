@@ -6,7 +6,7 @@
 \usage{
 simulateOutbreak(off.r = 1, off.p = 0.5, neg = 0.25, nSampled = NA,
   pi = 0.5, w.shape = 2, w.scale = 1, ws.shape = w.shape,
-  ws.scale = w.scale, dateStartOutbreak = 2000, datePresent = Inf)
+  ws.scale = w.scale, dateStartOutbreak = 2000, dateT = Inf)
 }
 \arguments{
 \item{off.r}{First parameter of the negative binomial distribution for offspring number}
@@ -29,7 +29,7 @@ simulateOutbreak(off.r = 1, off.p = 0.5, neg = 0.25, nSampled = NA,
 
 \item{dateStartOutbreak}{Date when index case becomes infected}
 
-\item{datePresent}{Date when process stops (this can be Inf for fully simulated outbreaks)}
+\item{dateT}{Date when process stops (this can be Inf for fully simulated outbreaks)}
 }
 \value{
 Combined phylogenetic and transmission tree

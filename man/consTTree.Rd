@@ -4,12 +4,14 @@
 \alias{consTTree}
 \title{Build a consensus transmission tree from a MCMC output}
 \usage{
-consTTree(record, burnin = 0.5)
+consTTree(record, burnin = 0.5, minimum = 0.5)
 }
 \arguments{
 \item{record}{Output from inferTTree function}
 
 \item{burnin}{Proportion of the MCMC output to be discarded as burnin}
+
+\item{minimum}{Minimum probability for inclusion in consensus}
 }
 \description{
 Build a consensus transmission tree from a MCMC output

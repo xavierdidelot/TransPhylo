@@ -7,10 +7,10 @@
 #' @param w.scale Scale parameter of the Gamma probability density function representing the generation time 
 #' @param ws.shape Shape parameter of the Gamma probability density function representing the sampling time
 #' @param ws.scale Scale parameter of the Gamma probability density function representing the sampling time 
-#' @param datePresent Date when process stops (this can be Inf for fully simulated outbreaks)
+#' @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @param allowTransPostSamp Whether or not to allow transmission after sampling of a host
 #' @return Probability of the transmission tree
-probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,datePresent,allowTransPostSamp)  {
+probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,allowTransPostSamp)  {
   prob <- 0 
   notinf=20
   n <- nrow(ttree)
@@ -20,7 +20,7 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,date
     for (i in 1:n) if (ttree[i,3]>0&&!is.na(ttree[ttree[i,3],2])&&ttree[i,1]>ttree[ttree[i,3],2]) return(-Inf)
   }
   
-  if (datePresent==Inf) {
+  if (dateT==Inf) {
     # This is the case of a finished outbreak
     omegaStar <- uniroot(function(x) {x-(1-pi)*((1-off.p)/(1-off.p*x))^off.r},c(0,1))$root #This is Equation (1)
     alphaStar <- rep(NA, n+1)
@@ -44,13 +44,13 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,date
     #This is the case of an ongoing outbreak
     dt=0.05;L=1000
     omegabar=.getOmegabar(L,dt,off.r,off.p,pi,w.shape,w.scale)
-    #pit      =function(t) {pi*pgamma((datePresent-t),shape=w.shape,scale=w.scale) }#This is Equation (6), but replaced with pi*trunc
-    #fomega   =function(x) {omega   [max(1,min(L,round((datePresent-x)/dt)))] }
-    fomegabar=function(x) {omegabar[max(1,min(L,round((datePresent-x)/dt)))] }
+    #pit      =function(t) {pi*pgamma((dateT-t),shape=w.shape,scale=w.scale) }#This is Equation (6), but replaced with pi*trunc
+    #fomega   =function(x) {omega   [max(1,min(L,round((dateT-x)/dt)))] }
+    fomegabar=function(x) {omegabar[max(1,min(L,round((dateT-x)/dt)))] }
     for (i in (1:n)) { 
       tinf=ttree[i,1]
-      ltruncW =pgamma(datePresent-tinf,shape= w.shape,scale= w.scale,log.p=T)
-       truncWS=pgamma(datePresent-tinf,shape=ws.shape,scale=ws.scale)
+      ltruncW =pgamma(dateT-tinf,shape= w.shape,scale= w.scale,log.p=T)
+       truncWS=pgamma(dateT-tinf,shape=ws.shape,scale=ws.scale)
       if (is.na(ttree[i,2])) prob<-prob+log(1-pi*truncWS) #This is the first term in the product in Equation (9)
       else prob<-prob+log(pi)+dgamma((ttree[i,2]-tinf),shape=ws.shape,scale=ws.scale,log=TRUE) #This is the second term in the product in Equation (9) Note simplification of truncWS/truncWS
       offspring <- which(ttree[ ,3]==i)

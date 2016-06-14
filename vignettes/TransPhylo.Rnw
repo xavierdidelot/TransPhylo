@@ -38,7 +38,7 @@ We simulate an outbreak that starts in 2005 and which and is observed up to 2010
 
 <<>>=
 simu <- simulateOutbreak(neg=neg,pi=pi,off.r=off.r,off.p=off.p,w.shape=w.shape,
-                         w.scale=w.scale,dateStartOutbreak=2005,datePresent=2008)
+                         w.scale=w.scale,dateStartOutbreak=2005,dateT=2008)
 @
 
 This simulation contains both the transmission tree between infected hosts and the within-host phlogenetic tree of each host. This can be visualised as a colored phlogenetic tree, where each host is represented by a unique color:
@@ -80,7 +80,7 @@ The MCMC procedure to infer the transmission tree given the phylogenetic tree ca
 <<message=FALSE>>=
 record<-inferTTree(ptree,mcmcIterations=100,w.shape=w.shape,w.scale=w.scale,
                    startNeg=neg,startPi=0.5,startOff.p=off.p,startOff.r=1,
-                   updateOff.r=T,updatePi=T,updateNeg=T,updateOff.p=F,datePresent=2008)
+                   updateOff.r=T,updatePi=T,updateNeg=T,updateOff.p=F,dateT=2008)
 @
 
 This returns a record of all MCMC iterations. This is what the transmission tree looks like at the end of the MCMC:

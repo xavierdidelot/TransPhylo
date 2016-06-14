@@ -4,8 +4,8 @@
 \alias{probTTree}
 \title{Calculates the log-probability of a transmission tree}
 \usage{
-probTTree(ttree, off.r, off.p, pi, w.shape, w.scale, ws.shape, ws.scale,
-  datePresent, allowTransPostSamp)
+probTTree(ttree, off.r, off.p, pi, w.shape, w.scale, ws.shape, ws.scale, dateT,
+  allowTransPostSamp)
 }
 \arguments{
 \item{ttree}{Transmission tree}
@@ -24,7 +24,7 @@ probTTree(ttree, off.r, off.p, pi, w.shape, w.scale, ws.shape, ws.scale,
 
 \item{ws.scale}{Scale parameter of the Gamma probability density function representing the sampling time}
 
-\item{datePresent}{Date when process stops (this can be Inf for fully simulated outbreaks)}
+\item{dateT}{Date when process stops (this can be Inf for fully simulated outbreaks)}
 
 \item{allowTransPostSamp}{Whether or not to allow transmission after sampling of a host}
 }

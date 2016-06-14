@@ -9,11 +9,11 @@
 #' @param ws.shape Shape parameter of the Gamma probability density function representing the sampling time
 #' @param ws.scale Scale parameter of the Gamma probability density function representing the sampling time 
 #' @param dateStartOutbreak Date when index case becomes infected
-#' @param datePresent Date when process stops (this can be Inf for fully simulated outbreaks)
+#' @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @return Combined phylogenetic and transmission tree
 #' @examples
 #' plotBothTree(simulateOutbreak())
-simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scale,dateStartOutbreak=2000,datePresent=Inf) {
+simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scale,dateStartOutbreak=2000,dateT=Inf) {
   #Create a transmission tree with nSampled infected sampled individuals
   nsam<-0
   nh<-0
@@ -21,12 +21,12 @@ simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shap
   while (is.na(nSampled)||nsam!=nSampled) {
     ttree=NULL
     while (is.null(ttree)) {
-      mtt<-makeTTree(off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,datePresent-dateStartOutbreak,nSampled)
+      mtt<-makeTTree(off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT-dateStartOutbreak,nSampled)
       rejected=rejected+1
       ttree<-mtt$ttree
       if (mtt$pruned>0) {
         dateStartOutbreak=dateStartOutbreak+mtt$pruned
-        cat(sprintf('Note that simulated outbreak was pruned: in order to have %d sampled by present date %f, the start date was set to %f\n',nSampled,datePresent,dateStartOutbreak))
+        cat(sprintf('Note that simulated outbreak was pruned: in order to have %d sampled by present date %f, the start date was set to %f\n',nSampled,dateT,dateStartOutbreak))
       }
       }
     nsam<-length(which(!is.na(ttree[,2])))
