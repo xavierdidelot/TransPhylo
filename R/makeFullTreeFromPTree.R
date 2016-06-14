@@ -33,8 +33,6 @@ makeFullTreeFromPTree = function(tree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,
       tree[2*n-1 + i2,2] <- i 
       tree[2*n-1 + i2,1] <- (tree[f,1] + tree[i,1])/2 
     } 
-    #  tree[ ,1] <- tree[ ,1]-min(tree[ ,1])
-    #  tree[ ,1] <- tree[ ,1]+dateLastSample-max(tree[ ,1])
     
     #Reorder nodes chronologically 
     MySort <- sort(tree[seq(n + 1,nrow(tree),1),1],decreasing=TRUE,index.return = TRUE); ind <- MySort$ix 
