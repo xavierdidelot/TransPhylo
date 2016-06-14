@@ -1,4 +1,8 @@
 \documentclass[a4paper]{article}
+
+%\VignetteIndexEntry{UsingTransPhylo}
+%\VignetteEngine{knitr::knitr}
+
 \usepackage{geometry}
 \geometry{tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
 
@@ -6,9 +10,6 @@
 \author{Xavier Didelot}
 
 \begin{document}
-
-%\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Using TransPhylo}
 
 <<include=FALSE>>=
 library(knitr)
