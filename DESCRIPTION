@@ -1,4 +1,4 @@
-Package: epiphylo
+Package: TransPhylo
 Type: Package
 Title: Inference of transmission tree under a within-host evolution model
 Version: 0.1
