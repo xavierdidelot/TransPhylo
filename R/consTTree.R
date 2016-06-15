@@ -5,9 +5,9 @@
 consTTree = function(record,burnin=0.5,minimum=0.5)
 {
   #Remove burnin
-  record=record[round(length(record)*burnin):length(record)]
+  if (burnin>0) record=record[round(length(record)*burnin):length(record)]
   m=length(record)
-  n=sum(record[[1]]$tree[,2]==0&record[[1]]$tree[,3]==0) 
+  n=sum(record[[1]]$tree[,2]==0&record[[1]]$tree[,3]==0) #Number of sampled individuals
 
   #Record partitions in sampled transmission tree
   hash=vector('list',n*m*10)
@@ -69,7 +69,7 @@ consTTree = function(record,burnin=0.5,minimum=0.5)
   
   #Choose partitions to include in consensus transmission tree
   comb=hash[!sapply(hash,is.null)]
-  comb=comb[sapply(comb,'[[',2)>(minimum*m)]
+  if (minimum>0) comb=comb[sapply(comb,'[[',2)>(minimum*m)]
   comb=comb[order(sapply(comb,'[[',2),decreasing=T)]
   keep=c()
   for (i in 1:n) {
@@ -82,7 +82,7 @@ consTTree = function(record,burnin=0.5,minimum=0.5)
     exclude=F
     for (j in keep) {
       c2=which(comb[[j]]$c==1)
-      if (length(intersect(c1,c2))>0 && length(setdiff(c1,c2))>0 && length(setdiff(c2,c1))>0) {exclude=T;break}
+      if (length(intersect(c1,c2))>0 && length(setdiff(c1,c2))>0 && length(setdiff(c2,c1))>0) {exclude=T;print('excluded');break}
     }
     if (exclude==F) keep=c(keep,i)
   }
@@ -93,7 +93,7 @@ consTTree = function(record,burnin=0.5,minimum=0.5)
   bralen =rep(NA,length(comb))
   inftim =rep(NA,length(comb))
   for (i in 1:length(comb)) {
-    bralen[i]=floor(mean(comb[[i]]$w))
+    bralen[i]=round(mean(comb[[i]]$w))
     inftim[i]=sum(comb[[i]]$t)/comb[[i]]$n
     ci=which(comb[[i]]$c==1)
     bestscore=Inf
@@ -117,7 +117,7 @@ consTTree = function(record,burnin=0.5,minimum=0.5)
 #   class(tr)<-'phylo'
 #   plot(tr)
   
-  #Update vectors parents and bralen and inftim so that branches of length zero are remove and branches of length>1 are deduplicated
+  #Update vectors parents and bralen and inftim so that branches of length zero are removed and branches of length>1 are deduplicated
   i=1
   while (i<length(parents)) {
     if (bralen[i]==0) {
@@ -127,8 +127,9 @@ consTTree = function(record,burnin=0.5,minimum=0.5)
     parents[which(parents==torem)]=i;parents=parents[-torem]
     bralen=bralen[-torem]
     inftim=inftim[-torem]
-    parents[which(parents>torem)]=parents[which(parents>torem)]-1} 
-    else if (bralen[i]>1) {
+    parents[which(parents>torem)]=parents[which(parents>torem)]-1 
+    } 
+    if (bralen[i]>1) {
       dt=abs(inftim[i]-inftim[parents[i]])
       inftim=c(inftim,inftim[i]-dt/bralen[i])
       bralen=c(bralen,bralen[i]-1)
