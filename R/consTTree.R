@@ -2,7 +2,7 @@
 #' @param record Output from inferTTree function
 #' @param burnin Proportion of the MCMC output to be discarded as burnin
 #' @param minimum Minimum probability for inclusion in consensus
-consTTree = function(record,burnin=0.5,minimum=0.5)
+consTTree = function(record,burnin=0.5,minimum=0.1)
 {
   #Remove burnin
   if (burnin>0) record=record[round(length(record)*burnin):length(record)]
@@ -82,7 +82,7 @@ consTTree = function(record,burnin=0.5,minimum=0.5)
     exclude=F
     for (j in keep) {
       c2=which(comb[[j]]$c==1)
-      if (length(intersect(c1,c2))>0 && length(setdiff(c1,c2))>0 && length(setdiff(c2,c1))>0) {exclude=T;print('excluded');break}
+      if (length(intersect(c1,c2))>0 && length(setdiff(c1,c2))>0 && length(setdiff(c2,c1))>0) {exclude=T;break}
     }
     if (exclude==F) keep=c(keep,i)
   }
@@ -124,6 +124,7 @@ consTTree = function(record,burnin=0.5,minimum=0.5)
     torem=parents[i]
     parents[i]=parents[torem]
     bralen[i]=bralen[torem]
+    inftim[i]=inftim[torem]
     parents[which(parents==torem)]=i;parents=parents[-torem]
     bralen=bralen[-torem]
     inftim=inftim[-torem]
