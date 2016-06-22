@@ -1,10 +1,10 @@
-#' Plot a transmission tree with the option of collapsing unsampled nodes
+#' Plot a transmission tree in an economic format
 #' @param ttree Transmission tree
-#' @param showLabels Whether or not to show the labels 
-#' @param collapseUnsampled Whether or not to simplify chains of unsampled hosts
-plotTTree2 = function(ttree,showLabels=TRUE,collapseUnsampled=TRUE) {
+#' @param showLabels Boolean for whether or not to show the labels
+#' @param showMissingLinks Option for how to show missing links: (0) as dots, (1) as several gray levels, (2) as a single gray level
+plotTTree2 = function(ttree,showLabels=TRUE,showMissingLinks=0) {
   ttree=cbind(ttree,rep(1,nrow(ttree)))
-  if (collapseUnsampled) {
+  if (showMissingLinks>0) {
     i=which(is.na(ttree[,2]))[1]
     while (i<nrow(ttree)) {
       w=which(ttree[,3]==i)
@@ -15,6 +15,10 @@ plotTTree2 = function(ttree,showLabels=TRUE,collapseUnsampled=TRUE) {
         ttree[which(ttree[,3]>i),3]=ttree[which(ttree[,3]>i),3]-1
       } else i=i+1
     }
+  }
+  
+  if (showMissingLinks==2) {
+    ttree[which(ttree[,4]>=2),4]=2
   }
   
   #Determine ys 
@@ -39,7 +43,6 @@ plotTTree2 = function(ttree,showLabels=TRUE,collapseUnsampled=TRUE) {
   ma=max(ttree[which(!is.na(ttree[,1])),1])
   plot(c(),c(),xlim=c(mi-(ma-mi)*0.05,ma+(ma-mi)*0.05),ylim=c(0,n+1),xlab='',ylab='')
   pal=gray.colors(max(ttree[,4]))
-  cols=rep(0,nrow(ttree))
   for (i in 1:n) {
     if (ttree[i,3]!=0) {
       dircol=pal[ttree[i,4]]
@@ -52,7 +55,7 @@ plotTTree2 = function(ttree,showLabels=TRUE,collapseUnsampled=TRUE) {
     #lines(c(mi,ma),c(ys[i],ys[i]))
   }
   for (i in 1:n) {
-    points(ttree[i,1],ys[i],pch=21+(cols[i]>7),bg=pal[cols[i]],cex=0.2+0.6*(cols[i]>1))
+    points(ttree[i,1],ys[i],pch=21,bg='black',cex=0.2+0.2*(!is.na(ttree[i,2])))
   }
-  if (length(pal)>1) legend('topleft',legend = 0:(length(pal)-1),col = pal,lty=1,cex=0.5,title='Missing links')
+  if (length(pal)>2) legend('topleft',legend = 0:(length(pal)-1),col = pal,lty=1,cex=0.5,title='Missing links')
 }
