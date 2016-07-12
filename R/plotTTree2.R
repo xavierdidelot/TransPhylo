@@ -55,7 +55,8 @@ plotTTree2 = function(ttree,showLabels=TRUE,showMissingLinks=0) {
     #lines(c(mi,ma),c(ys[i],ys[i]))
   }
   for (i in 1:n) {
-    points(ttree[i,1],ys[i],pch=21,bg='black',cex=0.2+0.2*(!is.na(ttree[i,2])))
+    #points(ttree[i,1],ys[i],pch=21,bg='black',cex=0.2+0.2*(!is.na(ttree[i,2])))
+    points(ttree[i,1],ys[i],pch=21,bg=ifelse(is.na(ttree[i,2]),'white','black'),cex=0.5)
   }
   if (length(pal)>2) legend('topleft',legend = 0:(length(pal)-1),col = pal,lty=1,cex=0.5,title='Missing links')
 }
