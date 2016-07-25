@@ -4,7 +4,7 @@
 \alias{consTTree}
 \title{Build a consensus transmission tree from a MCMC output}
 \usage{
-consTTree(record, burnin = 0.5, minimum = 0.5)
+consTTree(record, burnin = 0.5, minimum = 0.1)
 }
 \arguments{
 \item{record}{Output from inferTTree function}

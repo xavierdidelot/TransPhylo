@@ -2,18 +2,18 @@
 % Please edit documentation in R/plotTTree2.R
 \name{plotTTree2}
 \alias{plotTTree2}
-\title{Plot a transmission tree with the option of collapsing unsampled nodes}
+\title{Plot a transmission tree in an economic format}
 \usage{
-plotTTree2(ttree, showLabels = TRUE, collapseUnsampled = TRUE)
+plotTTree2(ttree, showLabels = TRUE, showMissingLinks = 0)
 }
 \arguments{
 \item{ttree}{Transmission tree}
 
-\item{showLabels}{Whether or not to show the labels}
+\item{showLabels}{Boolean for whether or not to show the labels}
 
-\item{collapseUnsampled}{Whether or not to simplify chains of unsampled hosts}
+\item{showMissingLinks}{Option for how to show missing links: (0) as dots, (1) as several gray levels, (2) as a single gray level}
 }
 \description{
-Plot a transmission tree with the option of collapsing unsampled nodes
+Plot a transmission tree in an economic format
 }
 

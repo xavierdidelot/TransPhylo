@@ -3,6 +3,7 @@
 #' @param dateLastSample date of the last sample
 #' @return phylogenetic tree
 ptreeFromPhylo <- function(tr,dateLastSample) {
+#TODO: preserv leaf names if they are already named from 1 to n
   n<-length(tr$tip.label)#tr$Nnode+1
   ed<-tr$edge
   le<-tr$edge.length
