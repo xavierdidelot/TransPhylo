@@ -75,7 +75,7 @@ plotTTree(ttree,w.shape,w.scale)
 
 The phylogenetic tree can be extracted and converted into a phylo object from the ape package:
 
-<<warning=F>>=
+<<>>=
 library(ape)
 ptree<-ptreeFromFullTree(simu)
 p<-phyloFromPtree(ptree)
