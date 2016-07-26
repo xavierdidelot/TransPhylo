@@ -6,7 +6,7 @@ This is the homepage of TransPhylo, a software package that can reconstruct infe
 
 For example, in the tree below, the outbreak started with the unsampled host 8, who transmitted to sampled host 4, who transmitted to unsampled host 3, who transmitted to both sampled hosts 1 and 2. Host 8 also transmitted to unsampled host 7 who transmitted to both sampled hosts 5 and 6.
 
-![example](https://raw.githubusercontent.com/wiki/xavierdidelot/TransPhylo/example.png)
+<img src="https://raw.githubusercontent.com/wiki/xavierdidelot/TransPhylo/example.png" width="300">
 
 For a more formal description of TransPhylo, see the following preprint:
 
