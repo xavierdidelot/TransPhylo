@@ -4,6 +4,10 @@
 
 This is the homepage of TransPhylo, a software package that can reconstruct infectious disease transmission using genomic data. The input is a dated phylogeny, where leaves correspond to pathogens sampled from the known infected hosts. The main output is a transmission tree which indicates who infected whom, including the potential existence of unsampled individuals who may have acted as missing transmission links. TransPhylo works by colouring the branches of the phylogeny using a separate colour for each host, sampled or not. Each section of the tree  coloured in a unique colour represents the pathogen evolution happening within a distinct host. Changes of colours on branches therefore correspond to transmission events from one host to another.
 
+For example, in the tree below, the outbreak started with the unsampled host 8, who transmitted to sampled host 4, who transmitted to unsampled host 3, who transmitted to both sampled hosts 1 and 2. Host 8 also transmitted to unsampled host 7 who transmitted to both sampled hosts 5 and 6.
+
+![example](https://raw.githubusercontent.com/wiki/xavierdidelot/TransPhylo/example.png)
+
 For a more formal description of TransPhylo, see the following preprint:
 
 Didelot, Fraser, Gardy and Colijn (2016)
@@ -18,7 +22,7 @@ You can install TransPhylo in R using the following command:
 
 # Tutorial
 
-See R vignette for now. More coming soon.
+The TransPhylo tutorial can be downloaded [here](https://raw.githubusercontent.com/wiki/xavierdidelot/TransPhylo/TransPhylo-Tutorial.pdf). This tutorial is also available within the R package as a vignette. There will be more instructions and tutorials coming soon.
 
 # Getting help
 
