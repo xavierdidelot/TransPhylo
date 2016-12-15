@@ -35,12 +35,12 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scal
   record <- vector('list',mcmcIterations/thinning)
   pTTree <- probTTree(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,allowTransPostSamp) 
   pPTree <- probPTreeGivenTTree(fulltree,neg) 
-  #pb <- txtProgressBar(min=0,max=mcmcIterations,style = 3)
+  pb <- txtProgressBar(min=0,max=mcmcIterations,style = 3)
   for (i in 1:mcmcIterations) {#Main MCMC loop
     if (i%%thinning == 0) {
       #Record things 
-      #setTxtProgressBar(pb, i)
-      message(sprintf('it=%d,neg=%f,off.r=%f,off.p=%f,pi=%f,Prior=%e,Likelihood=%f,n=%d',i,neg,off.r,off.p,pi,pTTree,pPTree,nrow(ttreeFromFullTree(fulltree))))
+      setTxtProgressBar(pb, i)
+      #message(sprintf('it=%d,neg=%f,off.r=%f,off.p=%f,pi=%f,Prior=%e,Likelihood=%f,n=%d',i,neg,off.r,off.p,pi,pTTree,pPTree,nrow(ttreeFromFullTree(fulltree))))
       record[[i/thinning]]$tree <- fulltree
       record[[i/thinning]]$pTTree <- pTTree 
       record[[i/thinning]]$pPTree <- pPTree 
