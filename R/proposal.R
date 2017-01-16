@@ -19,7 +19,7 @@
     bra=bra+1}
   nsam <- sum(tree[ ,2] == 0&tree[ ,3] == 0) 
   tree=.treeAdd(tree,tree[fathers[bra],1]+loc,bra,fathers[bra])
-  tree <- cbind(tree[ ,1:3],.hostFromFulltree(tree)) 
+  tree <- cbind(tree[ ,1:3],.computeHost(tree)) 
   ntraeve=sum( tree[ ,2] > 0&tree[ ,3] == 0)
   qr=totbralen/(ntraeve-nsam)
   return(list(tree=tree,qr=qr))
@@ -44,7 +44,7 @@
   
   #Remove it
   tree=.treeRem(tree,w,fathers[w])
-  tree <- cbind(tree[ ,1:3],.hostFromFulltree(tree)) 
+  tree <- cbind(tree[ ,1:3],.computeHost(tree)) 
   qr=(ntraeve-nsam)/totbralen
   return(list(tree=tree,qr=qr))
 }
@@ -114,7 +114,7 @@
   
   #Add it back
   tree=.treeAdd(tree,tree[locs[i],1]-r,locs[i],fathers[locs[i]])
-  tree <- cbind(tree[ ,1:3],.hostFromFulltree(tree)) 
+  tree <- cbind(tree[ ,1:3],.computeHost(tree)) 
   
   return(list(tree=tree,qr=1))  
 }
@@ -125,7 +125,7 @@
 #  MySort <- sort(tree[(nsam+1):nrow(tree),1],decreasing=TRUE,index.return = TRUE); ind <- MySort$ix 
 #  for (i in (nsam+1):nrow(tree)) for (j in (2:3)) if (tree[i,j] > nsam) tree[i,j] <- nsam + which( ind == tree[i,j]-nsam ) 
 #  tree <- tree[c(1:nsam,nsam + ind), ] 
-#  tree <- cbind(tree[ ,1:3],.hostFromFulltree(tree)) 
+#  tree <- cbind(tree[ ,1:3],.computeHost(tree)) 
 #}
 
 #Add a transmission node onto a tree

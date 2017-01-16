@@ -8,7 +8,7 @@ inferTTree(ptree, w.shape = 2, w.scale = 1, ws.shape = w.shape,
   ws.scale = w.scale, mcmcIterations = 1000, thinning = 1,
   startNeg = 100/365, startOff.r = 1, startOff.p = 0.5, startPi = 0.5,
   updateNeg = T, updateOff.r = T, updateOff.p = F, updatePi = T,
-  startFulltree = NA, updateTTree = TRUE, optiStart = T, dateT = Inf,
+  startCTree = NA, updateTTree = TRUE, optiStart = T, dateT = Inf,
   allowTransPostSamp = T)
 }
 \arguments{
@@ -42,7 +42,7 @@ inferTTree(ptree, w.shape = 2, w.scale = 1, ws.shape = w.shape,
 
 \item{updatePi}{Whether or not to update the parameter pi}
 
-\item{startFulltree}{Optional combined tree to start from}
+\item{startCTree}{Optional combined tree to start from}
 
 \item{updateTTree}{Whether or not to update the transmission tree}
 

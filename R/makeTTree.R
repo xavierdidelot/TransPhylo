@@ -78,5 +78,5 @@ makeTTree <-function(off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,maxTime,nS
   invorder=1:length(order);invorder[order]=1:length(order)
   ttree<-ttree[order,,drop=FALSE]
   ttree[ttree[,3]>0,3]=invorder[ttree[ttree[,3]>0,3]]
-  return(list(ttree=ttree,prob=prob,pruned=pruned))
+  return(list(ttree=ttree,nam=sprintf('%d',seq(1:length(which(!is.na(ttree[,2]))))),prob=prob,pruned=pruned))
 }

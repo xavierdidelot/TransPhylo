@@ -11,9 +11,10 @@
 #' @param T Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @param allowTransPostSamp Whether or not to allow transmission after sampling of a host
 #' @return A minimal non-zero probability phylogenetic+transmission tree, or an optimised version if parameters are provided
-makeFullTreeFromPTree = function(tree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,w.scale=NA,ws.shape=NA,ws.scale=NA,T=NA,allowTransPostSamp=NA)  {
-
-    if (is.na(off.r)) {
+makeCtreeFromPTree = function(ptree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,w.scale=NA,ws.shape=NA,ws.scale=NA,T=NA,allowTransPostSamp=NA)  {
+  nam=ptree$nam
+  tree=ptree$ptree
+  if (is.na(off.r)) {
     #Simple minimal method
     n <- ceiling( nrow(tree)/2 ) 
     tree <- rbind(tree,matrix(0, n, 3)) 
@@ -38,24 +39,25 @@ makeFullTreeFromPTree = function(tree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,
     MySort <- sort(tree[seq(n + 1,nrow(tree),1),1],decreasing=TRUE,index.return = TRUE); ind <- MySort$ix 
     for (i in (n+1):nrow(tree)) for (j in (2:3)) if (tree[i,j] > n) tree[i,j] <- n + which( ind == tree[i,j]-n ) 
     tree <- tree[c(1:n,n + ind), ] 
-    tree <- cbind(tree,.hostFromFulltree(tree)) 
-    return(tree)
+    tree <- cbind(tree,.computeHost(tree)) 
+    return(list(ctree=tree,nam=nam))
     
   } else {
 
     #Optimisation method
     n <- ceiling( nrow(tree)/2 ) 
-    ft=makeFullTreeFromPTree(tree)
-    pTTree <- probTTree(ttreeFromFullTree(ft),off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,T,allowTransPostSamp) 
+    ft=makeCtreeFromPTree(ptree)
+    pTTree <- probTTree(extractTTree(ft),off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,T,allowTransPostSamp) 
     pPTree <- probPTreeGivenTTree(ft,neg) 
     try=0
     while (try<100) {
       try=try+1
-      fulltree2 <- .move1(ft)$tree
-      pTTree2 <- probTTree(ttreeFromFullTree(fulltree2),off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,T,allowTransPostSamp) 
-      pPTree2 <- probPTreeGivenTTree(fulltree2,neg) 
+      ctree2 <- .move1(ft$ctree)$tree
+      ctree2=list(ctree=ctree2,nam=nam)
+      pTTree2 <- probTTree(extractTTree(ctree2),off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,T,allowTransPostSamp) 
+      pPTree2 <- probPTreeGivenTTree(ctree2,neg) 
       if (pTTree2 + pPTree2>pTTree+pPTree)  { 
-        ft <- fulltree2 
+        ft <- ctree2 
         pTTree <- pTTree2 
         pPTree <- pPTree2 
         try=0

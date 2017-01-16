@@ -7,14 +7,14 @@ consTTree = function(record,burnin=0.5,minimum=0.1)
   #Remove burnin
   if (burnin>0) record=record[round(length(record)*burnin):length(record)]
   m=length(record)
-  n=sum(record[[1]]$tree[,2]==0&record[[1]]$tree[,3]==0) #Number of sampled individuals
+  n=sum(record[[1]]$ctree$ctree[,2]==0&record[[1]]$ctree$ctree[,3]==0) #Number of sampled individuals
 
   #Record partitions in sampled transmission tree
   hash=vector('list',n*m*10)
   a=floor(n*10*runif(n))+1
   for (i in 1:length(record))
   {
-    ttree=ttreeFromFullTree(record[[i]]$tree)
+    ttree=extractTTree(record[[i]]$ctree)$ttree
     #Find children of nodes
     todo=1:n
     children=matrix(NA,nrow(ttree),n)
@@ -146,5 +146,5 @@ consTTree = function(record,burnin=0.5,minimum=0.1)
   parents[which(is.na(parents))]=0
   cons[,3]=parents
   cons[1:n,2]=ttree[1:n,2]#copy sampling dates from any ttree
-  return(cons)
+  return(list(ttree=cons,nam=record[[1]]$ctree$nam))
 }

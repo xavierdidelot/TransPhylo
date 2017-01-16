@@ -3,6 +3,8 @@
 #' @param showLabels Boolean for whether or not to show the labels
 #' @param showMissingLinks Option for how to show missing links: (0) as dots, (1) as several gray levels, (2) as a single gray level
 plotTTree2 = function(ttree,showLabels=TRUE,showMissingLinks=0) {
+  nam=ttree$nam
+  ttree=ttree$ttree
   ttree=cbind(ttree,rep(1,nrow(ttree)))
   if (showMissingLinks>0) {
     i=which(is.na(ttree[,2]))[1]
@@ -51,7 +53,7 @@ plotTTree2 = function(ttree,showLabels=TRUE,showMissingLinks=0) {
     }
     #ma=max(ttree[i,1],ttree[which(ttree[,3]==i),1])
     #mi=min(ttree[i,1],ttree[i,1],ttree[which(ttree[,3]==i),1])
-    if (showLabels && !is.na(ttree[i,2])) text(ttree[i,1],ys[i],i,pos=4,cex=0.5)
+    if (showLabels && !is.na(ttree[i,2])) text(ttree[i,1],ys[i],nam[i],pos=4,cex=0.5)
     #lines(c(mi,ma),c(ys[i],ys[i]))
   }
   for (i in 1:n) {

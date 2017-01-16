@@ -1,7 +1,9 @@
 #' Extracts phylogenetic tree from a combined phylogenetic/transmission tree 
-#' @param tree Combined tree
+#' @param ctree Combined tree
 #' @return phylogenetic tree
-ptreeFromFullTree = function(tree)  {
+extractPTree = function(ctree)  {
+  tree=ctree$ctree
+  nam=ctree$nam
   n <- sum(tree[ ,2] + tree[ ,3] == 0) 
   tra <- n + 1 
   while (tra <= nrow(tree))  { #Removing transmission events from the tree one by one
@@ -19,5 +21,5 @@ ptreeFromFullTree = function(tree)  {
     tra <- n + 1 
   } 
   ptree <- tree[,1:(ncol(tree)-1),drop=FALSE] 
-  return(ptree)
+  return(list(ptree=ptree,nam=nam))
 } 

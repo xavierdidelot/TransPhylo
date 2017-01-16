@@ -1,29 +1,30 @@
 #' Calculate the probability of a phylogenetic tree given a transmission tree
-#' @param fulltree Combined phylogenetic/transmission tree
+#' @param ctree Combined phylogenetic/transmission tree
 #' @param neg Within-host coalescent rate
 #' @return Probability of phylogeny given transmission tree
-probPTreeGivenTTree = function(fulltree,neg)  {
-  n <- max(fulltree[,4])
+probPTreeGivenTTree = function(ctree,neg)  {
+  if (is.list(ctree)) ctree=ctree$ctree
+  n <- max(ctree[,4])
   prob <- 0 
   for (i in (1:n)) { 
-    if (length(which(fulltree[,4]==i))==1) next
-    subtree <- .extractSubtree(fulltree,i) 
+    if (length(which(ctree[,4]==i))==1) next
+    subtree <- .extractSubtree(ctree,i) 
     prob <- prob + .probSubtree(subtree,neg) 
   } 
   return(prob)
 } 
 
-.extractSubtree = function(fulltree,w)  {
+.extractSubtree = function(ctree,w)  {
   #Take all nodes in host 
-  ind <- which(fulltree[,4] == w)
+  ind <- which(ctree[,4] == w)
   #Add father of oldest node 
-  ind <- c(ind,which(fulltree[,2]==ind[length(ind)]|fulltree[,3]==ind[length(ind)]))
+  ind <- c(ind,which(ctree[,2]==ind[length(ind)]|ctree[,3]==ind[length(ind)]))
   #Create subtree 
   subtree <- matrix(0, length(ind), 2) 
   for (i in 1:length(ind)) { 
-    subtree[i,1] <- fulltree[ind[i],1]
-    subtree[which(ind==fulltree[ind[i],2]),2]=i
-    subtree[which(ind==fulltree[ind[i],3]),2]=i
+    subtree[i,1] <- ctree[ind[i],1]
+    subtree[which(ind==ctree[ind[i],2]),2]=i
+    subtree[which(ind==ctree[ind[i],3]),2]=i
   } 
   return(subtree)
 } 

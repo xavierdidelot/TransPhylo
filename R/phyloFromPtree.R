@@ -1,12 +1,14 @@
 #' Converts a phylogenetic tree into an ape phylo object
 #' @param ptree phylogenetic tree
 #' @return phylo object
-phyloFromPtree <- function(ptree) {
+phyloFromPTree <- function(ptree) {
+  nam=ptree$nam
+  ptree=ptree$ptree
   n<-ceiling(nrow(ptree)/2)
   if (n==1) return(ape::read.tree(text='(1);'))
   tr<-list()
   tr$Nnode<-n-1
-  tr$tip.label<-as.character(1:n)
+  tr$tip.label<-nam
   tr$edge<-matrix(0,n*2-2,2)
   tr$edge.length<-rep(0,n*2-2)
   iedge<-1

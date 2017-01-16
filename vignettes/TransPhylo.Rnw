@@ -62,14 +62,14 @@ This simulation contains both the transmission tree between infected hosts and t
 
 \begin{center}
 <<>>=
-plotBothTree(simu)
+plotCTree(simu)
 @
 \end{center}
 
 The transmission tree can be extracted and plotted separately from the phylogeny:
 
 <<>>=
-ttree<-ttreeFromFullTree(simu)
+ttree<-extractTTree(simu)
 plotTTree(ttree,w.shape,w.scale)
 @
 
@@ -77,8 +77,8 @@ The phylogenetic tree can be extracted and converted into a phylo object from th
 
 <<>>=
 library(ape)
-ptree<-ptreeFromFullTree(simu)
-p<-phyloFromPtree(ptree)
+ptree<-extractPTree(simu)
+p<-phyloFromPTree(ptree)
 plot(p)
 axisPhylo()
 @
@@ -95,7 +95,7 @@ date of the last sample which is at 0 on the x-axis of the figure above. To use 
 in the second part we also need to know exactly when was the last sample taken:
 
 <<>>=
-print(max(simu[,1]))
+print(max(simu$ctree[,1]))
 @
 
 \section{Inference of transmission tree given a phylogeny}
@@ -127,7 +127,7 @@ dateT=2008
 
 The MCMC procedure to infer the transmission tree given the phylogenetic tree can be run as follows:
 
-<<message=FALSE>>=
+<<results='hide'>>=
 record<-inferTTree(ptree,mcmcIterations=100,w.shape=w.shape,w.scale=w.scale,dateT=dateT)
 @
 
@@ -135,7 +135,7 @@ This returns a record of all MCMC iterations. This is what the transmission tree
 
 <<>>=
 lastIteration<-record[[length(record)]]
-plotBothTree(lastIteration$tree)
+plotCTree(lastIteration$ctree)
 @
 
 Traces of the MCMC can be plotted as follows:

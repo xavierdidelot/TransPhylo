@@ -11,6 +11,7 @@
 #' @param allowTransPostSamp Whether or not to allow transmission after sampling of a host
 #' @return Probability of the transmission tree
 probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,allowTransPostSamp)  {
+  if (is.list(ttree)) ttree=ttree$ttree
   prob <- 0 
   n <- nrow(ttree)
   
