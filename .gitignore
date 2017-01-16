@@ -3,6 +3,7 @@
 .RData
 
 *.pdf
+!vignettes/TransPhylo.pdf
 
 *.tex
 
