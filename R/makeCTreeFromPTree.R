@@ -1,5 +1,5 @@
 #' Create a transmission tree compatible with the provided phylogenetic tree
-#' @param tree Phylogenetic tree
+#' @param ptree Phylogenetic tree
 #' @param off.r First parameter of the negative binomial distribution for offspring number
 #' @param off.p Second parameter of the negative binomial distribution for offspring number
 #' @param neg the within-host effective population size (Ne) timesgeneration duration (g)
@@ -11,6 +11,7 @@
 #' @param T Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @param allowTransPostSamp Whether or not to allow transmission after sampling of a host
 #' @return A minimal non-zero probability phylogenetic+transmission tree, or an optimised version if parameters are provided
+#' @export
 makeCtreeFromPTree = function(ptree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,w.scale=NA,ws.shape=NA,ws.scale=NA,T=NA,allowTransPostSamp=NA)  {
   nam=ptree$nam
   tree=ptree$ptree

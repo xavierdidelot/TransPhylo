@@ -2,6 +2,7 @@
 #' @param ctree Combined phylogenetic/transmission tree
 #' @param neg Within-host coalescent rate
 #' @return Probability of phylogeny given transmission tree
+#' @export
 probPTreeGivenTTree = function(ctree,neg)  {
   if (is.list(ctree)) ctree=ctree$ctree
   n <- max(ctree[,4])

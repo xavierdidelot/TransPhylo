@@ -2,6 +2,7 @@
 #' @param tr phylo object
 #' @param dateLastSample date of the last sample
 #' @return phylogenetic tree
+#' @export
 ptreeFromPhylo <- function(tr,dateLastSample) {
   n<-length(tr$tip.label)
   ed<-tr$edge

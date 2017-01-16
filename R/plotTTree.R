@@ -4,6 +4,7 @@
 #' @param w.scale Scale parameter of the Gamma probability density function representing the generation time 
 #' @param showLabels Whether or not to show the labels 
 #' @param maxTime Maximum value of time to show on x axis
+#' @export
 plotTTree = function(ttree,w.shape,w.scale,showLabels=TRUE,maxTime=NA) {
   nam=ttree$nam
   ttree=ttree$ttree

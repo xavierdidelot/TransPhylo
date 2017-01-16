@@ -9,6 +9,8 @@ makeCtreeFromPTree(ptree, off.r = NA, off.p = NA, neg = NA, pi = NA,
   allowTransPostSamp = NA)
 }
 \arguments{
+\item{ptree}{Phylogenetic tree}
+
 \item{off.r}{First parameter of the negative binomial distribution for offspring number}
 
 \item{off.p}{Second parameter of the negative binomial distribution for offspring number}
@@ -28,8 +30,6 @@ makeCtreeFromPTree(ptree, off.r = NA, off.p = NA, neg = NA, pi = NA,
 \item{T}{Date when process stops (this can be Inf for fully simulated outbreaks)}
 
 \item{allowTransPostSamp}{Whether or not to allow transmission after sampling of a host}
-
-\item{tree}{Phylogenetic tree}
 }
 \value{
 A minimal non-zero probability phylogenetic+transmission tree, or an optimised version if parameters are provided

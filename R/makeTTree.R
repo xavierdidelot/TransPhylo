@@ -9,6 +9,7 @@
 #' @param maxTime Duration of simulation (can be Inf)
 #' @param nSampled Number of sampled individuals (can be NA for any)
 #' @return A N*3 matrix in the following format with one row per infected host, first column is time of infection, second column is time of sampling, third column is infector
+#' @export
 makeTTree <-function(off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,maxTime,nSampled) { 
   ttree<-matrix(0,1,3)
   prob<-0

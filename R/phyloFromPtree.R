@@ -1,6 +1,7 @@
 #' Converts a phylogenetic tree into an ape phylo object
 #' @param ptree phylogenetic tree
 #' @return phylo object
+#' @export
 phyloFromPTree <- function(ptree) {
   nam=ptree$nam
   ptree=ptree$ptree

@@ -10,6 +10,7 @@
 #' @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @param allowTransPostSamp Whether or not to allow transmission after sampling of a host
 #' @return Probability of the transmission tree
+#' @export
 probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,allowTransPostSamp)  {
   if (is.list(ttree)) ttree=ttree$ttree
   prob <- 0 

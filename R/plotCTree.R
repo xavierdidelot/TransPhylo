@@ -5,6 +5,7 @@
 #' @param maxTime Maximum time to show on the x axis
 #' @examples
 #' plotCTree(simulateOutbreak())
+#' @export
 plotCTree = function(tree,showLabels=TRUE,cols=NA,maxTime=NA)  {
   nam=tree$nam
   tree=tree$ctree

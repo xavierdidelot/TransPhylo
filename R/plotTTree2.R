@@ -2,6 +2,7 @@
 #' @param ttree Transmission tree
 #' @param showLabels Boolean for whether or not to show the labels
 #' @param showMissingLinks Option for how to show missing links: (0) as dots, (1) as several gray levels, (2) as a single gray level
+#' @export
 plotTTree2 = function(ttree,showLabels=TRUE,showMissingLinks=0) {
   nam=ttree$nam
   ttree=ttree$ttree

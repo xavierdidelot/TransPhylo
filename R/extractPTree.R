@@ -1,6 +1,7 @@
 #' Extracts phylogenetic tree from a combined phylogenetic/transmission tree 
 #' @param ctree Combined tree
 #' @return phylogenetic tree
+#' @export
 extractPTree = function(ctree)  {
   tree=ctree$ctree
   nam=ctree$nam
