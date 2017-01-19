@@ -53,7 +53,8 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scal
       record[[i/thinning]]$w.scale <- w.scale
       record[[i/thinning]]$ws.shape <- ws.shape
       record[[i/thinning]]$ws.scale <- ws.scale
-      record[[i/thinning]]$source <- ctree$ctree[ctree$ctree[which(ctree$ctree[,1]==0),2],4] 
+      record[[i/thinning]]$source <- ctree$ctree[ctree$ctree[which(ctree$ctree[,4]==0),2],4]
+      if (record[[i/thinning]]$source<=length(ctree$nam)) record[[i/thinning]]$source=ctree$nam[record[[i/thinning]]$source] else record[[i/thinning]]$source='Unsampled'
     }
     
     if (updateTTree) {
