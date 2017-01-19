@@ -3,7 +3,7 @@
 #' @param burnin Proportion of the MCMC output to be discarded as burnin
 #' @param minimum Minimum probability for inclusion in consensus
 #' @export
-consTTree = function(record,burnin=0.5,minimum=0.1)
+consTTree = function(record,burnin=0.5,minimum=0.5)
 {
   #Remove burnin
   if (burnin>0) record=record[round(length(record)*burnin):length(record)]
