@@ -45,7 +45,7 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,date
   } else {
     #This is the case of an ongoing outbreak
     dt=0.05;L=1000
-    omegabar=.getOmegabar(L,dt,off.r,off.p,pi,w.shape,w.scale)
+    omegabar=.getOmegabar(L,dt,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale)
     #pit      =function(t) {pi*pgamma((dateT-t),shape=w.shape,scale=w.scale) }#This is Equation (6), but replaced with pi*trunc
     #fomega   =function(x) {omega   [max(1,min(L,round((dateT-x)/dt)))] }
     fomegabar=function(x) {omegabar[max(1,min(L,round((dateT-x)/dt)))] }
@@ -67,14 +67,14 @@ probTTree = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,date
   return(prob)
 } 
 
-.getOmegabar=function(L,dt,off.r,off.p,pi,w.shape,w.scale) {
+.getOmegabar=function(L,dt,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale) {
   omega=rep(NA,L);omega[1]=1;omegabar=rep(NA,L);omegabar[1]=1
   dgammastore=dgamma(dt*(1:(L-1)),shape=w.shape,scale=w.scale)
   coef=c(0.5,rep(1,L-1))
   omegaStar <- uniroot(function(x) {x-(1-pi)*((1-off.p)/(1-off.p*x))^off.r},c(0,1))$root #This is Equation (2)
   for (k in 1:(L-1)) {
     omegabar[k+1]=min(1,sum(coef[1:k]*dgammastore[seq(k,1,-1)]*omega[1:k]*dt)+1-pgamma(k*dt,shape=w.shape,scale=w.scale))
-    omega[k+1]=(1-pi*pgamma(k*dt,shape=w.shape,scale=w.scale))*((1-off.p)/(1-off.p*omegabar[k+1]))^off.r
+    omega[k+1]=(1-pi*pgamma(k*dt,shape=ws.shape,scale=ws.scale))*((1-off.p)/(1-off.p*omegabar[k+1]))^off.r #This is Equation (S3)
     if (abs(omegabar[k+1]-omegaStar)<0.01) {omegabar[k+2:L]=omegaStar;omega[k+2:L]=omegaStar;break} 
     if (k==L-1) {warning('Convergence not reached')
       print(sprintf('omegaStar=%f,omegabar[L]=%f,w.shape=%f,w.scale=%f,pi=%f,off.r=%f,off.p=%f',omegaStar,omegabar[L],w.shape,w.scale,pi,off.r,off.p))}
