@@ -2,10 +2,10 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 wbar <- function(tinf, dateT, rOff, pOff, pi, shGen, scGen, shSam, scSam, delta_t = 0.05) {
-    .Call('TransPhyloC_wbar', PACKAGE = 'TransPhyloC', tinf, dateT, rOff, pOff, pi, shGen, scGen, shSam, scSam, delta_t)
+    .Call('TransPhylo_wbar', PACKAGE = 'TransPhylo', tinf, dateT, rOff, pOff, pi, shGen, scGen, shSam, scSam, delta_t)
 }
 
 probTTree <- function(ttree, rOff, pOff, pi, shGen, scGen, shSam, scSam, dateT, delta_t = 0.05) {
-    .Call('TransPhyloC_probTTree', PACKAGE = 'TransPhyloC', ttree, rOff, pOff, pi, shGen, scGen, shSam, scSam, dateT, delta_t)
+    .Call('TransPhylo_probTTree', PACKAGE = 'TransPhylo', ttree, rOff, pOff, pi, shGen, scGen, shSam, scSam, dateT, delta_t)
 }
 

@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // wbar
 NumericVector wbar(double tinf, double dateT, double rOff, double pOff, double pi, double shGen, double scGen, double shSam, double scSam, double delta_t);
-RcppExport SEXP TransPhyloC_wbar(SEXP tinfSEXP, SEXP dateTSEXP, SEXP rOffSEXP, SEXP pOffSEXP, SEXP piSEXP, SEXP shGenSEXP, SEXP scGenSEXP, SEXP shSamSEXP, SEXP scSamSEXP, SEXP delta_tSEXP) {
+RcppExport SEXP TransPhylo_wbar(SEXP tinfSEXP, SEXP dateTSEXP, SEXP rOffSEXP, SEXP pOffSEXP, SEXP piSEXP, SEXP shGenSEXP, SEXP scGenSEXP, SEXP shSamSEXP, SEXP scSamSEXP, SEXP delta_tSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -27,7 +27,7 @@ END_RCPP
 }
 // probTTree
 double probTTree(NumericMatrix ttree, double rOff, double pOff, double pi, double shGen, double scGen, double shSam, double scSam, double dateT, double delta_t);
-RcppExport SEXP TransPhyloC_probTTree(SEXP ttreeSEXP, SEXP rOffSEXP, SEXP pOffSEXP, SEXP piSEXP, SEXP shGenSEXP, SEXP scGenSEXP, SEXP shSamSEXP, SEXP scSamSEXP, SEXP dateTSEXP, SEXP delta_tSEXP) {
+RcppExport SEXP TransPhylo_probTTree(SEXP ttreeSEXP, SEXP rOffSEXP, SEXP pOffSEXP, SEXP piSEXP, SEXP shGenSEXP, SEXP scGenSEXP, SEXP shSamSEXP, SEXP scSamSEXP, SEXP dateTSEXP, SEXP delta_tSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;

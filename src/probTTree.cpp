@@ -9,7 +9,6 @@
    @param ws.shape Shape parameter of the Gamma probability density function representing the sampling time
    @param ws.scale Scale parameter of the Gamma probability density function representing the sampling time 
    @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
-   @param allowTransPostSamp Whether or not to allow transmission after sampling of a host
    @return Probability of the transmission tree */
 
 
