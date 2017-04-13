@@ -5,8 +5,7 @@
 \title{Create a transmission tree compatible with the provided phylogenetic tree}
 \usage{
 makeCtreeFromPTree(ptree, off.r = NA, off.p = NA, neg = NA, pi = NA,
-  w.shape = NA, w.scale = NA, ws.shape = NA, ws.scale = NA, T = NA,
-  allowTransPostSamp = NA)
+  w.shape = NA, w.scale = NA, ws.shape = NA, ws.scale = NA, T = NA)
 }
 \arguments{
 \item{ptree}{Phylogenetic tree}
@@ -29,7 +28,6 @@ makeCtreeFromPTree(ptree, off.r = NA, off.p = NA, neg = NA, pi = NA,
 
 \item{T}{Date when process stops (this can be Inf for fully simulated outbreaks)}
 
-\item{allowTransPostSamp}{Whether or not to allow transmission after sampling of a host}
 }
 \value{
 A minimal non-zero probability phylogenetic+transmission tree, or an optimised version if parameters are provided
