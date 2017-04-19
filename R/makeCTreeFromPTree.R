@@ -9,10 +9,9 @@
 #' @param ws.shape Shape parameter of the Gamma probability density function representing the sampling time
 #' @param ws.scale Scale parameter of the Gamma probability density function representing the sampling time 
 #' @param T Date when process stops (this can be Inf for fully simulated outbreaks)
-#' @param allowTransPostSamp Whether or not to allow transmission after sampling of a host
 #' @return A minimal non-zero probability phylogenetic+transmission tree, or an optimised version if parameters are provided
 #' @export
-makeCtreeFromPTree = function(ptree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,w.scale=NA,ws.shape=NA,ws.scale=NA,T=NA,allowTransPostSamp=NA)  {
+makeCtreeFromPTree = function(ptree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,w.scale=NA,ws.shape=NA,ws.scale=NA,T=NA)  {
   nam=ptree$nam
   tree=ptree$ptree
   if (is.na(off.r)) {
@@ -48,14 +47,14 @@ makeCtreeFromPTree = function(ptree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,w.
     #Optimisation method
     n <- ceiling( nrow(tree)/2 ) 
     ft=makeCtreeFromPTree(ptree)
-    pTTree <- probTTree(extractTTree(ft),off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,T,allowTransPostSamp) 
+    pTTree <- probTTree((extractTTree(ft))$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,T) 
     pPTree <- probPTreeGivenTTree(ft,neg) 
     try=0
     while (try<100) {
       try=try+1
       ctree2 <- .move1(ft$ctree)$tree
       ctree2=list(ctree=ctree2,nam=nam)
-      pTTree2 <- probTTree(extractTTree(ctree2),off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,T,allowTransPostSamp) 
+      pTTree2 <- probTTree((extractTTree(ctree2))$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,T) 
       pPTree2 <- probPTreeGivenTTree(ctree2,neg) 
       if (pTTree2 + pPTree2>pTTree+pPTree)  { 
         ft <- ctree2 

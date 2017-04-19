@@ -8,8 +8,7 @@ inferTTree(ptree, w.shape = 2, w.scale = 1, ws.shape = w.shape,
   ws.scale = w.scale, mcmcIterations = 1000, thinning = 1,
   startNeg = 100/365, startOff.r = 1, startOff.p = 0.5, startPi = 0.5,
   updateNeg = T, updateOff.r = T, updateOff.p = F, updatePi = T,
-  startCTree = NA, updateTTree = TRUE, optiStart = T, dateT = Inf,
-  allowTransPostSamp = T)
+  startCTree = NA, updateTTree = TRUE, optiStart = T, dateT = Inf)
 }
 \arguments{
 \item{ptree}{Phylogenetic tree}
@@ -50,7 +49,6 @@ inferTTree(ptree, w.shape = 2, w.scale = 1, ws.shape = w.shape,
 
 \item{dateT}{Date when process stops (this can be Inf for fully simulated outbreaks)}
 
-\item{allowTransPostSamp}{Whether or not to allow transmission after sampling of a host}
 }
 \value{
 posterior sample set of transmission trees
