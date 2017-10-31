@@ -16,4 +16,3 @@ plotTTree2(ttree, showLabels = TRUE, showMissingLinks = 0)
 \description{
 Plot a transmission tree in an economic format
 }
-

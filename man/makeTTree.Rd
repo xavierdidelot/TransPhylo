@@ -32,4 +32,3 @@ A N*3 matrix in the following format with one row per infected host, first colum
 \description{
 Simulate a transmission tree
 }
-

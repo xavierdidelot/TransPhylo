@@ -14,4 +14,3 @@ computeMatWIW(record, burnin = 0.5)
 \description{
 Build a matrix of probability of who infected whom from a MCMC output
 }
-

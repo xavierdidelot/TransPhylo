@@ -13,6 +13,8 @@
 
 <<include=FALSE>>=
 library(knitr)
+temppath <- tempdir()
+opts_chunk$set(fig.path = temppath)
 opts_chunk$set(fig.width=5,fig.height=5,out.width="4in",out.height="4in",fig.align = "center")
 @
 

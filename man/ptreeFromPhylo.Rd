@@ -17,4 +17,3 @@ phylogenetic tree
 \description{
 Converts an ape phylo object into a phylogenetic tree
 }
-

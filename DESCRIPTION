@@ -1,8 +1,8 @@
 Package: TransPhylo
 Type: Package
 Title: Inference of Transmission Tree under a Within-Host Evolution Model
-Version: 1.1
-Date: 2017-04-11
+Version: 1.1.2
+Date: 2017-10-30
 Author: Xavier Didelot <xavier.didelot@gmail.com> and Yuanwei Xu <yuanwxu@126.com>
 Maintainer: Xavier Didelot <xavier.didelot@gmail.com>
 Depends: 
@@ -13,4 +13,4 @@ License: GPL (>=2)
 Imports: Rcpp (>= 0.12.8)
 LinkingTo: Rcpp, BH
 SystemRequirements: C++11
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

@@ -16,4 +16,3 @@ consTTree(record, burnin = 0.5, minimum = 0.5)
 \description{
 Build a consensus transmission tree from a MCMC output
 }
-

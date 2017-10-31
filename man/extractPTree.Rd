@@ -15,4 +15,3 @@ phylogenetic tree
 \description{
 Extracts phylogenetic tree from a combined phylogenetic/transmission tree
 }
-

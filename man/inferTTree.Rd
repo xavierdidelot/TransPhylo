@@ -48,7 +48,6 @@ inferTTree(ptree, w.shape = 2, w.scale = 1, ws.shape = w.shape,
 \item{optiStart}{Whether or not to optimise the MCMC start point}
 
 \item{dateT}{Date when process stops (this can be Inf for fully simulated outbreaks)}
-
 }
 \value{
 posterior sample set of transmission trees
@@ -56,4 +55,3 @@ posterior sample set of transmission trees
 \description{
 Infer transmission tree given a phylogenetic tree
 }
-

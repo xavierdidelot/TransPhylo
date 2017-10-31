@@ -12,3 +12,6 @@
 vignettes/TransPhylo.log
 
 *~
+*.o
+
+*.so

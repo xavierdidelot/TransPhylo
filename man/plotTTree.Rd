@@ -20,4 +20,3 @@ plotTTree(ttree, w.shape, w.scale, showLabels = TRUE, maxTime = NA)
 \description{
 Plot a transmission tree
 }
-

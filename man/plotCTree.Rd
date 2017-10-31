@@ -21,4 +21,3 @@ Plot both phylogenetic and transmission trees using colors on the phylogeny
 \examples{
 plotCTree(simulateOutbreak())
 }
-

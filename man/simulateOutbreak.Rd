@@ -40,4 +40,3 @@ Simulate an outbreak
 \examples{
 plotCTree(simulateOutbreak())
 }
-

@@ -27,7 +27,6 @@ makeCtreeFromPTree(ptree, off.r = NA, off.p = NA, neg = NA, pi = NA,
 \item{ws.scale}{Scale parameter of the Gamma probability density function representing the sampling time}
 
 \item{T}{Date when process stops (this can be Inf for fully simulated outbreaks)}
-
 }
 \value{
 A minimal non-zero probability phylogenetic+transmission tree, or an optimised version if parameters are provided
@@ -35,4 +34,3 @@ A minimal non-zero probability phylogenetic+transmission tree, or an optimised v
 \description{
 Create a transmission tree compatible with the provided phylogenetic tree
 }
-

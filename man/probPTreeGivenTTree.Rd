@@ -17,4 +17,3 @@ Probability of phylogeny given transmission tree
 \description{
 Calculate the probability of a phylogenetic tree given a transmission tree
 }
-
