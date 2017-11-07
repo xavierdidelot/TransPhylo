@@ -53,34 +53,49 @@ double wstar_rootFinder(double pi, double p, double r)
   return result;
 }
 
+double log_sum_exp(double u, double v)
+{
+  return(std::max(u, v) + log(exp(u - std::max(u, v)) + exp(v - std::max(u, v))));
+}
+
+double log_sum_exp_vec(NumericVector w)
+{
+  double total=w[0];
+  for (int i = 1; i < w.size(); ++i){
+    total=log_sum_exp(total, w[i]);
+  }
+  return(total);
+}
 
 double alphastar(int d, double p, double r, double wstar)
 {
   if(std::abs(r-1.0)<1e-6) // Exact solution available
-    return (1-p)/(1-p*wstar)*pow(p/(1-p*wstar), d);
+    return log((1-p))-log(1-p*wstar)+d*log(p/(1-p*wstar));
 
   int k = d;
-  std::vector<double> toSum;
+  std::vector<double> ltoSum;
   
   boost::math::negative_binomial_distribution<double> nbinom(r,p);
   while(true){
     
     double dnb = pdf(nbinom,k);
-    double term = dnb * pow(wstar,k);
+    double lterm = log(dnb) + k*log(wstar);
 
-    toSum.push_back(term);
-    if(term < 1e-8) break; // Achieved desired accuracy
+
+    ltoSum.push_back(lterm);
+    if(lterm <log(1e-8)) break; // Achieved desired accuracy
     
     k++;
   }
 
-  NumericVector toSumR = wrap(toSum); // Convert toSum to Rcpp NumericVector
+  NumericVector ltoSumR = wrap(ltoSum); // Convert toSum to Rcpp NumericVector
   NumericVector v(k-d+1);
   for(int i=0; i<v.size(); i++) v[i] = i+d;
 
-  return sum(choose(v, d)*toSumR)/pow(wstar,d);
+  return log_sum_exp_vec(log(choose(v, d)) + ltoSumR) - d*log(wstar);
 }
     
+
 
 /* alpha() computes equation (10) in TransPhylo paper
    wbar0 --- wbar computed from wbar() using the oldest infection time. */
@@ -88,31 +103,30 @@ double alpha(double tinf, int d, double p, double r, NumericVector wbar0, double
 {
   double wbar_tinf = wbar0[std::round((tinf - gridStart)/delta_t)];
   if(std::abs(r-1.0)<1e-6) // Exact solution available
-    return (1-p)/(1-p*wbar_tinf)*pow(p/(1-p*wbar_tinf), d);
-
+    return log((1-p))-log(1-p*wbar_tinf)+d*log(p/(1-p*wbar_tinf));
+  
 
   int k = d;
-  std::vector<double> toSum;
+  std::vector<double> ltoSum;
   
   while(true){
     
-    double dnb = R::dnbinom(k,r,p,0);
-    double term = dnb * pow(wbar_tinf,k);
+    double dnb = R::dnbinom(k,r,p,1);
+    double lterm = dnb + k*log(wbar_tinf);
 
-    toSum.push_back(term);
-    if(Rf_choose(k,d)*term < 1e-8) break; // Achieved desired accuracy
+    ltoSum.push_back(lterm);
+    if(log(Rf_choose(k,d))+lterm < log(1e-8)) break; // Achieved desired accuracy
     
     k++;
   }
 
-  NumericVector toSumR = wrap(toSum); // Convert toSum to Rcpp NumericVector
+  NumericVector ltoSumR = wrap(ltoSum); // Convert toSum to Rcpp NumericVector
   NumericVector v(k-d+1);
   for(int i=0; i<v.size(); i++) v[i] = i+d;
-
-  return sum(choose(v, d)*toSumR)/pow(wbar_tinf,d);
+  
+  return (log_sum_exp_vec( log(choose(v, d))+ltoSumR ) - d*log(wbar_tinf));
 }
 
-  
 
 // [[Rcpp::export]]
 NumericVector wbar(double tinf, double dateT, double rOff, double pOff, double pi, double shGen, double scGen, double shSam, double scSam, double delta_t=0.05)
@@ -148,7 +162,6 @@ NumericVector wbar(double tinf, double dateT, double rOff, double pOff, double p
 
 // [[Rcpp::export]]
 double probTTree(NumericMatrix ttree, double rOff, double pOff, double pi, double shGen, double scGen, double shSam, double scSam, double dateT, double delta_t=0.05){
-
   int numCases = ttree.nrow();
   boost::math::gamma_distribution<double> genGamma(shGen, scGen);
   
@@ -169,7 +182,7 @@ double probTTree(NumericMatrix ttree, double rOff, double pOff, double pi, doubl
 
     double accum = 0.0;
     for(int i=0; i<numCases; ++i){
-      accum += log(alphastar(progeny[i].size(), pOff, rOff, wstar));
+      accum += alphastar(progeny[i].size(), pOff, rOff, wstar);
      
       for(int j=0; j<progeny[i].size(); ++j)
 	accum += log(pdf(genGamma, ttree(progeny[i][j],0) - ttree(i,0)));
@@ -197,15 +210,16 @@ double probTTree(NumericMatrix ttree, double rOff, double pOff, double pi, doubl
     NumericVector wbar0 = wbar(tinfmin, dateT, rOff, pOff, pi, shGen, scGen, shSam, scSam, delta_t);
     // wbar0.size = grid size +1 
     double gridStart = dateT-(wbar0.size()-1)*delta_t;
-
+    
     for(int i=0; i<numCases; ++i){
 
-      accum += log(alpha(ttree(i,0), progeny[i].size(), pOff, rOff, wbar0, gridStart, delta_t));
-
-      for(int j=0; j<progeny[i].size(); ++j)
-	accum += (R::dgamma(ttree(progeny[i][j],0)-ttree(i,0), shGen, scGen, 1) - R::pgamma(dateT-ttree(i,0), shGen, scGen, 1, 1));
+      accum += alpha(ttree(i,0), progeny[i].size(), pOff, rOff, wbar0, gridStart, delta_t);
+      
+      for(int j=0; j<progeny[i].size(); ++j){
+        accum += (R::dgamma(ttree(progeny[i][j],0)-ttree(i,0), shGen, scGen, 1) - R::pgamma(dateT-ttree(i,0), shGen, scGen, 1, 1));
+      }
     }
-
+    
     return sum(lsstatus) + accum;
   }
 }
