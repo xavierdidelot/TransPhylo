@@ -14,6 +14,7 @@
     fi <- which( nodes[ ,1] < curt ) ;fi<-fi[1]
     for (j in (.seqML(fi,nrow(nodes))))  {
       if (r > (curt-nodes[j,1]) * (i-j))  { 
+        prob <- prob + log(1-pexp((curt-nodes[j,1]) * (i-j),neg^(-1)))
         r <- r-(curt-nodes[j,1]) * (i-j) 
         curt <- nodes[j,1] 
       } else { 
@@ -30,7 +31,7 @@
     #Now choose on which branch to regraft amongst the branches alive at time curt 
     no <- j 
     side <- 2 
-    prob <- prob + log(1/(nrow(nodes)-j))
+    #prob <- prob + log(1/(nrow(nodes)-j))
     w <- 1 + floor(runif(1) * (nrow(nodes)-j)) 
     while (w > 0)  { 
       no <- no + side-1 
@@ -45,7 +46,7 @@
   } 
   nodes <- rbind(matrix(0, nrow = n, ncol = 3),nodes) 
   nodes[1:n,1] <- times 
-  return(list(nodes <- nodes,prob <- prob))
+  return(list(nodes = nodes,prob = prob))
 } 
 
 .seqML <- function(from, to, by=1) {if (from > to) integer(0) else seq.int(from, to, by)}
