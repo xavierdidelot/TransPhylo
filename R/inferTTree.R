@@ -24,6 +24,10 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scal
 #  memoise::forget(.getOmegabar)
 #  memoise::forget(.probSubtree)
   ptree$ptree[,1]=ptree$ptree[,1]+runif(nrow(ptree$ptree))*1e-10#Ensure that all leaves have unique times
+  for (i in (ceiling(nrow(ptree$ptree)/2)+1):nrow(ptree$ptree)) for (j in 2:3) 
+    if (ptree$ptree[ptree$ptree[i,j],1]-ptree$ptree[i,1]<0) 
+      stop("The phylogenetic tree contains negative branch lengths!")
+  
   #MCMC algorithm
   neg <- startNeg
   off.r <- startOff.r
