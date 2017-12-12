@@ -42,7 +42,7 @@ simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shap
   for (i in (1:n)) {
     if (is.na(ttree[i,2])) {times<-c(           ttree[which(ttree[,3]==i),1])-ttree[i,1]}
                       else {times<-c(ttree[i,2],ttree[which(ttree[,3]==i),1])-ttree[i,1]}
-    wtree[[i]]<-.withinhost(times,neg)[[1]]
+    wtree[[i]]<-withinhost(times,neg)[[1]]
   }
   
   #Glue these trees together

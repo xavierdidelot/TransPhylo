@@ -1,14 +1,14 @@
 #Proposal distribution used in rjMCMC to update the transmission tree
 #Returns the proposed tree as well as qr=proposal ratio part of the Metropolis-Hastings ratio
-.proposal = function(tree)  {
+proposal = function(tree)  {
   which=sample.int(3,1)
-  if (which==1) return(.move1(tree))#Add
-  if (which==2) return(.move2(tree))#Remove
-  if (which==3) return(.move3(tree))#Update
+  if (which==1) return(move1(tree))#Add
+  if (which==2) return(move2(tree))#Remove
+  if (which==3) return(move3(tree))#Update
 }
 
 #MOVE1: Add a new transmission event
-.move1 = function(tree) {
+move1 = function(tree) {
   fathers <- rep(NA, nrow(tree));fathers[tree[ ,2:3] + 1] <- 1:nrow(tree);fathers <- fathers[-1] 
   totbralen=sum(head(tree[,1],-2)-head(tree[fathers,1],-1))
   if (totbralen==0) return(list(tree=tree,qr=1))
@@ -18,7 +18,7 @@
     loc=loc- (tree[bra,1]-tree[fathers[bra],1])
     bra=bra+1}
   nsam <- sum(tree[ ,2] == 0&tree[ ,3] == 0) 
-  tree=.treeAdd(tree,tree[fathers[bra],1]+loc,bra,fathers[bra])
+  tree=treeAdd(tree,tree[fathers[bra],1]+loc,bra,fathers[bra])
   tree <- cbind(tree[ ,1:3],.computeHost(tree)) 
   ntraeve=sum( tree[ ,2] > 0&tree[ ,3] == 0)
   qr=totbralen/(ntraeve-nsam)
@@ -26,7 +26,7 @@
 }
 
 #MOVE2: remove a transmission event if possible
-.move2 = function(tree) {
+move2 = function(tree) {
   nsam <- sum(tree[ ,2] == 0&tree[ ,3] == 0) 
   ntraeve=sum(tree[ ,2]  > 0&tree[ ,3] == 0)
   if (nsam==ntraeve) return(list(tree=tree,qr=1))#Nothing to remove
@@ -43,14 +43,14 @@
     infected <- host[tree[w,2]]}
   
   #Remove it
-  tree=.treeRem(tree,w,fathers[w])
+  tree=treeRem(tree,w,fathers[w])
   tree <- cbind(tree[ ,1:3],.computeHost(tree)) 
   qr=(ntraeve-nsam)/totbralen
   return(list(tree=tree,qr=qr))
 }
 
 #MOVE3: update a transmission event
-.move3 = function(tree) {
+move3 = function(tree) {
   nsam <- sum(tree[ ,2] == 0&tree[ ,3] == 0) 
   host <- tree[ ,4]
   fathers <- rep(NA, nrow(tree));fathers[tree[ ,2:3] + 1] <- 1:nrow(tree);fathers <- fathers[-1] 
@@ -75,7 +75,7 @@
   } 
     
   #Remove the transmission node 
-  tree=.treeRem(tree,w,fathers[w])
+  tree=treeRem(tree,w,fathers[w])
   host=host[-w]
   fathers <- rep(NA, nrow(tree));fathers[tree[ ,2:3] + 1] <- 1:nrow(tree);fathers <- fathers[-1] 
   
@@ -113,7 +113,7 @@
   while (r>lens[i]) {r<-r-lens[i];i=i+1}
   
   #Add it back
-  tree=.treeAdd(tree,tree[locs[i],1]-r,locs[i],fathers[locs[i]])
+  tree=treeAdd(tree,tree[locs[i],1]-r,locs[i],fathers[locs[i]])
   tree <- cbind(tree[ ,1:3],.computeHost(tree)) 
   
   return(list(tree=tree,qr=1))  
@@ -129,7 +129,7 @@
 #}
 
 #Add a transmission node onto a tree
-.treeAdd = function(tree,age,child,father) {
+treeAdd = function(tree,age,child,father) {
   nsam <- sum(tree[ ,2] == 0&tree[ ,3] == 0) 
   w=nsam+min(which(tree[(nsam+1):nrow(tree),1]<age))
   tree[which(tree[,2]>=w),2]=tree[which(tree[,2]>=w),2]+1
@@ -139,7 +139,7 @@
 }
 
 #Remove a transmission node from a tree
-.treeRem = function(tree,w,father) {
+treeRem = function(tree,w,father) {
   tree[father,1+which(tree[father,2:3]==w)]=tree[w,2]
   tree[which(tree[,2]>w),2]=tree[which(tree[,2]>w),2]-1
   tree[which(tree[,3]>w),3]=tree[which(tree[,3]>w),3]-1

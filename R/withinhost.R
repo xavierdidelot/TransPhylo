@@ -2,7 +2,7 @@
 # @param times times at which N samples are taken(counted forward in time from infection time) 
 # @param neg is the product of the within-host effective population size and the generation duration in days 
 # @return array of size(2N)*3 where each row is a node,the first column indicate the date of the node and the last two columns indicate the two children. This array has internal nodes sorted in order of most recent to most ancient node(and remains so during the algorithm). The last node corresponds to infection time and only has one child 
-.withinhost = function(times,neg)  {
+withinhost = function(times,neg)  {
   prob <- 0 
   MySort <- sort(times,decreasing=TRUE,index.return = TRUE); tim <- MySort$x; ind <- MySort$ix 
   n <- length(tim) 
@@ -12,7 +12,7 @@
     r <- -log(runif(1)) * neg 
     curt <- tim[i];#Current time:start with date of isolate and go back in time until coalescence happens 
     fi <- which( nodes[ ,1] < curt ) ;fi<-fi[1]
-    for (j in (.seqML(fi,nrow(nodes))))  {
+    for (j in (seqML(fi,nrow(nodes))))  {
       if (r > (curt-nodes[j,1]) * (i-j))  { 
         prob <- prob + log(1-pexp((curt-nodes[j,1]) * (i-j),neg^(-1)))
         r <- r-(curt-nodes[j,1]) * (i-j) 
@@ -27,7 +27,7 @@
     if (r>0) {next} 
     #Create new node 
     a <- nodes[ ,2:3];a[a >= j + n] <- a[a >= j + n] + 1;nodes[ ,2:3] <- a;#Renumbering according to table insertion in next line 
-    nodes <- rbind(nodes[.seqML(1,j-1), ],c(curt,ind[i],0),nodes[.seqML(j,nrow(nodes)),]) 
+    nodes <- rbind(nodes[seqML(1,j-1), ],c(curt,ind[i],0),nodes[seqML(j,nrow(nodes)),]) 
     #Now choose on which branch to regraft amongst the branches alive at time curt 
     no <- j 
     side <- 2 
@@ -49,5 +49,5 @@
   return(list(nodes = nodes,prob = prob))
 } 
 
-.seqML <- function(from, to, by=1) {if (from > to) integer(0) else seq.int(from, to, by)}
+seqML <- function(from, to, by=1) {if (from > to) integer(0) else seq.int(from, to, by)}
 

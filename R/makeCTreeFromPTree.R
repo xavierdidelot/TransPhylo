@@ -56,7 +56,7 @@ makeCtreeFromPTree = function(ptree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,w.
     maxi=sumbralen/w.shape/w.scale
     while (try<100) {
       try=try+1
-      ctree2 <- .move1(ft$ctree)$tree
+      ctree2 <- move1(ft$ctree)$tree
       ctree2=list(ctree=ctree2,nam=nam)
       pTTree2 <- probTTree((extractTTree(ctree2))$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,T) 
       pPTree2 <- probPTreeGivenTTree(ctree2,neg) 

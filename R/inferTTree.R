@@ -21,8 +21,8 @@
 #' @return posterior sample set of transmission trees
 #' @export
 inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scale,mcmcIterations=1000,thinning=1,startNeg=100/365,startOff.r=1,startOff.p=0.5,startPi=0.5,updateNeg=T,updateOff.r=T,updateOff.p=F,updatePi=T,startCTree=NA,updateTTree=TRUE,optiStart=T,dateT=Inf) {
-#  memoise::forget(.getOmegabar)
-#  memoise::forget(.probSubtree)
+#  memoise::forget(getOmegabar)
+#  memoise::forget(probSubtree)
   ptree$ptree[,1]=ptree$ptree[,1]+runif(nrow(ptree$ptree))*1e-10#Ensure that all leaves have unique times
   for (i in (ceiling(nrow(ptree$ptree)/2)+1):nrow(ptree$ptree)) for (j in 2:3) 
     if (ptree$ptree[ptree$ptree[i,j],1]-ptree$ptree[i,1]<0) 
@@ -62,7 +62,7 @@ inferTTree = function(ptree,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scal
     
     if (updateTTree) {
     #Metropolis update for transmission tree 
-    prop <- .proposal(ctree$ctree) 
+    prop <- proposal(ctree$ctree) 
     ctree2 <- list(ctree=prop$tree,nam=ctree$nam)
     ttree2 <- extractTTree(ctree2)
     pTTree2 <- probTTree(ttree2$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT) 

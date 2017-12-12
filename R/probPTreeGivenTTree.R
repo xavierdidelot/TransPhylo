@@ -9,13 +9,13 @@ probPTreeGivenTTree = function(ctree,neg)  {
   prob <- 0 
   for (i in (1:n)) { 
     if (length(which(ctree[,4]==i))==1) next
-    subtree <- .extractSubtree(ctree,i) 
-    prob <- prob + .probSubtree(subtree,neg) 
+    subtree <- extractSubtree(ctree,i) 
+    prob <- prob + probSubtree(subtree,neg) 
   } 
   return(prob)
 } 
 
-.extractSubtree = function(ctree,w)  {
+extractSubtree = function(ctree,w)  {
   #Take all nodes in host 
   ind <- which(ctree[,4] == w)
   #Add father of oldest node 
@@ -30,7 +30,7 @@ probPTreeGivenTTree = function(ctree,neg)  {
   return(subtree)
 } 
 
-.probSubtree=function(tab,rate)  {
+probSubtree=function(tab,rate)  {
   #tab(:,1)=times at bottom;tab(:,2)=father;rate=coalescence rate 
   #Return the log-prior probability of a subtree 
   #This is an extension to Eq1 of Drummond et al(2002) Genetics 161:1307-1320 that accounts for condition TMRCA<INCUBATION_PERIOD 
@@ -90,5 +90,5 @@ probPTreeGivenTTree = function(ctree,neg)  {
   if (length(which(ex==2))!=(length(iso)-1)) print('error: some internal nodes have not been activated twice')
   return(p)
 }
-#.probSubtree=memoise(.probSubtree0)
+#probSubtree=memoise(probSubtree0)
 
