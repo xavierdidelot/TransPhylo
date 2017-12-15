@@ -1,9 +1,11 @@
 #' Build a consensus transmission tree from a MCMC output
 #' @param record Output from inferTTree function
 #' @param burnin Proportion of the MCMC output to be discarded as burnin
-#' @param minimum Minimum probability for inclusion in consensus
+#' @param minimum Minimum probability for inclusion of a partition in the consensus
+#' @param debug Used for debugging
+#' @return The consensus transmission tree
 #' @export
-consTTree = function(record,burnin=0.5,minimum=0.5)
+consTTree = function(record,burnin=0.5,minimum=0.2,debug=F)
 {
   #Remove burnin
   if (burnin>0) record=record[round(length(record)*burnin):length(record)]
@@ -88,48 +90,68 @@ consTTree = function(record,burnin=0.5,minimum=0.5)
     if (exclude==F) keep=c(keep,i)
   }
   comb=comb[keep]
-
+  inds=c()
+  for (i in 1:n) for (j in 1:length(comb)) if (sum(comb[[j]]$c)==1&&comb[[j]]$c[i]) inds=c(inds,j)
+  for (j in 1:length(comb)) if (sum(comb[[j]]$c)==n) inds=c(inds,j)
+  comb=comb[c(inds,setdiff(1:length(comb),inds))]
+    
   #Build list of parents from selected partitions
   parents=rep(NA,length(comb))
   bralen =rep(NA,length(comb))
   inftim =rep(NA,length(comb))
   for (i in 1:length(comb)) {
-    bralen[i]=round(mean(comb[[i]]$w))
+    bralen[i]=round(mean(comb[[i]]$w)*comb[[i]]$n/m)
     inftim[i]=sum(comb[[i]]$t)/comb[[i]]$n
     ci=which(comb[[i]]$c==1)
     bestscore=Inf
     for (j in 1:length(comb)) {
-      cj=which(comb[[j]]$c==1)
       if (i==j) next
+      cj=which(comb[[j]]$c==1)
       if (length(setdiff(ci,cj))>0) next
       if (length(setdiff(cj,ci))<bestscore) {bestscore=length(setdiff(cj,ci));parents[i]=j}
     }
-    if (bestscore==Inf) root=i
   }
   
-#   #Temporary plot
-#   tr=list()
-#   tr$Nnode=length(comb)-n
-#   tr$tip.label=as.character(1:n)
-#   edge=cbind(parents[which(!is.na(parents))],which(!is.na(parents)))
-#   tr$edge=edge;tr$edge[edge==n+1]=root;tr$edge[edge==root]=n+1#Make the root the (n+1)-th
-#   tr$edge.length=rep(NA,nrow(tr$edge))
-#   for (i in 1:nrow(tr$edge)) tr$edge.length[i]=median(comb[[tr$edge[i,2]]]$w)
-#   class(tr)<-'phylo'
-#   plot(tr)
+  #Plot transmission tree as a phylogenetic tree; this is only for the purpose of debugging
+  if (debug) {
+    for (i in 1:length(comb)) cat(comb[[i]]$c,', w=',mean(comb[[i]]$w),', n=',comb[[i]]$n,', bralen=',round(mean(comb[[i]]$w)*comb[[i]]$n/m),'\n',sep='')
+    tr=list()
+    tr$Nnode=length(comb)-n
+    tr$edge=cbind(parents[which(!is.na(parents))],which(!is.na(parents)))
+    tr$edge.length=bralen[which(!is.na(parents))]
+    tr$tip.label=as.character(1:n)
+    #tr$tip.label=record[[1]]$ctree$nam
+    class(tr)<-'phylo'
+    plot(tr)
+  }
   
   #Update vectors parents and bralen and inftim so that branches of length zero are removed and branches of length>1 are deduplicated
   i=1
-  while (i<length(parents)) {
-    if (bralen[i]==0) {
-    torem=parents[i]
-    parents[i]=parents[torem]
-    bralen[i]=bralen[torem]
-    inftim[i]=inftim[torem]
-    parents[which(parents==torem)]=i;parents=parents[-torem]
-    bralen=bralen[-torem]
-    inftim=inftim[-torem]
-    parents[which(parents>torem)]=parents[which(parents>torem)]-1 
+  while (i<=length(parents)) {
+    if (bralen[i]==0 && parents[i]>n) {
+      torem=parents[i]
+      parents[i]=parents[torem]
+      parents[which(parents==torem)]=i
+      parents[which(parents>torem)]=parents[which(parents>torem)]-1
+      parents=parents[-torem]
+      bralen[i]=bralen[torem]
+      bralen=bralen[-torem]
+      inftim[i]=inftim[torem]
+      inftim=inftim[-torem]
+      i=1
+      next
+    } 
+    if (bralen[i]==0 && i>n) {
+      torem=i
+      parents[which(parents==torem)]=parents[torem]
+      parents[which(parents>torem)]=parents[which(parents>torem)]-1
+      parents=parents[-torem]
+      bralen[i]=bralen[torem]
+      bralen=bralen[-torem]
+      inftim[i]=inftim[torem]
+      inftim=inftim[-torem]
+      i=1
+      next
     } 
     if (bralen[i]>1) {
       dt=abs(inftim[i]-inftim[parents[i]])
@@ -138,8 +160,11 @@ consTTree = function(record,burnin=0.5,minimum=0.5)
       bralen[i]=1
       parents=c(parents,parents[i])
       parents[i]=length(bralen)
+      i=1
+      next
     }
-    i=i+1}
+    i=i+1
+  }
 
   #Build transmission tree
   cons=matrix(NA,length(parents),3)
