@@ -1,8 +1,8 @@
 Package: TransPhylo
 Type: Package
 Title: Inference of Transmission Tree under a Within-Host Evolution Model
-Version: 1.1.2
-Date: 2017-10-30
+Version: 1.2.0
+Date: 2017-12-19
 Author: Xavier Didelot <xavier.didelot@gmail.com> and Yuanwei Xu <yuanwxu@126.com>
 Maintainer: Xavier Didelot <xavier.didelot@gmail.com>
 Depends: 
