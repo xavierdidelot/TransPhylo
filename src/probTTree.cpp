@@ -149,7 +149,7 @@ NumericVector wbar(double tinf, double dateT, double rOff, double pOff, double p
 
     w[i] = (1-pi2[i]) * pow((1-pOff)/(1-pOff*F[i]-pOff*delta_t*sumPrev), rOff);
     out[i] = F[i] + sumPrev*delta_t;
-    if(isnan(out[i])) throw(Rcpp::exception("error!! NA value in calulating wbar."));
+    if(std::isnan(out[i])) throw(Rcpp::exception("error!! NA value in calulating wbar."));
     
     sumPrev = 0.0;
     for(int j=0; j<n-i; ++j)
