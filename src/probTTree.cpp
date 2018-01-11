@@ -159,8 +159,19 @@ NumericVector wbar(double tinf, double dateT, double rOff, double pOff, double p
   return out;
 }
       
-
-
+//' Calculates the log-probability of a transmission tree
+//' @param ttree Transmission tree
+//' @param rOff First parameter of the negative binomial distribution for offspring number
+//' @param pOff Second parameter of the negative binomial distribution for offspring number
+//' @param pi probability of sampling an infected individual
+//' @param shGen Shape parameter of the Gamma probability density function representing the generation time
+//' @param scGen Scale parameter of the Gamma probability density function representing the generation time 
+//' @param shSam Shape parameter of the Gamma probability density function representing the sampling time
+//' @param scSam Scale parameter of the Gamma probability density function representing the sampling time 
+//' @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
+//' @param delta_t Grid precision
+//' @return Probability of the transmission tree
+//' @export
 // [[Rcpp::export]]
 double probTTree(NumericMatrix ttree, double rOff, double pOff, double pi, double shGen, double scGen, double shSam, double scSam, double dateT, double delta_t=0.05){
   int numCases = ttree.nrow();

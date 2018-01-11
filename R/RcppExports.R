@@ -5,6 +5,19 @@ wbar <- function(tinf, dateT, rOff, pOff, pi, shGen, scGen, shSam, scSam, delta_
     .Call('_TransPhylo_wbar', PACKAGE = 'TransPhylo', tinf, dateT, rOff, pOff, pi, shGen, scGen, shSam, scSam, delta_t)
 }
 
+#' Calculates the log-probability of a transmission tree
+#' @param ttree Transmission tree
+#' @param rOff First parameter of the negative binomial distribution for offspring number
+#' @param pOff Second parameter of the negative binomial distribution for offspring number
+#' @param pi probability of sampling an infected individual
+#' @param shGen Shape parameter of the Gamma probability density function representing the generation time
+#' @param scGen Scale parameter of the Gamma probability density function representing the generation time 
+#' @param shSam Shape parameter of the Gamma probability density function representing the sampling time
+#' @param scSam Scale parameter of the Gamma probability density function representing the sampling time 
+#' @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
+#' @param delta_t Grid precision
+#' @return Probability of the transmission tree
+#' @export
 probTTree <- function(ttree, rOff, pOff, pi, shGen, scGen, shSam, scSam, dateT, delta_t = 0.05) {
     .Call('_TransPhylo_probTTree', PACKAGE = 'TransPhylo', ttree, rOff, pOff, pi, shGen, scGen, shSam, scSam, dateT, delta_t)
 }
