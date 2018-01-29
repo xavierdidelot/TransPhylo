@@ -166,6 +166,7 @@ NumericVector wbar(double tinf, double dateT, double rOff, double pOff, double p
   
   double sumPrev = log(0.5) + gam[0];
   for(int i=n-1; i>=0; --i){
+<<<<<<< HEAD
     
     if(log(delta_t)+sumPrev > 0){
       w[i] = log_subtract_exp(0.0, pi2[i]) + rOff*(log(1-pOff) - log_subtract_exp(
@@ -178,6 +179,12 @@ NumericVector wbar(double tinf, double dateT, double rOff, double pOff, double p
     out[i] = log_sum_exp(F[i], sumPrev + log(delta_t));
     
     if(isnan(out[i])) throw(Rcpp::exception("error!! NA value in calulating wbar."));
+=======
+
+    w[i] = (1-pi2[i]) * pow((1-pOff)/(1-pOff*F[i]-pOff*delta_t*sumPrev), rOff);
+    out[i] = F[i] + sumPrev*delta_t;
+    if(std::isnan(out[i])) throw(Rcpp::exception("error!! NA value in calulating wbar."));
+>>>>>>> upstream/master
     
     sumPrev = gam[0] + w[i+0];
     for(int j=0; j<n-i; ++j)
@@ -187,8 +194,25 @@ NumericVector wbar(double tinf, double dateT, double rOff, double pOff, double p
   
   return out;
 }
+<<<<<<< HEAD
 
 
+=======
+      
+//' Calculates the log-probability of a transmission tree
+//' @param ttree Transmission tree
+//' @param rOff First parameter of the negative binomial distribution for offspring number
+//' @param pOff Second parameter of the negative binomial distribution for offspring number
+//' @param pi probability of sampling an infected individual
+//' @param shGen Shape parameter of the Gamma probability density function representing the generation time
+//' @param scGen Scale parameter of the Gamma probability density function representing the generation time 
+//' @param shSam Shape parameter of the Gamma probability density function representing the sampling time
+//' @param scSam Scale parameter of the Gamma probability density function representing the sampling time 
+//' @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
+//' @param delta_t Grid precision
+//' @return Probability of the transmission tree
+//' @export
+>>>>>>> upstream/master
 // [[Rcpp::export]]
 double probTTree(NumericMatrix ttree, double rOff, double pOff, double pi,
                  double shGen, double scGen, double shSam, double scSam,
