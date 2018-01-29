@@ -5,9 +5,6 @@ wbar <- function(tinf, dateT, rOff, pOff, pi, shGen, scGen, shSam, scSam, delta_
     .Call('_TransPhylo_wbar', PACKAGE = 'TransPhylo', tinf, dateT, rOff, pOff, pi, shGen, scGen, shSam, scSam, delta_t)
 }
 
-<<<<<<< HEAD
-probTTree <- function(ttree, rOff, pOff, pi, shGen, scGen, shSam, scSam, dateT, delta_t = 0.01) {
-=======
 #' Calculates the log-probability of a transmission tree
 #' @param ttree Transmission tree
 #' @param rOff First parameter of the negative binomial distribution for offspring number
@@ -21,8 +18,7 @@ probTTree <- function(ttree, rOff, pOff, pi, shGen, scGen, shSam, scSam, dateT, 
 #' @param delta_t Grid precision
 #' @return Probability of the transmission tree
 #' @export
-probTTree <- function(ttree, rOff, pOff, pi, shGen, scGen, shSam, scSam, dateT, delta_t = 0.05) {
->>>>>>> upstream/master
+probTTree <- function(ttree, rOff, pOff, pi, shGen, scGen, shSam, scSam, dateT, delta_t = 0.01) {
     .Call('_TransPhylo_probTTree', PACKAGE = 'TransPhylo', ttree, rOff, pOff, pi, shGen, scGen, shSam, scSam, dateT, delta_t)
 }
 
