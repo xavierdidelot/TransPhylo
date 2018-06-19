@@ -1,26 +1,17 @@
-\documentclass[a4paper]{article}
+---
+title: "Tutorial introducing the R package TransPhylo"
+author: "Xavier Didelot"
+date: '`r Sys.Date()`'
+output:
+  pdf_document: default
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Tutorial introducing the R package TransPhylo}
+  %\usepackage[utf8]{inputenc}
+---
 
-%\VignetteIndexEntry{UsingTransPhylo}
-%\VignetteEngine{knitr::knitr}
 
-\usepackage{geometry}
-\geometry{tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
-
-\title{Tutorial introducing the R package TransPhylo}
-\author{Xavier Didelot}
-
-\begin{document}
-
-<<include=FALSE>>=
-library(knitr)
-temppath <- tempdir()
-opts_chunk$set(fig.path = temppath)
-opts_chunk$set(fig.width=5,fig.height=5,out.width="4in",out.height="4in",fig.align = "center")
-@
-
-\maketitle
-
-\section*{Introduction}
+##Introduction
 
 Welcome to this quick tutorial on TransPhylo. TransPhylo is a R package that can reconstruct infectious disease transmission using genomic data. The input is a dated phylogeny, where leaves correspond to pathogens sampled from the known infected hosts. The main output is a transmission tree which indicates who infected whom, including the potential existence of unsampled individuals who may have acted as missing transmission links. TransPhylo works by colouring the branches of the phylogeny using a separate colour for each host, sampled or not. Each section of the tree  coloured in a unique colour represents the pathogen evolution happening within a distinct host. Changes of colours on branches therefore correspond to transmission events from one host to another.
 
@@ -28,121 +19,119 @@ In the first part of this tutorial we will simulate a dataset. In the second par
 
 If you have not already done so, you can install TransPhylo using the following R command:
 
-<<eval=FALSE>>=
+```{r,eval=FALSE}
 devtools::install_github('xavierdidelot/TransPhylo')
-@
+```
 
 You should then be able to load TransPhylo using:
-<<>>=
+```{r}
 library('TransPhylo')
-@
+```
 
 Finally, if you want to reproduce exactly the same results as the ones shown in this tutorial, you should set the seed of your random number generator to the same as mine:
-<<>>=
+```{r}
 set.seed(0)
-@
+```
 
-\section{Simulation}
+##Simulation
 
 A pathogen has an effective within-host population size of $N_e=100$ and a generation time $g=1$ day, so that $N_e g=100/365$ year. The offspring distribution is negative binomial with mean equal to the basic reproduction number $R=5$. Both the generation time and the sampling time are Gamma distributed with parameters (10,0.1) which has a mean of 1 year. The density of sampling is $\pi=0.25$. The following commands specify these parameters:
-<<>>=
+```{r}
 neg=100/365
 off.r=5
 w.shape=10
 w.scale=0.1
 pi=0.25
-@
+```
 
 We simulate an outbreak that starts in 2005 and which and is observed up to 2008:
 
-<<>>=
+```{r}
 simu <- simulateOutbreak(neg=neg,pi=pi,off.r=off.r,w.shape=w.shape,
                          w.scale=w.scale,dateStartOutbreak=2005,dateT=2008)
-@
+```
 
 This simulation contains both the transmission tree between infected hosts and the within-host phylogenetic tree of each host. This can be visualised as a colored phlogenetic tree, where each host is represented by a unique color:
 
-\begin{center}
-<<>>=
+```{r}
 plotCTree(simu)
-@
-\end{center}
+```
 
 The transmission tree can be extracted and plotted separately from the phylogeny:
 
-<<>>=
+```{r}
 ttree<-extractTTree(simu)
 plotTTree(ttree,w.shape,w.scale)
-@
+```
 
 The phylogenetic tree can be extracted and converted into a phylo object from the ape package:
 
-<<>>=
+```{r}
 library(ape)
 ptree<-extractPTree(simu)
 p<-phyloFromPTree(ptree)
 plot(p)
 axisPhylo()
-@
+```
 
 Let us save this tree into a Newick file so that we can use it as input in the second part.
 
-<<>>=
+```{r}
 write.tree(p,'tree.nwk',append = F)
-@
+```
 
 
 Note that this phylogeny is scaled in years, but time is measured only relatively to the 
 date of the last sample which is at 0 on the x-axis of the figure above. To use this tree
 in the second part we also need to know exactly when was the last sample taken:
 
-<<>>=
+```{r}
 print(max(simu$ctree[,1]))
-@
+```
 
-\section{Inference of transmission tree given a phylogeny}
+##Inference of transmission tree given a phylogeny
 
 This second part is independent from the first part, so we start by erasing the workspace and resetting the seed of the random number generator:
 
-<<>>=
+```{r}
 rm(list=ls())
 set.seed(0)
-@
+```
 
-Our starting point is a timed phylogenetic tree such as the one created in the previous part and that we stored in the \verb+tree.nwk+ file. Because such a phylogeny is timed relatively and not absolutely, we also need to indicate when the last sample was taken, which in the simulation above was equal to 2007.964. However, if you are using your own dataset, you should set this equal to the date at which the last sample was taken.
+Our starting point is a timed phylogenetic tree such as the one created in the previous part and that we stored in the `tree.nwk` file. Because such a phylogeny is timed relatively and not absolutely, we also need to indicate when the last sample was taken, which in the simulation above was equal to 2007.964. However, if you are using your own dataset, you should set this equal to the date at which the last sample was taken.
 
-<<hide-par,echo=1,results='hide'>>=
+```{r,results='hide'}
 ptree<-ptreeFromPhylo(read.tree('tree.nwk'),dateLastSample=2007.964)
 file.remove('tree.nwk') #Erase the tree.nwk file since we will not need it anymore
-@
+```
 
 TransPhylo also needs to know the parameters of the Gamma distribution representing the generation time. In the simulation above we assumed that these parameters were equal to (10,0.1), and so this is what we specify below. However, if you are using your own data, you should set these values to something sensible for your pathogen of interest.
-<<>>=
+```{r}
 w.shape=10
 w.scale=0.1
-@
+```
 
-Finally TransPhylo needs to know the time at which observation of cases stopped. In the simulation above this was equal to 2008, and so this is what we specify below. However, if you are using your own data, you should set this equal to the date when observation stopped for your outbreak of interest. It might be today's date if you are doing a real-time genomic epidemiology investigation. It can even be set equal to \verb+Inf+ if you are confident that the outbreak is finished and that there will be no cases in the future, for example if you are analysing an old outbreak which is clearly finished.
-<<>>=
+Finally TransPhylo needs to know the time at which observation of cases stopped. In the simulation above this was equal to 2008, and so this is what we specify below. However, if you are using your own data, you should set this equal to the date when observation stopped for your outbreak of interest. It might be today's date if you are doing a real-time genomic epidemiology investigation. It can even be set equal to `Inf` if you are confident that the outbreak is finished and that there will be no cases in the future, for example if you are analysing an old outbreak which is clearly finished.
+```{r}
 dateT=2008
-@
+```
 
 The MCMC procedure to infer the transmission tree given the phylogenetic tree can be run as follows:
 
-<<results='hide'>>=
+```{r,results='hide'}
 record<-inferTTree(ptree,mcmcIterations=100,w.shape=w.shape,w.scale=w.scale,dateT=dateT)
-@
+```
 
 This returns a record of all MCMC iterations. This is what the transmission tree looks like at the end of the MCMC:
 
-<<>>=
+```{r}
 lastIteration<-record[[length(record)]]
 plotCTree(lastIteration$ctree)
-@
+```
 
 Traces of the MCMC can be plotted as follows:
 
-<<>>=
+```{r}
 par(mfrow=c(2,2))
 plot(sapply(record,function(x) x$pTTree+x$pPTree),ylab='Posterior probability',
      xlab='MCMC iterations',type='l')
@@ -152,12 +141,11 @@ plot(sapply(record,function(x) x$neg),ylab='Within-host coalescent rate Ne*g',
      xlab='MCMC iterations',type='l')
 plot(sapply(record,function(x) x$off.r),ylab='Basic reproduction number R',
      xlab='MCMC iterations',type='l')
-@
+```
 
 A consensus transmission tree can be built as follows:
-<<>>=
+```{r}
 cons=consTTree(record)
 plotTTree(cons,w.shape,w.scale)
-@
+```
 
-\end{document}

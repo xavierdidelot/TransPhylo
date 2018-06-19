@@ -1,15 +1,17 @@
 Package: TransPhylo
 Type: Package
 Title: Inference of Transmission Tree under a Within-Host Evolution Model
-Version: 1.2.0
-Date: 2017-12-19
-Author: Xavier Didelot <xavier.didelot@gmail.com> and Yuanwei Xu <yuanwxu@126.com>
+Version: 1.2.1
+Date: 2018-05-19
+Authors@R: person("Xavier","Didelot",email="xavier.didelot@gmail.com",role=c("aut", "cre"))
 Maintainer: Xavier Didelot <xavier.didelot@gmail.com>
 Depends: 
 Suggests: ape, knitr, testthat
 Description: Inference of transmission tree under a within-host evolution model.
 VignetteBuilder: knitr
 License: GPL (>=2)
+URL: https://github.com/xavierdidelot/TransPhylo
+BugReports: https://github.com/xavierdidelot/TransPhylo/issues
 Imports: Rcpp (>= 0.12.8)
 LinkingTo: Rcpp, BH
 SystemRequirements: C++11

@@ -41,7 +41,7 @@ You can install TransPhylo in R using the following command:
 
 # Documentation
 
-The TransPhylo tutorial can be downloaded [here](https://raw.githubusercontent.com/wiki/xavierdidelot/TransPhylo/TransPhylo-Tutorial.pdf). This tutorial is also available within the R package as a vignette. The TransPhylo reference manual can be downloaded [here](https://raw.githubusercontent.com/wiki/xavierdidelot/TransPhylo/TransPhylo-RefMan.pdf).
+See the TransPhylo tutorial at https://xavierdidelot.github.io/TransPhylo/articles/TransPhylo.html. This tutorial is also available within the R package as a vignette. The TransPhylo reference manual is available at https://xavierdidelot.github.io/TransPhylo/reference/index.html.
 
 # Getting help
 
