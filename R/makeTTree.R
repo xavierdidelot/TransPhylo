@@ -29,8 +29,8 @@ makeTTree <-function(off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,maxTime,nS
       prob<-prob+log(1-pi)
       ttree[todo[1],2]<-NA}
     
-    offspring<-rnbinom(1,off.r,off.p)
-    prob<-prob+log(dnbinom(offspring,off.r,off.p))
+    offspring<-rnbinom(1,off.r,1-off.p)
+    prob<-prob+log(dnbinom(offspring,off.r,1-off.p))
     if (offspring>0) {
       for (i in 1:offspring) {
         draw<-rgamma(1,shape=w.shape,scale=w.scale)

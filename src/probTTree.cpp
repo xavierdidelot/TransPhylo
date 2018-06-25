@@ -1,17 +1,3 @@
-/* Rewrite probTTree with allowTransPostSamp = TRUE
- Calculates the log-probability of a transmission tree.
- @param ttree Transmission tree
-@param off.r First parameter of the negative binomial distribution for offspring number
-@param off.p Second parameter of the negative binomial distribution for offspring number
-@param pi probability of sampling an infected individual
-@param w.shape Shape parameter of the Gamma probability density function representing the generation time
-@param w.scale Scale parameter of the Gamma probability density function representing the generation time 
-@param ws.shape Shape parameter of the Gamma probability density function representing the sampling time
-@param ws.scale Scale parameter of the Gamma probability density function representing the sampling time 
-@param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
-@return Probability of the transmission tree */
-
-
 // [[Rcpp::depends(BH)]]
 // [[Rcpp::plugins(cpp11)]]
 #include <Rcpp.h>
@@ -77,12 +63,13 @@ double log_sum_exp_vec(NumericVector w)
 double alphastar(int d, double p, double r, double wstar)
 {
   if(std::abs(r-1.0)<1e-6) // Exact solution available
-    return log((1-p))-log(1-p*wstar)+d*log(p/(1-p*wstar));
+    return log(1-p)+d*log(p)-(d+1)*log(1-p*wstar);
+    //return log((1-p))-log(1-p*wstar)+d*log(p/(1-p*wstar));
   
   int k = d;
   std::vector<double> ltoSum;
   
-  boost::math::negative_binomial_distribution<double> nbinom(r,p);
+  boost::math::negative_binomial_distribution<double> nbinom(r,1-p);
   while(true){
     
     double dnb = pdf(nbinom,k);
@@ -112,13 +99,14 @@ double alpha(double tinf, int d, double p, double r, NumericVector wbar0, double
   double wbar_tinf = wbar0[std::round((tinf - gridStart)/delta_t)];
   if(std::abs(r-1.0)<1e-6) // Exact solution available
     return log((1-p))-log_subtract_exp(0.0,log(p)+wbar_tinf)+d*(log(p)-log_subtract_exp(0.0, log(p)+wbar_tinf));
+  //    return log(1-p)+d*log(p)-(d+1)*log(1-p*exp(wbar_tinf));
   
   int k = d;
   std::vector<double> ltoSum;
   
   while(true){
     
-    double dnb = R::dnbinom(k,r,p,1);
+    double dnb = R::dnbinom(k,r,1-p,1);
     double lterm = dnb + k*wbar_tinf;
     
     ltoSum.push_back(lterm);

@@ -25,7 +25,7 @@ probTTreeR = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dat
       d <- length(offspring)
       if (is.na(alphaStar[d+1])) {
         notinf=max(d,20)
-        alphaStar[d+1]=sum(choose(d:notinf,d)*dnbinom(d:notinf,off.r,off.p)*omegaStar^{0:(notinf-d)})#This is Equation (4)
+        alphaStar[d+1]=sum(choose(d:notinf,d)*dnbinom(d:notinf,off.r,1-off.p)*omegaStar^{0:(notinf-d)})#This is Equation (4)
         alphaStar[d+1]=log(alphaStar[d+1])
       }
       prob <- prob + alphaStar[d+1] #This is the third term in the product in Equation (7)
@@ -36,7 +36,7 @@ probTTreeR = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dat
     
   } else {
     #This is the case of an ongoing outbreak
-    dt=0.05;L=1000
+    dt=0.01;L=1000
     omegabar=getOmegabarR(L,dt,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale)
     #pit      =function(t) {pi*pgamma((dateT-t),shape=w.shape,scale=w.scale) }#This is Equation (6), but replaced with pi*trunc
     #fomega   =function(x) {omega   [max(1,min(L,round((dateT-x)/dt)))] }
