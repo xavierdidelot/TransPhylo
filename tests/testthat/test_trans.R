@@ -22,6 +22,7 @@ test_that("Probability of a transmission tree is the same when simulating and ca
   p2=TransPhylo:::probTTreeR(ttree$ttree,off.r,off.p,pi,w.shape,w.scale,w.shape,w.scale,Inf)
   expect_equal(ttree$prob,p,tolerance=0.001,scale=1)
   expect_equal(ttree$prob,p2,tolerance=0.001,scale=1)
+  
   set.seed(0)
   off.r=0.3333
   off.p=0.25
@@ -30,6 +31,23 @@ test_that("Probability of a transmission tree is the same when simulating and ca
   p2=TransPhylo:::probTTreeR(ttree$ttree,off.r,off.p,pi,w.shape,w.scale,w.shape,w.scale,Inf)
   expect_equal(ttree$prob,p,tolerance=0.001,scale=1)
   expect_equal(ttree$prob,p2,tolerance=0.001,scale=1)
+})
+
+test_that("Probability of a transmission tree is roughly the same if timeT=Inf and timeT=10000.", {
+  set.seed(1)
+  pi=1
+  off.r=1
+  off.p=0.5
+  w.shape=1.1
+  w.scale=1.2
+  ttree=makeTTree(pi=pi,off.r=off.r,off.p=off.p,w.shape=w.shape,w.scale=w.scale,ws.shape=w.shape,ws.scale=w.scale,maxTime=Inf,nSampled = NA)
+  p =TransPhylo:::probTTreeR(ttree$ttree,1.1,0.4,pi,w.shape,w.scale,w.shape,w.scale,Inf)
+  p2=TransPhylo:::probTTreeR(ttree$ttree,1.1,0.4,pi,w.shape,w.scale,w.shape,w.scale,1000)
+  expect_equal(p,p2,tolerance=0.001,scale=1)
+#  p =probTTree(ttree$ttree,1.1,0.4,pi,w.shape,w.scale,w.shape,w.scale,Inf)
+#  p2=probTTree(ttree$ttree,1.1,0.4,pi,w.shape,w.scale,w.shape,w.scale,1000)
+#  print(c(p,p2))
+#  expect_equal(ttree$prob,p2,tolerance=0.001,scale=1)
 })
 
 
@@ -57,10 +75,10 @@ test_that("Probability of a transmission tree is the same in R and C++.", {
   p =probTTree (ttree$ttree,off.r,off.p,pi,w.shape,w.scale,w.shape,w.scale,Inf)
   p2=TransPhylo:::probTTreeR(ttree$ttree,off.r,off.p,pi,w.shape,w.scale,w.shape,w.scale,Inf)
   expect_equal(p,p2,tolerance=0.001)
-#  set.seed(0)
-#  ttree=makeTTree(pi=pi,off.r=off.r,off.p=off.p,w.shape=w.shape,w.scale=w.scale,ws.shape=w.shape,ws.scale=w.scale,maxTime=1,nSampled = NA)
-#  p =probTTree (ttree$ttree,off.r,off.p,pi,w.shape,w.scale,w.shape,w.scale,1)
-#  p2=TransPhylo:::probTTreeR(ttree$ttree,off.r,off.p,pi,w.shape,w.scale,w.shape,w.scale,1)
-#  print(c(p,p2))
-#  expect_equal(p,p2,tolerance=0.001)
+  set.seed(0)
+  ttree=makeTTree(pi=pi,off.r=off.r,off.p=off.p,w.shape=w.shape,w.scale=w.scale,ws.shape=w.shape,ws.scale=w.scale,maxTime=1,nSampled = NA)
+  p =probTTree (ttree$ttree,off.r,off.p,pi,w.shape,w.scale,w.shape,w.scale,1)
+  p2=TransPhylo:::probTTreeR(ttree$ttree,off.r,off.p,pi,w.shape,w.scale,w.shape,w.scale,1)
+  print(c(p,p2))
+  expect_equal(p,p2,tolerance=0.01)
 })
