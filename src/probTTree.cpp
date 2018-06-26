@@ -41,6 +41,8 @@ double wstar_rootFinder(double pi, double p, double r)
 
 double log_sum_exp(double u, double v)
 {
+  if (u == R_NegInf) return v;
+  if (v == R_NegInf) return u;
   return(std::max(u, v) + log(exp(u - std::max(u, v)) + exp(v - std::max(u, v))));
 }
 
@@ -163,8 +165,8 @@ NumericVector wbar(double tinf, double dateT, double rOff, double pOff, double p
     }
     
     out[i] = log_sum_exp(F[i], sumPrev + log(delta_t));
-    
-    if(std::isnan(out[i])) throw(Rcpp::exception("error!! NA value in calulating wbar."));
+
+    if(std::isnan(out[i])) throw(Rcpp::exception("error!! NA value in calculating wbar."));
     
     sumPrev = gam[0] + w[i+0];
     for(int j=0; j<n-i; ++j)
