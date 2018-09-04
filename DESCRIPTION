@@ -15,4 +15,5 @@ BugReports: https://github.com/xavierdidelot/TransPhylo/issues
 Imports: Rcpp (>= 0.12.8)
 LinkingTo: Rcpp, BH
 SystemRequirements: C++11
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
+Encoding: UTF-8

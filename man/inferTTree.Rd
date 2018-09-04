@@ -6,10 +6,10 @@
 \usage{
 inferTTree(ptree, w.shape = 2, w.scale = 1, ws.shape = w.shape,
   ws.scale = w.scale, mcmcIterations = 1000, thinning = 1,
-  startNeg = 100/365, startOff.r = 1, startOff.p = 0.5, startPi = 0.5,
-  updateNeg = TRUE, updateOff.r = TRUE, updateOff.p = FALSE,
-  updatePi = TRUE, startCTree = NA, updateTTree = TRUE,
-  optiStart = TRUE, dateT = Inf)
+  startNeg = 100/365, startOff.r = 1, startOff.p = 0.5,
+  startPi = 0.5, updateNeg = TRUE, updateOff.r = TRUE,
+  updateOff.p = FALSE, updatePi = TRUE, startCTree = NA,
+  updateTTree = TRUE, optiStart = TRUE, dateT = Inf)
 }
 \arguments{
 \item{ptree}{Phylogenetic tree}
