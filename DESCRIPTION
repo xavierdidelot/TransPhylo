@@ -6,7 +6,7 @@ Date: 2018-05-25
 Authors@R: person("Xavier","Didelot",email="xavier.didelot@gmail.com",role=c("aut", "cre"))
 Maintainer: Xavier Didelot <xavier.didelot@gmail.com>
 Depends: 
-Suggests: ape, knitr, testthat
+Suggests: ape, knitr, testthat, purrr
 Description: Inference of transmission tree under a within-host evolution model.
 VignetteBuilder: knitr
 License: GPL (>=2)
