@@ -116,7 +116,7 @@ double alpha(double tinf, int d, double p, double r, NumericVector wbar0, double
     
     k++;
 
-    if(k>5e5 && k%1000 == 0){
+    if(k>100 && k%10 == 0){
       Rcout << "Value of lterm: " << lterm << " value of wbar_tinf: " << wbar_tinf << " value of r: " << r << " value of p: " << p << std::endl;
     }
     
