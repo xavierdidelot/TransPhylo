@@ -115,8 +115,14 @@ double alpha(double tinf, int d, double p, double r, NumericVector wbar0, double
     if(log(Rf_choose(k,d))+lterm < log(1e-8)) break; // Achieved desired accuracy
     
     k++;
+
+    if(k>5e5 && k%1000 == 0){
+      Rcout << "Value of lterm: " << lterm << " value of wbar_tinf: " << wbar_tinf << " value of r: " << r << " value of p: " << p << std::endl;
+    }
     
-    if(k>1e6) throw(Rcpp::exception("too many iterations, giving up!"));
+    if(k>1e6) {
+      Rcout << "The value of Rf_choose " << Rf_choose(k,d) << std::endl;
+      throw(Rcpp::exception("too many iterations, giving up!"));}
     
   }
   
