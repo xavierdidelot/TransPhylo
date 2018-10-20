@@ -137,50 +137,32 @@ double alpha(double tinf, int d, double p, double r, NumericVector wbar0, double
 // [[Rcpp::export]]
 NumericVector wbar(double tinf, double dateT, double rOff, double pOff, double pi, double shGen, double scGen, double shSam, double scSam, double delta_t)
 {
-  
-  int n = std::round((dateT-tinf)/delta_t);
-  
-  NumericVector grid(n);
-  for(int i=0; i<n; ++i) // use the left point of each subinterval
-    grid[i] = dateT-n*delta_t+i*delta_t;
-  
-  NumericVector pi2(n);
-  for(int i=0; i<n; ++i)
-    pi2[i] = log(pi)+R::pgamma(dateT-grid[i], shSam, scSam, 1, 1);
-  
-  NumericVector F(n);
-  for(int i=0; i<n; ++i)
-    F[i] = R::pgamma(dateT-grid[i], shGen, scGen, 0, 1);
-  
-  NumericVector w(n+1), out(n+1);
-  out[n] = w[n] = 0.0;
-  
-  NumericVector gam(n);
-  for(double i=1; i<n+1; ++i)
-    gam[i-1] = R::dgamma(i*delta_t,shGen,scGen,1);
-  
-  double sumPrev = log(0.5) + gam[0];
-  for(int i=n-1; i>=0; --i){
-    
-    if(log(delta_t)+sumPrev > 0){
-      w[i] = log_subtract_exp(0.0, pi2[i]) + rOff*(log(1-pOff) - log_subtract_exp(
-        log_subtract_exp(0.0, log(pOff)+F[i]), log(pOff)+0.0));
-    } else {
-      w[i] = log_subtract_exp(0.0, pi2[i]) + rOff*(log(1-pOff) - log_subtract_exp(
-        log_subtract_exp(0.0, log(pOff)+F[i]), log(pOff)+log(delta_t)+sumPrev));
-    }
-    
-    out[i] = log_sum_exp(F[i], sumPrev + log(delta_t));
+  int n = std::round((dateT-tinf)/delta_t); 
+   NumericVector grid(n);
+   for(int i=0; i<n; ++i) // use the left point of each subinterval
+     grid[i] = dateT-n*delta_t+i*delta_t;
+ 
+   NumericVector pi2 = pi*pgamma(dateT-grid, shSam, scSam);
+   NumericVector F = 1-pgamma(dateT-grid, shGen, scGen);
+ 
+   NumericVector w(n+1), out(n+1);
+   out[n] = w[n] = 1.0;
+ 
+   IntegerVector seq = seq_len(n);
+   NumericVector gam = dgamma(as<NumericVector>(seq)*delta_t,shGen,scGen);
+   double sumPrev = 0.5 * gam[0];
+   for(int i=n-1; i>=0; --i){
+ 
+     w[i] = (1-pi2[i]) * pow((1-pOff)/(1-pOff*F[i]-pOff*delta_t*sumPrev), rOff);
+     out[i] = F[i] + sumPrev*delta_t;
+     
+     sumPrev = 0.0;
+     for(int j=0; j<n-i; ++j)
+       sumPrev += gam[j]*w[i+j];
+     sumPrev += 0.5 * gam[n-i];
+   }
+   return log(out);
 
-    if(std::isnan(out[i])) throw(Rcpp::exception("error!! NA value in calculating wbar."));
-    
-    sumPrev = gam[0] + w[i+0];
-    for(int j=0; j<n-i; ++j)
-      sumPrev = log_sum_exp(sumPrev, gam[j] + w[i+j]);
-    sumPrev = log_sum_exp(sumPrev, log(0.5) + gam[n-i] + w[n-i]);
-  }
-  
-  return out;
 }
 
 
