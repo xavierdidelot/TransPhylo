@@ -61,7 +61,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
     
     if (updateTTree) {
       #Metropolis update for transmission tree 
-      prop <- .proposal(ctree$ctree)
+      prop <- proposal(ctree$ctree)
       ctree2 <- list(ctree=prop$tree,nam=ctree$nam)
       ttree2 <- extractTTree(ctree2)
       pTTree2 <- probTTree(ttree2$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT) 
