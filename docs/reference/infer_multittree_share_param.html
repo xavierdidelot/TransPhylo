@@ -6,7 +6,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Infer transmission tree given a phylogenetic tree — inferTTree • TransPhylo</title>
+<title>Simultaneously infer transmission trees given phylogenetic trees 
+User can specify any subset of parameters that will be shared by providing a character vector of parameter names to 
+the argument "share". — infer_multittree_share_param • TransPhylo</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +32,13 @@
 
 
 
-<meta property="og:title" content="Infer transmission tree given a phylogenetic tree — inferTTree" />
+<meta property="og:title" content="Simultaneously infer transmission trees given phylogenetic trees 
+User can specify any subset of parameters that will be shared by providing a character vector of parameter names to 
+the argument "share". — infer_multittree_share_param" />
 
-<meta property="og:description" content="Infer transmission tree given a phylogenetic tree" />
+<meta property="og:description" content="Simultaneously infer transmission trees given phylogenetic trees 
+User can specify any subset of parameters that will be shared by providing a character vector of parameter names to 
+the argument &quot;share&quot;." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -114,30 +120,36 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Infer transmission tree given a phylogenetic tree</h1>
-    <small class="dont-index">Source: <a href='https://github.com/xavierdidelot/TransPhylo/blob/master/R/inferTTree.R'><code>R/inferTTree.R</code></a></small>
-    <div class="hidden name"><code>inferTTree.Rd</code></div>
+    <h1>Simultaneously infer transmission trees given phylogenetic trees 
+User can specify any subset of parameters that will be shared by providing a character vector of parameter names to 
+the argument "share".</h1>
+    <small class="dont-index">Source: <a href='https://github.com/xavierdidelot/TransPhylo/blob/master/R/infer_multittree_share_param.R'><code>R/infer_multittree_share_param.R</code></a></small>
+    <div class="hidden name"><code>infer_multittree_share_param.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Infer transmission tree given a phylogenetic tree</p>
+    <p>Simultaneously infer transmission trees given phylogenetic trees 
+User can specify any subset of parameters that will be shared by providing a character vector of parameter names to 
+the argument "share".</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>inferTTree</span>(<span class='no'>ptree</span>, <span class='kw'>w.shape</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>w.scale</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ws.shape</span> <span class='kw'>=</span> <span class='no'>w.shape</span>,
-  <span class='kw'>ws.scale</span> <span class='kw'>=</span> <span class='no'>w.scale</span>, <span class='kw'>mcmcIterations</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>thinning</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>startNeg</span> <span class='kw'>=</span> <span class='fl'>100</span>/<span class='fl'>365</span>, <span class='kw'>startOff.r</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>startOff.p</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
-  <span class='kw'>startPi</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>updateNeg</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>updateOff.r</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>updateOff.p</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>updatePi</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>startCTree</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>updateTTree</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>optiStart</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>dateT</span> <span class='kw'>=</span> <span class='fl'>Inf</span>)</pre>
+    <pre class="usage"><span class='fu'>infer_multittree_share_param</span>(<span class='no'>ptree_lst</span>, <span class='kw'>w.shape</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>w.scale</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>ws.shape</span> <span class='kw'>=</span> <span class='no'>w.shape</span>, <span class='kw'>ws.scale</span> <span class='kw'>=</span> <span class='no'>w.scale</span>, <span class='kw'>mcmcIterations</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
+  <span class='kw'>thinning</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>startNeg</span> <span class='kw'>=</span> <span class='fl'>100</span>/<span class='fl'>365</span>, <span class='kw'>startOff.r</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>startOff.p</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>startPi</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>prior_pi_a</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>prior_pi_b</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>updateNeg</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>updateOff.r</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>updateOff.p</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>updatePi</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>share</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>startCTree_lst</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>NA</span>,
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>ptree_lst</span>)), <span class='kw'>updateTTree</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>optiStart</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>dateT</span> <span class='kw'>=</span> <span class='fl'>Inf</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>ptree</th>
-      <td><p>Phylogenetic tree</p></td>
+      <th>ptree_lst</th>
+      <td><p>List of phylogenetic tree</p></td>
     </tr>
     <tr>
       <th>w.shape</th>
@@ -180,6 +192,14 @@
       <td><p>Starting value of sampling proportion pi</p></td>
     </tr>
     <tr>
+      <th>prior_pi_a</th>
+      <td><p>First shape parameter of Beta prior for pi</p></td>
+    </tr>
+    <tr>
+      <th>prior_pi_b</th>
+      <td><p>Second shape parameter of Beta prior for pi</p></td>
+    </tr>
+    <tr>
       <th>updateNeg</th>
       <td><p>Whether of not to update the parameter Ne*g</p></td>
     </tr>
@@ -196,8 +216,13 @@
       <td><p>Whether or not to update the parameter pi</p></td>
     </tr>
     <tr>
-      <th>startCTree</th>
-      <td><p>Optional combined tree to start from</p></td>
+      <th>share</th>
+      <td><p>Character vector of parameters to be shared. For example, share = c("off.r", "off.p") would 
+share the offspring distribution. Allowed parameter names are "neg", "off.r", "off.p" and "pi".</p></td>
+    </tr>
+    <tr>
+      <th>startCTree_lst</th>
+      <td><p>Optional combined list of trees to start from</p></td>
     </tr>
     <tr>
       <th>updateTTree</th>
@@ -215,7 +240,8 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>posterior sample set of transmission trees</p>
+    <p>list the same size as input, each element contains posterior transmission trees inferred from
+corresponding phylogenetic tree</p>
     
 
   </div>
@@ -227,6 +253,8 @@
       <li><a href="#value">Value</a></li>
           </ul>
 
+    <h2>Author</h2>
+    <p>Yuanwei Xu</p>
   </div>
 </div>
 

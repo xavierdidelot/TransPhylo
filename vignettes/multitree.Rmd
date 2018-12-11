@@ -1,8 +1,12 @@
 ---
-title: "Simultaneious Inference of Multiple Transmission Trees"
+title: "Simultaneous Inference of Multiple Transmission Trees"
 author: "Yuanwei Xu"
 date: "`r Sys.Date()`"
 output: html_document
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Simultaneous Inference of Multiple Transmission Trees}
+  %\usepackage[utf8]{inputenc}
 ---
 
 ```{r setup, include=FALSE}

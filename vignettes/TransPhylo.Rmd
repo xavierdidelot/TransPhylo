@@ -2,8 +2,7 @@
 title: "Tutorial introducing the R package TransPhylo"
 author: "Xavier Didelot"
 date: '`r Sys.Date()`'
-output:
-  pdf_document: default
+output: html_document
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Tutorial introducing the R package TransPhylo}
@@ -11,7 +10,7 @@ vignette: >
 ---
 
 
-##Introduction
+## Introduction
 
 Welcome to this quick tutorial on TransPhylo. TransPhylo is a R package that can reconstruct infectious disease transmission using genomic data. The input is a dated phylogeny, where leaves correspond to pathogens sampled from the known infected hosts. The main output is a transmission tree which indicates who infected whom, including the potential existence of unsampled individuals who may have acted as missing transmission links. TransPhylo works by colouring the branches of the phylogeny using a separate colour for each host, sampled or not. Each section of the tree  coloured in a unique colour represents the pathogen evolution happening within a distinct host. Changes of colours on branches therefore correspond to transmission events from one host to another.
 
@@ -33,7 +32,7 @@ Finally, if you want to reproduce exactly the same results as the ones shown in 
 set.seed(0)
 ```
 
-##Simulation
+## Simulation
 
 A pathogen has an effective within-host population size of $N_e=100$ and a generation time $g=1$ day, so that $N_e g=100/365$ year. The offspring distribution is negative binomial with mean equal to the basic reproduction number $R=5$. Both the generation time and the sampling time are Gamma distributed with parameters (10,0.1) which has a mean of 1 year. The density of sampling is $\pi=0.25$. The following commands specify these parameters:
 ```{r}
@@ -89,7 +88,7 @@ in the second part we also need to know exactly when was the last sample taken:
 print(max(simu$ctree[,1]))
 ```
 
-##Inference of transmission tree given a phylogeny
+## Inference of transmission tree given a phylogeny
 
 This second part is independent from the first part, so we start by erasing the workspace and resetting the seed of the random number generator:
 
@@ -122,7 +121,9 @@ The MCMC procedure to infer the transmission tree given the phylogenetic tree ca
 record<-inferTTree(ptree,mcmcIterations=100,w.shape=w.shape,w.scale=w.scale,dateT=dateT)
 ```
 
-This returns a record of all MCMC iterations. This is what the transmission tree looks like at the end of the MCMC:
+## Interpretation of results
+
+The last command returned a record of all MCMC iterations. This is what the transmission tree looks like at the end of the MCMC:
 
 ```{r}
 lastIteration<-record[[length(record)]]
@@ -132,15 +133,14 @@ plotCTree(lastIteration$ctree)
 Traces of the MCMC can be plotted as follows:
 
 ```{r}
-par(mfrow=c(2,2))
-plot(sapply(record,function(x) x$pTTree+x$pPTree),ylab='Posterior probability',
-     xlab='MCMC iterations',type='l')
-plot(sapply(record,function(x) x$pi),ylab='Sampling proportion pi',
-     xlab='MCMC iterations',type='l')
-plot(sapply(record,function(x) x$neg),ylab='Within-host coalescent rate Ne*g',
-     xlab='MCMC iterations',type='l')
-plot(sapply(record,function(x) x$off.r),ylab='Basic reproduction number R',
-     xlab='MCMC iterations',type='l')
+plotTraces(record)
+```
+
+Further assessment of the MCMC convergence and mixing can be obtained using the CODA package, for example to obtain the effective sample size of paramaters as follows:
+```{r}
+library(coda)
+mcmc=convertToCoda(record)
+effectiveSize(mcmc)
 ```
 
 A consensus transmission tree can be built as follows:
@@ -149,3 +149,14 @@ cons=consTTree(record)
 plotTTree(cons,w.shape,w.scale)
 ```
 
+A matrix of probability of direct transmission for all pairs of individuals can be drawn as follows:
+```{r}
+mat=computeMatWIW(record)
+lattice::levelplot(mat,xlab='',ylab='')
+```
+
+It is also possible to plot a matrix indicating for each pairs of individuals how many intermediates there are in the transmission chain:
+```{r}
+mat=computeMatTDist(record)
+lattice::levelplot(mat,xlab='',ylab='')
+```
