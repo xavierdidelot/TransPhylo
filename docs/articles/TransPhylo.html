@@ -83,7 +83,7 @@
       <h1>Tutorial introducing the R package TransPhylo</h1>
                         <h4 class="author">Xavier Didelot</h4>
             
-            <h4 class="date">2018-12-11</h4>
+            <h4 class="date">2018-12-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/xavierdidelot/TransPhylo/blob/master/vignettes/TransPhylo.Rmd"><code>vignettes/TransPhylo.Rmd</code></a></small>
       <div class="hidden name"><code>TransPhylo.Rmd</code></div>
@@ -151,7 +151,7 @@
 <p>Finally TransPhylo needs to know the time at which observation of cases stopped. In the simulation above this was equal to 2008, and so this is what we specify below. However, if you are using your own data, you should set this equal to the date when observation stopped for your outbreak of interest. It might be today’s date if you are doing a real-time genomic epidemiology investigation. It can even be set equal to <code>Inf</code> if you are confident that the outbreak is finished and that there will be no cases in the future, for example if you are analysing an old outbreak which is clearly finished.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">dateT=<span class="dv">2008</span></a></code></pre></div>
 <p>The MCMC procedure to infer the transmission tree given the phylogenetic tree can be run as follows:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">record&lt;-<span class="kw"><a href="../reference/inferTTree.html">inferTTree</a></span>(ptree,<span class="dt">mcmcIterations=</span><span class="dv">100</span>,<span class="dt">w.shape=</span>w.shape,<span class="dt">w.scale=</span>w.scale,<span class="dt">dateT=</span>dateT)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">record&lt;-<span class="kw"><a href="../reference/inferTTree.html">inferTTree</a></span>(ptree,<span class="dt">mcmcIterations=</span><span class="dv">1000</span>,<span class="dt">w.shape=</span>w.shape,<span class="dt">w.scale=</span>w.scale,<span class="dt">dateT=</span>dateT)</a></code></pre></div>
 </div>
 <div id="interpretation-of-results" class="section level2">
 <h2 class="hasAnchor">
@@ -167,8 +167,8 @@
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(coda)</a>
 <a class="sourceLine" id="cb19-2" data-line-number="2">mcmc=<span class="kw"><a href="../reference/convertToCoda.html">convertToCoda</a></span>(record)</a>
 <a class="sourceLine" id="cb19-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/effectiveSize">effectiveSize</a></span>(mcmc)</a></code></pre></div>
-<pre><code>##       pi      neg        R 
-## 3.247992 5.980158 4.573666</code></pre>
+<pre><code>##        pi       neg         R 
+##  4.265306 20.670318  5.925520</code></pre>
 <p>A consensus transmission tree can be built as follows:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">cons=<span class="kw"><a href="../reference/consTTree.html">consTTree</a></span>(record)</a>
 <a class="sourceLine" id="cb21-2" data-line-number="2"><span class="kw"><a href="../reference/plotTTree.html">plotTTree</a></span>(cons,w.shape,w.scale)</a></code></pre></div>
@@ -181,6 +181,18 @@
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">mat=<span class="kw"><a href="../reference/computeMatTDist.html">computeMatTDist</a></span>(record)</a>
 <a class="sourceLine" id="cb23-2" data-line-number="2">lattice<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/lattice/topics/levelplot">levelplot</a></span>(mat,<span class="dt">xlab=</span><span class="st">''</span>,<span class="dt">ylab=</span><span class="st">''</span>)</a></code></pre></div>
 <p><img src="TransPhylo_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
+<p>Plot of sampled and unsampled cases over time:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">a=<span class="kw"><a href="../reference/getIncidentCases.html">getIncidentCases</a></span>(record,<span class="dt">show.plot =</span> T)</a></code></pre></div>
+<p><img src="TransPhylo_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
+<p>Distribution of realised generation times:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">a=<span class="kw"><a href="../reference/getGenerationTimeDist.html">getGenerationTimeDist</a></span>(record,<span class="dt">show.plot =</span> T)</a></code></pre></div>
+<p><img src="TransPhylo_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
+<p>Distribution of realised sampling times:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">a=<span class="kw"><a href="../reference/getSamplingTimeDist.html">getSamplingTimeDist</a></span>(record,<span class="dt">show.plot =</span> T)</a></code></pre></div>
+<p><img src="TransPhylo_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
+<p>Distribution of infection time for the individual labelled ‘1’:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">a=<span class="kw"><a href="../reference/getInfectionTimeDist.html">getInfectionTimeDist</a></span>(record,<span class="dt">k=</span><span class="st">'1'</span>,<span class="dt">show.plot =</span> T)</a></code></pre></div>
+<p><img src="TransPhylo_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
 </div>
   </div>
 

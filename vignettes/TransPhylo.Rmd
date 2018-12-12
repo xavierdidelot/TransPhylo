@@ -118,7 +118,7 @@ dateT=2008
 The MCMC procedure to infer the transmission tree given the phylogenetic tree can be run as follows:
 
 ```{r,results='hide'}
-record<-inferTTree(ptree,mcmcIterations=100,w.shape=w.shape,w.scale=w.scale,dateT=dateT)
+record<-inferTTree(ptree,mcmcIterations=1000,w.shape=w.shape,w.scale=w.scale,dateT=dateT)
 ```
 
 ## Interpretation of results
@@ -159,4 +159,25 @@ It is also possible to plot a matrix indicating for each pairs of individuals ho
 ```{r}
 mat=computeMatTDist(record)
 lattice::levelplot(mat,xlab='',ylab='')
+```
+
+Plot of sampled and unsampled cases over time:
+```{r}
+a=getIncidentCases(record,show.plot = T)
+```
+
+Distribution of realised generation times:
+```{r}
+a=getGenerationTimeDist(record,show.plot = T)
+```
+
+Distribution of realised sampling times:
+```{r}
+a=getSamplingTimeDist(record,show.plot = T)
+```
+
+Distribution of infection time for the individual labelled '1':
+
+```{r}
+a=getInfectionTimeDist(record,k='1',show.plot = T)
 ```
