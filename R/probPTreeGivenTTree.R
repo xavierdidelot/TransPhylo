@@ -31,7 +31,7 @@ extractSubtree = function(ctree,w)  {
 } 
 
 probSubtree=function(tab,rate)  {
-  #tab(:,1)=times at bottom;tab(:,2)=father;rate=coalescence rate 
+  #tab[,1]=times at bottom;tab[,2]=father;rate=coalescence rate 
   #Return the log-prior probability of a subtree 
   #This is an extension to Eq1 of Drummond et al(2002) Genetics 161:1307-1320 that accounts for condition TMRCA<INCUBATION_PERIOD 
   p <- 0 
@@ -90,5 +90,21 @@ probSubtree=function(tab,rate)  {
   if (length(which(ex==2))!=(length(iso)-1)) print('error: some internal nodes have not been activated twice')
   return(p)
 }
-#probSubtree=memoise(probSubtree0)
+
+probSubtreeLinear=function(tab,rate)  {
+  #tab[,1]=times at bottom;tab[,2]=father;rate=linear growth rate of within-host population 
+  #Return the log-prior probability of a subtree 
+  p <- 0 
+  tab[ ,1] <- tab[ ,1]-min(tab[,1])#convert dates to relative dates
+  isiso <- rep(1, nrow(tab)) 
+  isiso[tab[1:(nrow(tab)-1),2]] <- 0
+  tab[,2]=1-isiso*2
+  tab=tab[order(tab[,1]),]
+  tab[,2]=cumsum(tab[,2])#number of live lineages
+  for (i in 2:(nrow(tab)-1)) {
+    if (tab[i,2]>1) p=p-choose(tab[i,2],2)*(log(tab[i+1,1])-log(tab[i,1]))/rate
+    if (tab[i,2]>tab[i-1,2]) p=p-log(rate*tab[i,1])
+  }
+  return(p)
+}
 

@@ -15,7 +15,7 @@ test_that("Probabilities of a coalescent tree are the same when simulating and e
  fathers=rep(0,nrow(tre))
  for (i in (length(leaves)+1):(nrow(tre)-1)) for (j in 2:3) fathers[tre[i,j]]=i 
  fathers[tre[nrow(tre),2]]=nrow(tre)
- MySort <- sort(tre[,1],index.return = TRUE,decreasing = T);ind<-MySort$ix
+ ind=order(tre[,1],decreasing=T)
  revind=ind;revind[ind]=1:length(ind)
  subtree=cbind(tre[ind,1],c(revind[fathers[ind[1:(length(ind)-1)]]],0))
  p=TransPhylo:::probSubtree(subtree,1.1)
@@ -40,4 +40,13 @@ test_that("Probabilities of coalescence in an outbreak is same when simulation a
   ft<-TransPhylo:::.glueTrees(ttree,wtree)
   ft=list(ctree=ft,nam=as.character(1:n))
   expect_equal(p1,probPTreeGivenTTree(ft,1.1))
+})
+
+test_that("Linear coalescent probability function gives expected result on small example.", {
+  rate=2
+  coaltime=1 #must be between 0 and 2
+  a=TransPhylo:::probSubtreeLinear(cbind(c(3,2,coaltime,0),c(3,3,4,0)),rate)
+  b=1/(rate*coaltime)*exp(-1/rate*(log(2)-log(coaltime)))
+  b=log(b)
+  expect_equal(a,b)
 })

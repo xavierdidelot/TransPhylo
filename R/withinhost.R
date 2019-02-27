@@ -4,7 +4,7 @@
 # @return array of size(2N)*3 where each row is a node,the first column indicate the date of the node and the last two columns indicate the two children. This array has internal nodes sorted in order of most recent to most ancient node(and remains so during the algorithm). The last node corresponds to infection time and only has one child 
 withinhost = function(times,neg)  {
   prob <- 0 
-  MySort <- sort(times,decreasing=TRUE,index.return = TRUE); tim <- MySort$x; ind <- MySort$ix 
+  ind=order(times,decreasing=T);tim=times[ind]
   n <- length(tim) 
   nodes <- cbind(0,ind[1],0);#Start with one node at time 0 and with the first isolate connected to it 
   i <- 2 
