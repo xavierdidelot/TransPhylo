@@ -1,7 +1,7 @@
 context("Test probTTree")
 
 test_that("Probability of a transmission tree is the same when simulating and calculating.", {
-  #Note this test does not work for pi>0 or maxTime<Inf because then there are unsampled cases not accounted for in the calculation of probability within the simulation procedure
+  #Note this test does not work for pi<1 or maxTime<Inf because then there are unsampled cases not accounted for in the calculation of probability within the simulation procedure
   set.seed(0)
   pi=1
   off.r=1

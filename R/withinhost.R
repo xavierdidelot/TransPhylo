@@ -10,8 +10,6 @@ withinhost = function(times,neg)  {
   nodes <- cbind(0,ind[1],0);#Start with one node at time 0 and with the first isolate connected to it 
   i <- 2 
   while (i <= n) {#Graft branches one by one 
-    #r <- -log(runif(1)) * neg 
-    
     curt <- tim[i]
     fi <- which( nodes[ ,1] < curt );fi<-fi[1]
     trunc=0
@@ -26,12 +24,10 @@ withinhost = function(times,neg)  {
     fi <- which( nodes[ ,1] < curt );fi<-fi[1]
     for (j in (seqML(fi,nrow(nodes))))  {
       if (r > (curt-nodes[j,1]) * (i-j))  { 
-        #prob <- prob + log(1-pexp((curt-nodes[j,1]) * (i-j),neg^(-1)))
         r <- r-(curt-nodes[j,1]) * (i-j) 
         curt <- nodes[j,1] 
       } else { 
         curt <- curt-r/(i-j)#Found the time for grafting
-        #prob <- prob + log1overneg-r/neg
         r <- 0 
         break 
       } 
