@@ -25,6 +25,7 @@ simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shap
       mtt<-makeTTree(off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT-dateStartOutbreak,nSampled)
       rejected=rejected+1
       ttree<-mtt$ttree
+      probttree<-mtt$prob
       if (mtt$pruned>0) {
         dateStartOutbreak=dateStartOutbreak+mtt$pruned
         cat(sprintf('Note that simulated outbreak was pruned: in order to have %d sampled by present date %f, the start date was set to %f\n',nSampled,dateT,dateStartOutbreak))
@@ -39,14 +40,17 @@ simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shap
   
   #Create a within-host phylogenetic tree for each infected host
   wtree<-vector('list',n)
+  probwithin=0
   for (i in (1:n)) {
     if (is.na(ttree[i,2])) {times<-c(           ttree[which(ttree[,3]==i),1])-ttree[i,1]}
                       else {times<-c(ttree[i,2],ttree[which(ttree[,3]==i),1])-ttree[i,1]}
-    wtree[[i]]<-withinhost(times,neg)[[1]]
+    a<-withinhost(times,neg)
+    wtree[[i]]=a$nodes
+    probwithin=probwithin+a$prob
   }
   
   #Glue these trees together
   truth<-.glueTrees(ttree,wtree)
   truth[,1]<-truth[,1]+dateStartOutbreak
-  return(list(ctree=truth,nam=mtt$nam))
+  return(list(ctree=truth,nam=mtt$nam,probttree=probttree,probwithin=probwithin))
 }  

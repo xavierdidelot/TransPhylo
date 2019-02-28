@@ -4,27 +4,39 @@
 # @return array of size(2N)*3 where each row is a node,the first column indicate the date of the node and the last two columns indicate the two children. This array has internal nodes sorted in order of most recent to most ancient node(and remains so during the algorithm). The last node corresponds to infection time and only has one child 
 withinhost = function(times,neg)  {
   prob <- 0 
+  #log1overneg=log(1/neg)
   ind=order(times,decreasing=T);tim=times[ind]
   n <- length(tim) 
   nodes <- cbind(0,ind[1],0);#Start with one node at time 0 and with the first isolate connected to it 
   i <- 2 
   while (i <= n) {#Graft branches one by one 
-    r <- -log(runif(1)) * neg 
-    curt <- tim[i];#Current time:start with date of isolate and go back in time until coalescence happens 
-    fi <- which( nodes[ ,1] < curt ) ;fi<-fi[1]
+    #r <- -log(runif(1)) * neg 
+    
+    curt <- tim[i]
+    fi <- which( nodes[ ,1] < curt );fi<-fi[1]
+    trunc=0
+    for (j in (seqML(fi,nrow(nodes))))  {
+        trunc=trunc+(curt-nodes[j,1]) * (i-j) 
+        curt <- nodes[j,1] 
+    }
+    r=rexpT(1/neg,trunc)
+    prob=prob+r$prob
+    r=r$x
+    curt <- tim[i]#Current time:start with date of isolate and go back in time until coalescence happens 
+    fi <- which( nodes[ ,1] < curt );fi<-fi[1]
     for (j in (seqML(fi,nrow(nodes))))  {
       if (r > (curt-nodes[j,1]) * (i-j))  { 
-        prob <- prob + log(1-pexp((curt-nodes[j,1]) * (i-j),neg^(-1)))
+        #prob <- prob + log(1-pexp((curt-nodes[j,1]) * (i-j),neg^(-1)))
         r <- r-(curt-nodes[j,1]) * (i-j) 
         curt <- nodes[j,1] 
       } else { 
-        curt <- curt-r/(i-j);#Found the time for grafting
-        prob <- prob + log(dexp(r,neg^(-1))) 
+        curt <- curt-r/(i-j)#Found the time for grafting
+        #prob <- prob + log1overneg-r/neg
         r <- 0 
         break 
       } 
     } 
-    if (r>0) {next} 
+    if (r>0) print('error: this shound not happen')#{next} 
     #Create new node 
     a <- nodes[ ,2:3];a[a >= j + n] <- a[a >= j + n] + 1;nodes[ ,2:3] <- a;#Renumbering according to table insertion in next line 
     nodes <- rbind(nodes[seqML(1,j-1), ],c(curt,ind[i],0),nodes[seqML(j,nrow(nodes)),]) 
@@ -51,3 +63,9 @@ withinhost = function(times,neg)  {
 
 seqML <- function(from, to, by=1) {if (from > to) integer(0) else seq.int(from, to, by)}
 
+#truncated exponential distribution
+rexpT = function(rate,trunc) {
+  x=-log(1-runif(1)*(1-exp(-rate*trunc)))/rate
+  prob=log(rate)-rate*x-log(1-exp(-rate*trunc))
+  return(list(x=x,prob=prob))
+}

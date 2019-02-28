@@ -83,7 +83,7 @@
       <h1>Tutorial introducing the R package TransPhylo</h1>
                         <h4 class="author">Xavier Didelot</h4>
             
-            <h4 class="date">2018-12-12</h4>
+            <h4 class="date">2019-02-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/xavierdidelot/TransPhylo/blob/master/vignettes/TransPhylo.Rmd"><code>vignettes/TransPhylo.Rmd</code></a></small>
       <div class="hidden name"><code>TransPhylo.Rmd</code></div>
@@ -168,7 +168,7 @@
 <a class="sourceLine" id="cb19-2" data-line-number="2">mcmc=<span class="kw"><a href="../reference/convertToCoda.html">convertToCoda</a></span>(record)</a>
 <a class="sourceLine" id="cb19-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/effectiveSize">effectiveSize</a></span>(mcmc)</a></code></pre></div>
 <pre><code>##        pi       neg         R 
-##  4.265306 20.670318  5.925520</code></pre>
+##  5.562202 17.836008  9.250795</code></pre>
 <p>A consensus transmission tree can be built as follows:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">cons=<span class="kw"><a href="../reference/consTTree.html">consTTree</a></span>(record)</a>
 <a class="sourceLine" id="cb21-2" data-line-number="2"><span class="kw"><a href="../reference/plotTTree.html">plotTTree</a></span>(cons,w.shape,w.scale)</a></code></pre></div>
