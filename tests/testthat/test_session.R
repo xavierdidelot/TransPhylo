@@ -48,4 +48,20 @@ test_that("Typical session can be run.", {
    expect_is(a,'numeric')
 })
 
+test_that("Inference with multiple trees runs", {
+  set.seed(0)
+  neg=100/365
+  off.r=5
+  w.shape=10
+  w.scale=0.1
+  pi=0.25
+  dateT=2008
+  simu=simulateOutbreak(neg=neg,pi=pi,off.r=off.r,w.shape=w.shape,
+  w.scale=w.scale,dateStartOutbreak=2005,dateT=dateT)
+  ptree=extractPTree(simu)
+  expect_is(capture.output(rec<-infer_multittree_share_param(list(ptree),mcmcIterations=100,w.shape=w.shape,w.scale=w.scale,dateT=dateT)),'character')
+  expect_is(rec,'list')
+})
+
+
 

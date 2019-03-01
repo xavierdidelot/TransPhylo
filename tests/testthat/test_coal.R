@@ -1,8 +1,9 @@
 context("Test coalescent functions")
 
 test_that("Coalescent probability function gives expected result on small example.", {
-  a=TransPhylo:::probSubtree(cbind(c(2010+1e-10,2010+2e-10,2010,2009,2008,0),c(4,4,5,5,6,0)),2)
-  b=dexp(1,3/2,T)+dexp(1,1/2,T)+log(1/3)
+  neg=2.1
+  a=TransPhylo:::probSubtree(cbind(c(2010+1e-10,2010+2e-10,2010,2009,2008,0),c(4,4,5,5,6,0)),neg)
+  b=dexp(1,choose(3,2)/neg,T)+dexp(1,choose(2,2)/neg,T)+log(1/3)
   expect_equal(a,b)
 })
 
@@ -73,9 +74,30 @@ test_that("Probabilities of an outbreak is same when simulation and evaluating."
 
 test_that("Linear coalescent probability function gives expected result on small example.", {
   rate=2.2
-  coaltime=1.2 #must be between 0 and 2
+  coaltime=1 #must be between 0 and 2
   a=TransPhylo:::probSubtreeLinear(cbind(c(3,2,coaltime,0),c(3,3,4,0)),rate)
-  b=1/(rate*coaltime)*exp(-1/rate*(log(2)-log(coaltime)))
+  b=1/(rate*coaltime)*exp(-1/rate*(log(rate*2)-log(rate*coaltime)))
   b=log(b)
   expect_equal(a,b)
+})
+
+test_that("Linear coalescent probability function gives expected result on tree with rescaled time.", {
+  rate=1.1#rate of growth
+  pres=10
+  coal=pres-1.2
+  tree=cbind(c(pres+1e-10,pres,coal,0),c(3,3,4,0))
+  b=dexp(pres-coal,choose(2,2),T)#probability of unscaled tree
+  b=b+log(exp(rate*(pres-coal)))
+  tree2=tree
+  tree2[3,1]=pres-(1-exp(-(pres-coal)*rate))/rate
+  tree2[4,1]=pres-1/rate
+  a=TransPhylo:::probSubtreeLinear(tree2,rate)
+  expect_equal(a,b)
+})
+
+test_that("Can calculate probability of a within-host linear tree.",{
+  rate=1.1
+  expect_silent(tree<-TransPhylo:::withinhostLinear(10:1,1/rate)[[1]])
+  expect_silent(a<-TransPhylo:::probSubtreeLinear(tree,rate))
+  expect_is(a,'numeric')
 })

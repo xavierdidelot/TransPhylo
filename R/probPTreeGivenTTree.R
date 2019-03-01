@@ -103,7 +103,7 @@ probSubtreeLinear=function(tab,rate)  {
   tab[,2]=cumsum(tab[,2])#number of live lineages
   for (i in 2:(nrow(tab)-1)) {
     if (tab[i,2]>1) p=p-choose(tab[i,2],2)*(log(tab[i+1,1])-log(tab[i,1]))/rate
-    if (tab[i,2]>tab[i-1,2]) p=p-log(rate*tab[i,1])
+    if (tab[i,2]>tab[i-1,2]) p=p-log(rate*tab[i,1])#-log(choose(tab[i,2],2))
   }
   return(p)
 }
