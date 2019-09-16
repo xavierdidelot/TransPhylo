@@ -4,6 +4,8 @@
 #' @return phylogenetic tree
 #' @export
 ptreeFromPhylo <- function(tr,dateLastSample) {
+  if (dateLastSample>1900 && dateLastSample<2100 && sum(tr$edge.length)<1)
+    warning('Warning: input tree has small branch lengths. This needs to be a timed tree in the same unit as dateLastSample (eg years).\n')
   n<-length(tr$tip.label)
   ed<-tr$edge
   le<-tr$edge.length
