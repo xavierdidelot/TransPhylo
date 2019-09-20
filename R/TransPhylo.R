@@ -16,8 +16,6 @@
 #' @seealso https://github.com/xavierdidelot/TransPhylo
 
 #' @importFrom Rcpp evalCpp
-#' @importFrom utils setTxtProgressBar txtProgressBar head
-#' @importFrom grDevices gray gray.colors palette rainbow
 #' @useDynLib TransPhylo
 #' @import stats
 #' @import graphics

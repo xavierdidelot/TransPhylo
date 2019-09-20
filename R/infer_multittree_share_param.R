@@ -191,7 +191,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
                      neg=neg_lst, off.r=off.r_lst, off.p=off.p_lst, pi=pi_lst)
   
   #Main MCMC loop
-  pb <- txtProgressBar(min=0,max=mcmcIterations,style = 3)
+  pb <- utils::txtProgressBar(min=0,max=mcmcIterations,style = 3)
   for (i in 1:mcmcIterations) {
     
     # Update shared parameters
@@ -209,7 +209,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
     
     if (i%%thinning == 0) {
       #Record things 
-      setTxtProgressBar(pb, i)
+      utils::setTxtProgressBar(pb, i)
       for(k in seq_along(ctree_lst)){
         record[[k]][[i/thinning]]$ctree <- state_new[[k]]$ctree
         record[[k]][[i/thinning]]$pTTree <- state_new[[k]]$pTTree 

@@ -31,7 +31,7 @@ plotTTree = function(ttree,w.shape,w.scale,showLabels=TRUE,maxTime=NA) {
     as=seq(ttree[i,1],ma,xstep)
     bs=rep(ys[i],length(as))
     cs=abs((maxcol-dgamma(as-ttree[i,1],shape=w.shape,scale=w.scale))/maxcol)
-    cs=gray(cs)
+    cs=grDevices::gray(cs)
     segments(as,bs,x1=as+xstep,col=cs)
     points(ttree[i,2],ys[i],col = 'red') 
     if (showLabels) text(ma+(ma-mi)*0.05,ys[i],nam[i])

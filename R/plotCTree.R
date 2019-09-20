@@ -16,8 +16,8 @@ plotCTree = function(tree,showLabels=TRUE,cols=NA,maxTime=NA)  {
   plot(0,0,type='l',xlim=c(min(tree[,1]),ifelse(is.na(maxTime),max(tree[,1]),maxTime)),ylim=c(0,nsam+1),xlab='',ylab='')
   host <- tree[ ,4] 
   if (ntot>1) {
-      if (is.na(cols[1])) palette(rainbow(min(1024,ntot)))#Need as many unique colors as there are hosts. If there are more than 1024 hosts, colors are recycled.
-    else palette(cols)
+      if (is.na(cols[1])) grDevices::palette(grDevices::rainbow(min(1024,ntot)))#Need as many unique colors as there are hosts. If there are more than 1024 hosts, colors are recycled.
+    else grDevices::palette(cols)
     }
   
   #Determine ys for leaves

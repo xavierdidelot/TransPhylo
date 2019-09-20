@@ -10,7 +10,7 @@ proposal = function(tree)  {
 #MOVE1: Add a new transmission event
 move1 = function(tree) {
   fathers <- rep(NA, nrow(tree));fathers[tree[ ,2:3] + 1] <- 1:nrow(tree);fathers <- fathers[-1] 
-  totbralen=sum(head(tree[,1],-2)-head(tree[fathers,1],-1))
+  totbralen=sum(utils::head(tree[,1],-2)-utils::head(tree[fathers,1],-1))
   if (totbralen==0) return(list(tree=tree,qr=1))
   loc=runif(1)*totbralen
   bra=1
@@ -34,7 +34,7 @@ move2 = function(tree) {
   #Choose a transmission event that can be removed
   host <- tree[ ,4]
   fathers <- rep(NA, nrow(tree));fathers[tree[ ,2:3] + 1] <- 1:nrow(tree);fathers <- fathers[-1] 
-  totbralen=sum(head(tree[,1],-2)-head(tree[fathers,1],-1))
+  totbralen=sum(utils::head(tree[,1],-2)-utils::head(tree[fathers,1],-1))
   w=0
   while (w==0||w==nrow(tree)||(infector<=nsam && infected<=nsam)){
     w<-which( tree[ ,2] > 0&tree[ ,3] == 0 )

@@ -45,7 +45,7 @@ plotTTree2 = function(ttree,showLabels=TRUE,showMissingLinks=0) {
   mi=min(ttree[which(!is.na(ttree[,1])),1])
   ma=max(ttree[which(!is.na(ttree[,1])),1])
   plot(c(),c(),xlim=c(mi-(ma-mi)*0.05,ma+(ma-mi)*0.05),ylim=c(0,n+1),xlab='',ylab='')
-  pal=gray.colors(max(ttree[,4]))
+  pal=grDevices::gray.colors(max(ttree[,4]))
   for (i in 1:n) {
     if (ttree[i,3]!=0) {
       dircol=pal[ttree[i,4]]
