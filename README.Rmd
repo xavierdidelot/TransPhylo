@@ -16,6 +16,7 @@ set.seed(0)
 
 [![Travis-CI Build Status](https://travis-ci.com/xavierdidelot/TransPhylo.svg?branch=master)](https://travis-ci.com/xavierdidelot/TransPhylo)
 [![codecov](https://codecov.io/gh/xavierdidelot/TransPhylo/branch/master/graph/badge.svg)](https://codecov.io/gh/xavierdidelot/TransPhylo)
+![GitHub](https://img.shields.io/github/license/xavierdidelot/TransPhylo)
 
 
 # Introduction
