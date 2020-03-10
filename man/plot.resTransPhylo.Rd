@@ -4,10 +4,12 @@
 \alias{plot.resTransPhylo}
 \title{Plotting methods}
 \usage{
-\method{plot}{resTransPhylo}(x, type = "tree", show.axis = T, ...)
+\method{plot}{resTransPhylo}(x, ...)
 }
 \arguments{
 \item{x}{Output from inferTTree}
+
+\item{...}{Additional parameters are passed on}
 }
 \value{
 Plot of TransPhylo results

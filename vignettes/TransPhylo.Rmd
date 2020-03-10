@@ -5,7 +5,7 @@ date: '`r Sys.Date()`'
 output: html_document
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Tutorial introducing the R package TransPhylo}
+  %\VignetteIndexEntry{Introducing the R package TransPhylo}
   %\usepackage[utf8]{inputenc}
 ---
 

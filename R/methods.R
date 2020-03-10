@@ -1,17 +1,19 @@
 #' Plotting methods
 #' @param x Output from inferTTree
+#' @param ... Additional parameters are passed on
 #' @return Plot of TransPhylo results
 #' @export
-plot.resTransPhylo = function(x, type='tree', show.axis=T, ...) {
+plot.resTransPhylo = function(x,...) {
   stopifnot(inherits(x, "resTransPhylo"))
   plotTraces(x)
 }
 
 #' Print function for resTransPhylo objects
 #' @param x output from inferTTree
+#' @param ... Additional parameters are passed on
 #' @return Print out details of TransPhylo results
 #' @export
-print.resTransPhylo <- function(x)
+print.resTransPhylo <- function(x, ...)
 {
   stopifnot(inherits(x, "resTransPhylo"))
   cat( 'Result from TransPhylo analysis\n')

@@ -4,10 +4,12 @@
 \alias{print.resTransPhylo}
 \title{Print function for resTransPhylo objects}
 \usage{
-\method{print}{resTransPhylo}(x)
+\method{print}{resTransPhylo}(x, ...)
 }
 \arguments{
 \item{x}{output from inferTTree}
+
+\item{...}{Additional parameters are passed on}
 }
 \value{
 Print out details of TransPhylo results
