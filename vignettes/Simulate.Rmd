@@ -1,0 +1,76 @@
+---
+title: "Simulation of outbreak data"
+author: "Xavier Didelot"
+date: '`r Sys.Date()`'
+output: html_document
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Tutorial introducing the R package TransPhylo}
+  %\usepackage[utf8]{inputenc}
+---
+
+
+If you want to reproduce exactly the same results as the ones shown in this tutorial, you need to set the seed of your random number generator to zero:
+```{r}
+library(TransPhylo)
+set.seed(0)
+```
+
+A pathogen has an effective within-host population size of $N_e=100$ and a generation time $g=1$ day, so that $N_e g=100/365$ year. The offspring distribution is negative binomial with mean equal to the basic reproduction number $R=5$. Both the generation time and the sampling time are Gamma distributed with parameters (10,0.1) which has a mean of 1 year. The density of sampling is $\pi=0.25$. The following commands specify these parameters:
+```{r}
+neg=100/365
+off.r=5
+w.shape=10
+w.scale=0.1
+pi=0.25
+```
+
+We simulate an outbreak that starts in 2005 and which and is observed up to 2008:
+
+```{r}
+simu <- simulateOutbreak(neg=neg,pi=pi,off.r=off.r,w.shape=w.shape,
+                         w.scale=w.scale,dateStartOutbreak=2005,dateT=2008)
+```
+
+This simulation contains both the transmission tree between infected hosts and the within-host phylogenetic tree of each host. This can be visualised as a colored phlogenetic tree, where each host is represented by a unique color:
+
+```{r}
+plotCTree(simu)
+```
+
+The transmission tree can be extracted and plotted separately from the phylogeny:
+
+```{r}
+ttree<-extractTTree(simu)
+plotTTree(ttree,w.shape,w.scale)
+```
+
+The phylogenetic tree can be extracted and converted into a phylo object from the ape package:
+
+```{r}
+library(ape)
+ptree<-extractPTree(simu)
+p<-phyloFromPTree(ptree)
+plot(p)
+axisPhylo()
+```
+
+You can save this tree into a Newick file for further analysis. This is the tree that is used as the starting poit of the tutorial on inference of a transmission tree from a dated phylogeny.
+
+```{r eval=F} 
+write.tree(p,'tree.nwk',append = F)
+```
+
+The content of this Newick file is:
+
+```{r}
+write.tree(p,'')
+```
+
+This phylogeny is scaled in years, but time is measured only relatively to the 
+date of the last sample which is at 0 on the x-axis of the figure above. To use this tree
+again we also need to know exactly when was the last sample taken:
+
+```{r}
+print(max(simu$ctree[,1]))
+```

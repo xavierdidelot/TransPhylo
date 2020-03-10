@@ -112,5 +112,6 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=w.shape, ws.scale=w.
   }#End of main MCMC loop
   
   #close(pb)
+  class(record)<-'resTransPhylo'
   return(record)
 }

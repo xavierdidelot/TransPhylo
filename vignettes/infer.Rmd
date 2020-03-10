@@ -1,0 +1,110 @@
+---
+title: "Inference of transmission tree from a dated phylogeny"
+author: "Xavier Didelot"
+date: '`r Sys.Date()`'
+output: html_document
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Tutorial introducing the R package TransPhylo}
+  %\usepackage[utf8]{inputenc}
+---
+
+
+If you want to reproduce exactly the same results as the ones shown in this tutorial, you need to set the seed of your random number generator to zero:
+```{r}
+library(TransPhylo)
+set.seed(0)
+```
+
+## Inference of transmission tree from a dated phylogeny
+
+This tutorial illustrates the main functionality of TransPhylo, which is to infer a transmission tree given a dated phylogeny. We will use the same dated phylogeny tree that was generated in the tutorial on simulations:
+
+```{r}
+library(ape)
+phy<-read.tree(text='(((2:0.007344035611,6:0.656820028):0.7562780805,3:1.643413444):1.293120815,((5:1.519248672,1:1.231048819):0.303038892,4:1.257652937):0.784065883);')
+```
+
+Because such a phylogeny is timed relatively and not absolutely, we also need to indicate when the last sample was taken, which in the simulation above was equal to 2007.964:
+
+```{r}
+ptree<-ptreeFromPhylo(phy,dateLastSample=2007.964)
+```
+
+TransPhylo also needs to know the parameters of the Gamma distribution representing the generation time. In the simulation above we assumed that these parameters were equal to (10,0.1), and so this is what we specify below. However, if you are using your own data, you should set these values to something sensible for your pathogen of interest.
+```{r}
+w.shape=10
+w.scale=0.1
+```
+
+Finally TransPhylo needs to know the time at which observation of cases stopped. In the simulation above this was equal to 2008, and so this is what we specify below. However, if you are using your own data, you should set this equal to the date when observation stopped for your outbreak of interest. It might be today's date if you are doing a real-time genomic epidemiology investigation. It can even be set equal to `Inf` if you are confident that the outbreak is finished and that there will be no cases in the future, for example if you are analysing an old outbreak which is clearly finished.
+```{r}
+dateT=2008
+```
+
+The MCMC procedure to infer the transmission tree given the phylogenetic tree can be run as follows:
+
+```{r,results='hide'}
+record<-inferTTree(ptree,mcmcIterations=1000,w.shape=w.shape,w.scale=w.scale,dateT=dateT)
+```
+
+## Interpretation of results
+
+The last command returned a record of all MCMC iterations. This is what the transmission tree looks like at the end of the MCMC:
+
+```{r}
+lastIteration<-record[[length(record)]]
+plotCTree(lastIteration$ctree)
+```
+
+Traces of the MCMC can be plotted as follows:
+
+```{r}
+plotTraces(record)
+```
+
+Further assessment of the MCMC convergence and mixing can be obtained using the CODA package, for example to obtain the effective sample size of paramaters as follows:
+```{r}
+library(coda)
+mcmc=convertToCoda(record)
+effectiveSize(mcmc)
+```
+
+A consensus transmission tree can be built as follows:
+```{r}
+cons=consTTree(record)
+plotTTree(cons,w.shape,w.scale)
+```
+
+A matrix of probability of direct transmission for all pairs of individuals can be drawn as follows:
+```{r}
+mat=computeMatWIW(record)
+lattice::levelplot(mat,xlab='',ylab='')
+```
+
+It is also possible to plot a matrix indicating for each pairs of individuals how many intermediates there are in the transmission chain:
+```{r}
+mat=computeMatTDist(record)
+lattice::levelplot(mat,xlab='',ylab='')
+```
+
+Plot of sampled and unsampled cases over time:
+```{r}
+a=getIncidentCases(record,show.plot = T)
+```
+
+Distribution of realised generation times:
+```{r}
+a=getGenerationTimeDist(record,show.plot = T)
+```
+
+Distribution of realised sampling times:
+```{r}
+a=getSamplingTimeDist(record,show.plot = T)
+```
+
+Distribution of infection time for the individual labelled '1':
+
+```{r}
+a=getInfectionTimeDist(record,k='1',show.plot = T)
+```
