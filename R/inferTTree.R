@@ -27,6 +27,7 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=w.shape, ws.scale=w.
 #  memoise::forget(getOmegabar)
 #  memoise::forget(probSubtree)
   ptree$ptree[,1]=ptree$ptree[,1]+runif(nrow(ptree$ptree))*1e-10#Ensure that all leaves have unique times
+  if (dateT<dateLastSample(ptree)) stop('The parameter dateT cannot be smaller than the date of last sample')
   for (i in (ceiling(nrow(ptree$ptree)/2)+1):nrow(ptree$ptree)) for (j in 2:3) 
     if (ptree$ptree[ptree$ptree[i,j],1]-ptree$ptree[i,1]<0) 
       stop("The phylogenetic tree contains negative branch lengths!")
@@ -67,6 +68,7 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=w.shape, ws.scale=w.
     #Metropolis update for transmission tree 
     prop <- proposal(ctree$ctree) 
     ctree2 <- list(ctree=prop$tree,nam=ctree$nam)
+    class(ctree2)<-'ctree'
     ttree2 <- extractTTree(ctree2)
     pTTree2 <- probTTree(ttree2$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT) 
     pPTree2 <- probPTreeGivenTTree(ctree2,neg) 

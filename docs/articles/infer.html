@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.5</span>
       </span>
     </div>
 
@@ -128,8 +128,8 @@
 <h2 class="hasAnchor">
 <a href="#interpretation-of-results" class="anchor"></a>Interpretation of results</h2>
 <p>The last command returned a record of all MCMC iterations. This is what the transmission tree looks like at the end of the MCMC:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">lastIteration&lt;-res[[<span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(res)]]</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw"><a href="../reference/plotCTree.html">plotCTree</a></span>(lastIteration<span class="op">$</span>ctree)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">last=<span class="kw"><a href="../reference/extractCTree.html">extractCTree</a></span>(res,<span class="dv">1000</span>)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(last)</a></code></pre></div>
 <p><img src="infer_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>Traces of the MCMC can be plotted as follows:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(res)</a></code></pre></div>
@@ -142,7 +142,7 @@
 ##  5.562202 17.836008  9.250795</code></pre>
 <p>A consensus transmission tree can be built as follows:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">cons=<span class="kw"><a href="../reference/consTTree.html">consTTree</a></span>(res)</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(cons,w.shape,w.scale)</a></code></pre></div>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(cons,<span class="dt">type=</span><span class="st">'detailed'</span>,w.shape,w.scale)</a></code></pre></div>
 <p><img src="infer_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <p>A matrix of probability of direct transmission for all pairs of individuals can be drawn as follows:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">mat=<span class="kw"><a href="../reference/computeMatWIW.html">computeMatWIW</a></span>(res)</a>

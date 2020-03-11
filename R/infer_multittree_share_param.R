@@ -64,6 +64,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
       #Metropolis update for transmission tree 
       prop <- proposal(ctree$ctree)
       ctree2 <- list(ctree=prop$tree,nam=ctree$nam)
+      class(ctree2)<-'ctree'
       ttree2 <- extractTTree(ctree2)
       pTTree2 <- probTTree(ttree2$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT) 
       pPTree2 <- probPTreeGivenTTree(ctree2,neg) 
@@ -233,6 +234,6 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
     mcmc_state <- purrr::transpose(state_new)
 
   }#End of main MCMC loop
-
+  class(record)<-'resTransPhylo'
   return(record)
 }

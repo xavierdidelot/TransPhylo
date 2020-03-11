@@ -56,8 +56,8 @@ res<-inferTTree(ptree,mcmcIterations=1000,w.shape=w.shape,w.scale=w.scale,dateT=
 The last command returned a record of all MCMC iterations. This is what the transmission tree looks like at the end of the MCMC:
 
 ```{r}
-lastIteration<-res[[length(res)]]
-plotCTree(lastIteration$ctree)
+last=extractCTree(res,1000)
+plot(last)
 ```
 
 Traces of the MCMC can be plotted as follows:
@@ -76,7 +76,7 @@ effectiveSize(mcmc)
 A consensus transmission tree can be built as follows:
 ```{r}
 cons=consTTree(res)
-plot(cons,w.shape,w.scale)
+plot(cons,type='detailed',w.shape,w.scale)
 ```
 
 A matrix of probability of direct transmission for all pairs of individuals can be drawn as follows:

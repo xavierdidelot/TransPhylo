@@ -42,7 +42,13 @@ The transmission tree can be extracted and plotted separately from the phylogeny
 
 ```{r}
 ttree<-extractTTree(simu)
-plot(ttree,w.shape,w.scale)
+plot(ttree)
+```
+
+A more detailed plot can be displayed as follows:
+
+```{r}
+plot(ttree,type='detailed',w.shape,w.scale)
 ```
 
 The phylogenetic tree can be extracted and plotted separately from the transmission tree:
@@ -64,7 +70,7 @@ axisPhylo()
 You can save this tree into a Newick file for further analysis. This is the tree that is used as the starting poit of the tutorial on inference of a transmission tree from a dated phylogeny.
 
 ```{r eval=F} 
-write.tree(p,'tree.nwk',append = F)
+write.tree(p,'tree.nwk')
 ```
 
 The content of this Newick file is:
@@ -78,5 +84,5 @@ date of the last sample which is at 0 on the x-axis of the figure above. To use 
 again we also need to know exactly when was the last sample taken:
 
 ```{r}
-print(max(simu$ctree[,1]))
+dateLastSample(simu)
 ```

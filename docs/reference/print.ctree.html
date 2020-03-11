@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Converts an ape phylo object into a phylogenetic tree — ptreeFromPhylo • TransPhylo</title>
+<title>Print function for ctree objects — print.ctree • TransPhylo</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Converts an ape phylo object into a phylogenetic tree — ptreeFromPhylo" />
-<meta property="og:description" content="Converts an ape phylo object into a phylogenetic tree" />
+<meta property="og:title" content="Print function for ctree objects — print.ctree" />
+<meta property="og:description" content="Print function for ctree objects" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -126,33 +126,34 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Converts an ape phylo object into a phylogenetic tree</h1>
-    <small class="dont-index">Source: <a href='https://github.com/xavierdidelot/TransPhylo/blob/master/R/ptreeFromPhylo.R'><code>R/ptreeFromPhylo.R</code></a></small>
-    <div class="hidden name"><code>ptreeFromPhylo.Rd</code></div>
+    <h1>Print function for ctree objects</h1>
+    <small class="dont-index">Source: <a href='https://github.com/xavierdidelot/TransPhylo/blob/master/R/methods.R'><code>R/methods.R</code></a></small>
+    <div class="hidden name"><code>print.ctree.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Converts an ape phylo object into a phylogenetic tree</p>
+    <p>Print function for ctree objects</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ptreeFromPhylo</span>(<span class='no'>tr</span>, <span class='no'>dateLastSample</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for ctree</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>tr</th>
-      <td><p>phylo object</p></td>
+      <th>x</th>
+      <td><p>Object of class ctree, ie a colored phylogenetic tree</p></td>
     </tr>
     <tr>
-      <th>dateLastSample</th>
-      <td><p>date of the last sample</p></td>
+      <th>...</th>
+      <td><p>Additional parameters are passed on</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>phylogenetic tree</p>
+    <p>Print out details of the ctree</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

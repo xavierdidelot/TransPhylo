@@ -60,6 +60,7 @@ makeCtreeFromPTree = function(ptree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,w.
       try=try+1
       ctree2 <- move1(ft$ctree)$tree
       ctree2=list(ctree=ctree2,nam=nam)
+      class(ctree2)<-'ctree'
       pTTree2 <- probTTree((extractTTree(ctree2))$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,T) 
       pPTree2 <- probPTreeGivenTTree(ctree2,neg) 
       if (pTTree2 + pPTree2>pTTree+pPTree)  { 
