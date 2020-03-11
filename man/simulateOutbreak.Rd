@@ -37,6 +37,3 @@ Combined phylogenetic and transmission tree
 \description{
 Simulate an outbreak
 }
-\examples{
-plotCTree(simulateOutbreak())
-}

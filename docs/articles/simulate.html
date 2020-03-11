@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.4</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
       <h1>Simulation of outbreak data</h1>
                         <h4 class="author">Xavier Didelot</h4>
             
-            <h4 class="date">2020-03-10</h4>
+            <h4 class="date">2020-03-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/xavierdidelot/TransPhylo/blob/master/vignettes/Simulate.Rmd"><code>vignettes/Simulate.Rmd</code></a></small>
       <div class="hidden name"><code>Simulate.Rmd</code></div>
@@ -113,26 +113,29 @@
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">simu &lt;-<span class="st"> </span><span class="kw"><a href="../reference/simulateOutbreak.html">simulateOutbreak</a></span>(<span class="dt">neg=</span>neg,<span class="dt">pi=</span>pi,<span class="dt">off.r=</span>off.r,<span class="dt">w.shape=</span>w.shape,</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">                         <span class="dt">w.scale=</span>w.scale,<span class="dt">dateStartOutbreak=</span><span class="dv">2005</span>,<span class="dt">dateT=</span><span class="dv">2008</span>)</a></code></pre></div>
 <p>This simulation contains both the transmission tree between infected hosts and the within-host phylogenetic tree of each host. This can be visualised as a colored phlogenetic tree, where each host is represented by a unique color:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="../reference/plotCTree.html">plotCTree</a></span>(simu)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(simu)</a></code></pre></div>
 <p><img src="simulate_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <p>The transmission tree can be extracted and plotted separately from the phylogeny:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">ttree&lt;-<span class="kw"><a href="../reference/extractTTree.html">extractTTree</a></span>(simu)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="../reference/plotTTree.html">plotTTree</a></span>(ttree,w.shape,w.scale)</a></code></pre></div>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(ttree,w.shape,w.scale)</a></code></pre></div>
 <p><img src="simulate_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-<p>The phylogenetic tree can be extracted and converted into a phylo object from the ape package:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ape)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">ptree&lt;-<span class="kw"><a href="../reference/extractPTree.html">extractPTree</a></span>(simu)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">p&lt;-<span class="kw"><a href="../reference/phyloFromPTree.html">phyloFromPTree</a></span>(ptree)</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(p)</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/pkg/ape/man/axisPhylo.html">axisPhylo</a></span>()</a></code></pre></div>
+<p>The phylogenetic tree can be extracted and plotted separately from the transmission tree:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">ptree&lt;-<span class="kw"><a href="../reference/extractPTree.html">extractPTree</a></span>(simu)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(ptree)</a></code></pre></div>
 <p><img src="simulate_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p>The extracted phylogenetic tree can also be converted into a phylo object from the ape package:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ape)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">p&lt;-<span class="kw"><a href="../reference/phyloFromPTree.html">phyloFromPTree</a></span>(ptree)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(p)</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/pkg/ape/man/axisPhylo.html">axisPhylo</a></span>()</a></code></pre></div>
+<p><img src="simulate_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>You can save this tree into a Newick file for further analysis. This is the tree that is used as the starting poit of the tutorial on inference of a transmission tree from a dated phylogeny.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/pkg/ape/man/write.tree.html">write.tree</a></span>(p,<span class="st">'tree.nwk'</span>,<span class="dt">append =</span> F)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/pkg/ape/man/write.tree.html">write.tree</a></span>(p,<span class="st">'tree.nwk'</span>,<span class="dt">append =</span> F)</a></code></pre></div>
 <p>The content of this Newick file is:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/pkg/ape/man/write.tree.html">write.tree</a></span>(p,<span class="st">''</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/pkg/ape/man/write.tree.html">write.tree</a></span>(p,<span class="st">''</span>)</a></code></pre></div>
 <pre><code>## [1] "(((2:0.007344035611,6:0.656820028):0.7562780805,3:1.643413444):1.293120815,((5:1.519248672,1:1.231048819):0.303038892,4:1.257652937):0.784065883);"</code></pre>
 <p>This phylogeny is scaled in years, but time is measured only relatively to the date of the last sample which is at 0 on the x-axis of the figure above. To use this tree again we also need to know exactly when was the last sample taken:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(simu<span class="op">$</span>ctree[,<span class="dv">1</span>]))</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(simu<span class="op">$</span>ctree[,<span class="dv">1</span>]))</a></code></pre></div>
 <pre><code>## [1] 2007.964</code></pre>
   </div>
 

@@ -1,4 +1,4 @@
-#' Plotting methods
+#' Plotting for resTransPhylo
 #' @param x Output from inferTTree
 #' @param ... Additional parameters are passed on
 #' @return Plot of TransPhylo results
@@ -6,6 +6,38 @@
 plot.resTransPhylo = function(x,...) {
   stopifnot(inherits(x, "resTransPhylo"))
   plotTraces(x)
+}
+
+#' Plotting for ctree
+#' @param x Object of class ctree, ie a colored phylogenetic tree
+#' @param ... Additional parameters are passed on
+#' @return Plot of ctree
+#' @export
+plot.ctree = function(x,...) {
+  stopifnot(inherits(x, "ctree"))
+  plotCTree(x,...)
+}
+
+#' Plotting for ttree
+#' @param x Object of class ttree, ie  a transmission tree
+#' @param ... Additional parameters are passed on
+#' @return Plot of ttree
+#' @export
+plot.ttree = function(x,...) {
+  stopifnot(inherits(x, "ttree"))
+  plotTTree(x,...)
+}
+
+#' Plotting for ptree
+#' @param x Object of class ptree, ie  a phylogenetic tree
+#' @param ... Additional parameters are passed on
+#' @return Plot of ptree
+#' @export
+plot.ptree = function(x,...) {
+  stopifnot(inherits(x, "ptree"))
+  phy=phyloFromPTree(x)
+  ape::plot.phylo(phy,...)
+  ape::axisPhylo()
 }
 
 #' Print function for resTransPhylo objects

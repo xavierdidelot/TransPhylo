@@ -43,8 +43,8 @@ simu2 <- simulateOutbreak(neg=neg, off.r=off.r, pi=pi, w.shape=w.shape,
 
 We plot the combined phylogenetic and transmission trees, each colour represents an infected host, colour changes when there is a transmission event.
 ```{r}
-plotCTree(simu1)
-plotCTree(simu2)
+plot(simu1)
+plot(simu2)
 ```
 
 ## Run single and multiple tree inference algorithm

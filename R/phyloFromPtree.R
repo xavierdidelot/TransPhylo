@@ -25,6 +25,7 @@ phyloFromPTree <- function(ptree) {
     tr$edge.length[iedge]<-ptree[ptree[i,3],1]-ptree[i,1]
     iedge<-iedge+1
   }
+  tr$root.time=min(ptree[,1])
   class(tr)<-'phylo'
   return(tr)
 }

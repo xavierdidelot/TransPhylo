@@ -2,7 +2,7 @@
 % Please edit documentation in R/methods.R
 \name{plot.resTransPhylo}
 \alias{plot.resTransPhylo}
-\title{Plotting methods}
+\title{Plotting for resTransPhylo}
 \usage{
 \method{plot}{resTransPhylo}(x, ...)
 }
@@ -15,5 +15,5 @@
 Plot of TransPhylo results
 }
 \description{
-Plotting methods
+Plotting for resTransPhylo
 }

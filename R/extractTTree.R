@@ -20,5 +20,7 @@ extractTTree = function(ctree)  {
     ttree[i,1] <- ctree[j,1] 
     ttree[i,3] <- host[j] 
   } 
-  return(list(ttree=ttree,nam=nam))
+  l=list(ttree=ttree,nam=nam)
+  class(l)<-'ttree'
+  return(l)
 } 

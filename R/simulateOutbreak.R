@@ -11,8 +11,6 @@
 #' @param dateStartOutbreak Date when index case becomes infected
 #' @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @return Combined phylogenetic and transmission tree
-#' @examples
-#' plotCTree(simulateOutbreak())
 #' @export
 simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scale,dateStartOutbreak=2000,dateT=Inf) {
   #Create a transmission tree with nSampled infected sampled individuals
@@ -52,5 +50,7 @@ simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shap
   #Glue these trees together
   truth<-.glueTrees(ttree,wtree)
   truth[,1]<-truth[,1]+dateStartOutbreak
-  return(list(ctree=truth,nam=mtt$nam,probttree=probttree,probwithin=probwithin))
+  l=list(ctree=truth,nam=mtt$nam,probttree=probttree,probwithin=probwithin)
+  class(l)<-'ctree'
+  return(l)
 }  

@@ -36,5 +36,7 @@ ptreeFromPhylo <- function(tr,dateLastSample) {
     todo=c(todo[-1],ptree[t1,2],ptree[t1,3])
   }
   ptree[,1]=ptree[,1]-max(ptree[,1])+dateLastSample
-  return(list(ptree=ptree,nam=tr$tip.label))
+  l=list(ptree=ptree,nam=tr$tip.label)
+  class(l)<-'ptree'
+  return(l)
 }

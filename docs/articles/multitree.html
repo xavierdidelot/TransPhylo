@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.4</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
       <h1>Simultaneous Inference of Multiple Transmission Trees</h1>
                         <h4 class="author">Yuanwei Xu</h4>
             
-            <h4 class="date">2020-03-10</h4>
+            <h4 class="date">2020-03-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/xavierdidelot/TransPhylo/blob/master/vignettes/multitree.Rmd"><code>vignettes/multitree.Rmd</code></a></small>
       <div class="hidden name"><code>multitree.Rmd</code></div>
@@ -121,9 +121,9 @@
 <a class="sourceLine" id="cb2-12" data-line-number="12">simu2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/simulateOutbreak.html">simulateOutbreak</a></span>(<span class="dt">neg=</span>neg, <span class="dt">off.r=</span>off.r, <span class="dt">pi=</span>pi, <span class="dt">w.shape=</span>w.shape,</a>
 <a class="sourceLine" id="cb2-13" data-line-number="13">                         <span class="dt">w.scale=</span>w.scale, <span class="dt">dateStartOutbreak=</span><span class="dv">2000</span>,<span class="dt">dateT=</span><span class="dv">2005</span>)</a></code></pre></div>
 <p>We plot the combined phylogenetic and transmission trees, each colour represents an infected host, colour changes when there is a transmission event.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="../reference/plotCTree.html">plotCTree</a></span>(simu1)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(simu1)</a></code></pre></div>
 <p><img src="multitree_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="../reference/plotCTree.html">plotCTree</a></span>(simu2)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(simu2)</a></code></pre></div>
 <p><img src="multitree_files/figure-html/unnamed-chunk-1-2.png" width="700"></p>
 </div>
 <div id="run-single-and-multiple-tree-inference-algorithm" class="section level2">

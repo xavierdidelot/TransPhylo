@@ -22,5 +22,7 @@ extractPTree = function(ctree)  {
     tra <- n + 1 
   } 
   ptree <- tree[,1:(ncol(tree)-1),drop=FALSE] 
-  return(list(ptree=ptree,nam=nam))
+  l=list(ptree=ptree,nam=nam)
+  class(l)<-'ptree'
+  return(l)
 } 

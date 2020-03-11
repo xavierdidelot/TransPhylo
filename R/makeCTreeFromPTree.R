@@ -40,7 +40,9 @@ makeCtreeFromPTree = function(ptree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,w.
     for (i in (n+1):nrow(tree)) for (j in (2:3)) if (tree[i,j] > n) tree[i,j] <- n + which( ind == tree[i,j]-n ) 
     tree <- tree[c(1:n,n + ind), ] 
     tree <- cbind(tree,.computeHost(tree)) 
-    return(list(ctree=tree,nam=nam))
+    l=list(ctree=tree,nam=nam)
+    class(l)<-'ctree'
+    return(l)
     
   } else {
 

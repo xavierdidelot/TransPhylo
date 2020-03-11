@@ -172,5 +172,7 @@ consTTree = function(record,burnin=0.5,minimum=0.2,debug=F)
   parents[which(is.na(parents))]=0
   cons[,3]=parents
   cons[1:n,2]=ttree[1:n,2]#copy sampling dates from any ttree
-  return(list(ttree=cons,nam=record[[1]]$ctree$nam))
+  l=list(ttree=cons,nam=record[[1]]$ctree$nam)
+  class(l)<-'ttree'
+  return(l)
 }

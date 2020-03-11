@@ -34,6 +34,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
                       share=NULL,
                       startCTree_lst=rep(NA,length(ptree_lst)),updateTTree=TRUE,optiStart=TRUE,dateT=Inf) {
 
+  if (length(ptree_lst)>=1) for (i in 1:length(ptree_lst)) class(ptree_lst[[i]])<-'list'
   ptree_lst <- purrr::map(ptree_lst, function(x) within(x, ptree[,1] <- ptree[,1]+runif(nrow(ptree))*1e-10))
   #MCMC algorithm
   neg <- startNeg

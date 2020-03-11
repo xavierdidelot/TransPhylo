@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract and return realised generation time distribution — getGenerationTimeDist • TransPhylo</title>
+<title>Plotting for ctree — plot.ctree • TransPhylo</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Extract and return realised generation time distribution — getGenerationTimeDist" />
-<meta property="og:description" content="Extract and return realised generation time distribution" />
+<meta property="og:title" content="Plotting for ctree — plot.ctree" />
+<meta property="og:description" content="Plotting for ctree" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -126,46 +126,34 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract and return realised generation time distribution</h1>
-    <small class="dont-index">Source: <a href='https://github.com/xavierdidelot/TransPhylo/blob/master/R/interpret.R'><code>R/interpret.R</code></a></small>
-    <div class="hidden name"><code>getGenerationTimeDist.Rd</code></div>
+    <h1>Plotting for ctree</h1>
+    <small class="dont-index">Source: <a href='https://github.com/xavierdidelot/TransPhylo/blob/master/R/methods.R'><code>R/methods.R</code></a></small>
+    <div class="hidden name"><code>plot.ctree.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Extract and return realised generation time distribution</p>
+    <p>Plotting for ctree</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getGenerationTimeDist</span>(<span class='no'>record</span>, <span class='kw'>burnin</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>maxi</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>numBins</span> <span class='kw'>=</span> <span class='fl'>20</span>,
-  <span class='kw'>show.plot</span> <span class='kw'>=</span> <span class='no'>F</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for ctree</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>record</th>
-      <td><p>MCMC output produced by inferTTree</p></td>
+      <th>x</th>
+      <td><p>Object of class ctree, ie a colored phylogenetic tree</p></td>
     </tr>
     <tr>
-      <th>burnin</th>
-      <td><p>Proportion of the MCMC output to be discarded as burnin</p></td>
-    </tr>
-    <tr>
-      <th>maxi</th>
-      <td><p>Maximum generation time to consider</p></td>
-    </tr>
-    <tr>
-      <th>numBins</th>
-      <td><p>Number of time bins to compute and display distribution</p></td>
-    </tr>
-    <tr>
-      <th>show.plot</th>
-      <td><p>Show a barplot of the distribution</p></td>
+      <th>...</th>
+      <td><p>Additional parameters are passed on</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Vector of times between becoming infected and infecting others (generation times) in the posterior</p>
+    <p>Plot of ctree</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -35,21 +35,27 @@ simu <- simulateOutbreak(neg=neg,pi=pi,off.r=off.r,w.shape=w.shape,
 This simulation contains both the transmission tree between infected hosts and the within-host phylogenetic tree of each host. This can be visualised as a colored phlogenetic tree, where each host is represented by a unique color:
 
 ```{r}
-plotCTree(simu)
+plot(simu)
 ```
 
 The transmission tree can be extracted and plotted separately from the phylogeny:
 
 ```{r}
 ttree<-extractTTree(simu)
-plotTTree(ttree,w.shape,w.scale)
+plot(ttree,w.shape,w.scale)
 ```
 
-The phylogenetic tree can be extracted and converted into a phylo object from the ape package:
+The phylogenetic tree can be extracted and plotted separately from the transmission tree:
+
+```{r}
+ptree<-extractPTree(simu)
+plot(ptree)
+```
+
+The extracted phylogenetic tree can also be converted into a phylo object from the ape package:
 
 ```{r}
 library(ape)
-ptree<-extractPTree(simu)
 p<-phyloFromPTree(ptree)
 plot(p)
 axisPhylo()
