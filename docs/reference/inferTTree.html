@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
       </span>
     </div>
 
@@ -135,8 +135,9 @@
     <p>Infer transmission tree given a phylogenetic tree</p>
     </div>
 
-    <pre class="usage"><span class='fu'>inferTTree</span>(<span class='no'>ptree</span>, <span class='kw'>w.shape</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>w.scale</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ws.shape</span> <span class='kw'>=</span> <span class='no'>w.shape</span>,
-  <span class='kw'>ws.scale</span> <span class='kw'>=</span> <span class='no'>w.scale</span>, <span class='kw'>mcmcIterations</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>thinning</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+    <pre class="usage"><span class='fu'>inferTTree</span>(<span class='no'>ptree</span>, <span class='kw'>w.shape</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>w.scale</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ws.shape</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>ws.scale</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>w.mean</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>w.std</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>ws.mean</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>ws.std</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>mcmcIterations</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>thinning</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>startNeg</span> <span class='kw'>=</span> <span class='fl'>100</span>/<span class='fl'>365</span>, <span class='kw'>startOff.r</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>startOff.p</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
   <span class='kw'>startPi</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>updateNeg</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>updateOff.r</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>updateOff.p</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>updatePi</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>startCTree</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
@@ -151,19 +152,35 @@
     </tr>
     <tr>
       <th>w.shape</th>
-      <td><p>Shape parameter of the Gamma probability density function representing the generation time</p></td>
+      <td><p>Shape parameter of the Gamma distribution representing the generation time</p></td>
     </tr>
     <tr>
       <th>w.scale</th>
-      <td><p>Scale parameter of the Gamma probability density function representing the generation time</p></td>
+      <td><p>Scale parameter of the Gamma distribution representing the generation time</p></td>
     </tr>
     <tr>
       <th>ws.shape</th>
-      <td><p>Shape parameter of the Gamma probability density function representing the sampling time</p></td>
+      <td><p>Shape parameter of the Gamma distribution representing the sampling time</p></td>
     </tr>
     <tr>
       <th>ws.scale</th>
-      <td><p>Scale parameter of the Gamma probability density function representing the sampling time</p></td>
+      <td><p>Scale parameter of the Gamma distribution representing the sampling time</p></td>
+    </tr>
+    <tr>
+      <th>w.mean</th>
+      <td><p>Mean of the Gamma distribution representing the generation time</p></td>
+    </tr>
+    <tr>
+      <th>w.std</th>
+      <td><p>Std of the Gamma distribution representing the generation time</p></td>
+    </tr>
+    <tr>
+      <th>ws.mean</th>
+      <td><p>Mean of the Gamma distribution representing the sampling time</p></td>
+    </tr>
+    <tr>
+      <th>ws.std</th>
+      <td><p>Std of the Gamma distribution representing the sampling time</p></td>
     </tr>
     <tr>
       <th>mcmcIterations</th>

@@ -72,4 +72,3 @@ getOmegabarR=function(L,dt,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale) {
   }
   return(omegabar)
 }
-#getOmegabarR=memoise(getOmegabarR0)

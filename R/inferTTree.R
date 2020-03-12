@@ -1,9 +1,13 @@
 #' Infer transmission tree given a phylogenetic tree
 #' @param ptree Phylogenetic tree
-#' @param w.shape Shape parameter of the Gamma probability density function representing the generation time
-#' @param w.scale Scale parameter of the Gamma probability density function representing the generation time 
-#' @param ws.shape Shape parameter of the Gamma probability density function representing the sampling time
-#' @param ws.scale Scale parameter of the Gamma probability density function representing the sampling time 
+#' @param w.shape Shape parameter of the Gamma distribution representing the generation time
+#' @param w.scale Scale parameter of the Gamma distribution representing the generation time 
+#' @param ws.shape Shape parameter of the Gamma distribution representing the sampling time
+#' @param ws.scale Scale parameter of the Gamma distribution representing the sampling time 
+#' @param w.mean Mean of the Gamma distribution representing the generation time
+#' @param w.std Std of the Gamma distribution representing the generation time 
+#' @param ws.mean Mean of the Gamma distribution representing the sampling time
+#' @param ws.std Std of the Gamma distribution representing the sampling time 
 #' @param mcmcIterations Number of MCMC iterations to run the algorithm for
 #' @param thinning MCMC thinning interval between two sampled iterations
 #' @param startNeg Starting value of within-host coalescent parameter Ne*g
@@ -20,17 +24,22 @@
 #' @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @return posterior sample set of transmission trees
 #' @export
-inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=w.shape, ws.scale=w.scale, mcmcIterations=1000,
+inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA, 
+                      w.mean=NA,w.std=NA,ws.mean=NA,ws.std=NA,mcmcIterations=1000,
                       thinning=1, startNeg=100/365, startOff.r=1, startOff.p=0.5, startPi=0.5, updateNeg=TRUE,
                       updateOff.r=TRUE, updateOff.p=FALSE, updatePi=TRUE, startCTree=NA, updateTTree=TRUE,
                       optiStart=TRUE, dateT=Inf) {
-#  memoise::forget(getOmegabar)
-#  memoise::forget(probSubtree)
+
   ptree$ptree[,1]=ptree$ptree[,1]+runif(nrow(ptree$ptree))*1e-10#Ensure that all leaves have unique times
   if (dateT<dateLastSample(ptree)) stop('The parameter dateT cannot be smaller than the date of last sample')
   for (i in (ceiling(nrow(ptree$ptree)/2)+1):nrow(ptree$ptree)) for (j in 2:3) 
     if (ptree$ptree[ptree$ptree[i,j],1]-ptree$ptree[i,1]<0) 
       stop("The phylogenetic tree contains negative branch lengths!")
+  
+  if (!is.na( w.mean)&&!is.na( w.std)) { w.shape= w.mean^2/ w.std^2; w.scale= w.std^2/ w.mean}
+  if (!is.na(ws.mean)&&!is.na(ws.std)) {ws.shape=ws.mean^2/ws.std^2;ws.scale=ws.std^2/ws.mean}
+  if (is.na(ws.shape)) ws.shape=w.shape
+  if (is.na(ws.scale)) ws.scale=w.scale
   
   #MCMC algorithm
   neg <- startNeg

@@ -4,8 +4,9 @@
 \alias{inferTTree}
 \title{Infer transmission tree given a phylogenetic tree}
 \usage{
-inferTTree(ptree, w.shape = 2, w.scale = 1, ws.shape = w.shape,
-  ws.scale = w.scale, mcmcIterations = 1000, thinning = 1,
+inferTTree(ptree, w.shape = 2, w.scale = 1, ws.shape = NA,
+  ws.scale = NA, w.mean = NA, w.std = NA, ws.mean = NA,
+  ws.std = NA, mcmcIterations = 1000, thinning = 1,
   startNeg = 100/365, startOff.r = 1, startOff.p = 0.5,
   startPi = 0.5, updateNeg = TRUE, updateOff.r = TRUE,
   updateOff.p = FALSE, updatePi = TRUE, startCTree = NA,
@@ -14,13 +15,21 @@ inferTTree(ptree, w.shape = 2, w.scale = 1, ws.shape = w.shape,
 \arguments{
 \item{ptree}{Phylogenetic tree}
 
-\item{w.shape}{Shape parameter of the Gamma probability density function representing the generation time}
+\item{w.shape}{Shape parameter of the Gamma distribution representing the generation time}
 
-\item{w.scale}{Scale parameter of the Gamma probability density function representing the generation time}
+\item{w.scale}{Scale parameter of the Gamma distribution representing the generation time}
 
-\item{ws.shape}{Shape parameter of the Gamma probability density function representing the sampling time}
+\item{ws.shape}{Shape parameter of the Gamma distribution representing the sampling time}
 
-\item{ws.scale}{Scale parameter of the Gamma probability density function representing the sampling time}
+\item{ws.scale}{Scale parameter of the Gamma distribution representing the sampling time}
+
+\item{w.mean}{Mean of the Gamma distribution representing the generation time}
+
+\item{w.std}{Std of the Gamma distribution representing the generation time}
+
+\item{ws.mean}{Mean of the Gamma distribution representing the sampling time}
+
+\item{ws.std}{Std of the Gamma distribution representing the sampling time}
 
 \item{mcmcIterations}{Number of MCMC iterations to run the algorithm for}
 

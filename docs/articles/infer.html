@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
       <h1>Inference of transmission tree from a dated phylogeny</h1>
                         <h4 class="author">Xavier Didelot</h4>
             
-            <h4 class="date">2020-03-11</h4>
+            <h4 class="date">2020-03-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/xavierdidelot/TransPhylo/blob/master/vignettes/infer.Rmd"><code>vignettes/infer.Rmd</code></a></small>
       <div class="hidden name"><code>infer.Rmd</code></div>
@@ -138,8 +138,8 @@
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(coda)</a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">mcmc=<span class="kw"><a href="../reference/convertToCoda.html">convertToCoda</a></span>(res)</a>
 <a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/pkg/coda/man/effectiveSize.html">effectiveSize</a></span>(mcmc)</a></code></pre></div>
-<pre><code>##        pi       neg         R 
-##  5.562202 17.836008  9.250795</code></pre>
+<pre><code>##        pi       neg     off.r     off.p 
+##  5.562202 17.836008  9.250795  0.000000</code></pre>
 <p>A consensus transmission tree can be built as follows:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">cons=<span class="kw"><a href="../reference/consTTree.html">consTTree</a></span>(res)</a>
 <a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(cons,<span class="dt">type=</span><span class="st">'detailed'</span>,w.shape,w.scale)</a></code></pre></div>

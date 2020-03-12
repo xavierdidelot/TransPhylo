@@ -11,7 +11,7 @@ plotTraces = function(record,burnin=0) {
        xlab='MCMC iterations',type='l')
   plot(sapply(record,function(x) x$neg),ylab='Within-host coalescent rate Ne*g',
        xlab='MCMC iterations',type='l')
-  plot(sapply(record,function(x) x$off.r),ylab='Basic reproduction number R',
+  plot(sapply(record,function(x) x$off.r*(1-x$off.p)/x$off.p),ylab='Basic reproduction number R',
        xlab='MCMC iterations',type='l')
 }
 
@@ -24,8 +24,9 @@ convertToCoda = function(record,burnin=0.5) {
   mat=cbind(
   sapply(record,function(x) x$pi),
   sapply(record,function(x) x$neg),
-  sapply(record,function(x) x$off.r))
-  colnames(mat)<-c('pi','neg','R')
+  sapply(record,function(x) x$off.r),
+  sapply(record,function(x) x$off.p))
+colnames(mat)<-c('pi','neg','off.r','off.p')
   return(coda::as.mcmc(mat))
 }
 
