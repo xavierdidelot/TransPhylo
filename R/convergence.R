@@ -11,7 +11,7 @@ plotTraces = function(record,burnin=0) {
        xlab='MCMC iterations',type='l')
   plot(sapply(record,function(x) x$neg),ylab='Within-host coalescent rate Ne*g',
        xlab='MCMC iterations',type='l')
-  plot(sapply(record,function(x) x$off.r*(1-x$off.p)/x$off.p),ylab='Basic reproduction number R',
+  plot(sapply(record,function(x) x$off.r*x$off.p/(1-x$off.p)),ylab='Basic reproduction number R',
        xlab='MCMC iterations',type='l')
 }
 
