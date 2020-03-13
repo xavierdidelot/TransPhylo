@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.8</span>
       </span>
     </div>
 
@@ -136,8 +136,9 @@
     </div>
 
     <pre class="usage"><span class='fu'>simulateOutbreak</span>(<span class='kw'>off.r</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>off.p</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>neg</span> <span class='kw'>=</span> <span class='fl'>0.25</span>, <span class='kw'>nSampled</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>pi</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>w.shape</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>w.scale</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ws.shape</span> <span class='kw'>=</span> <span class='no'>w.shape</span>,
-  <span class='kw'>ws.scale</span> <span class='kw'>=</span> <span class='no'>w.scale</span>, <span class='kw'>dateStartOutbreak</span> <span class='kw'>=</span> <span class='fl'>2000</span>, <span class='kw'>dateT</span> <span class='kw'>=</span> <span class='fl'>Inf</span>)</pre>
+  <span class='kw'>pi</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>w.shape</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>w.scale</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ws.shape</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>ws.scale</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>w.mean</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>w.std</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>ws.mean</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>ws.std</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>dateStartOutbreak</span> <span class='kw'>=</span> <span class='fl'>2000</span>, <span class='kw'>dateT</span> <span class='kw'>=</span> <span class='fl'>Inf</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -177,6 +178,22 @@
     <tr>
       <th>ws.scale</th>
       <td><p>Scale parameter of the Gamma probability density function representing the sampling time</p></td>
+    </tr>
+    <tr>
+      <th>w.mean</th>
+      <td><p>Mean of the Gamma distribution representing the generation time</p></td>
+    </tr>
+    <tr>
+      <th>w.std</th>
+      <td><p>Std of the Gamma distribution representing the generation time</p></td>
+    </tr>
+    <tr>
+      <th>ws.mean</th>
+      <td><p>Mean of the Gamma distribution representing the sampling time</p></td>
+    </tr>
+    <tr>
+      <th>ws.std</th>
+      <td><p>Std of the Gamma distribution representing the sampling time</p></td>
     </tr>
     <tr>
       <th>dateStartOutbreak</th>

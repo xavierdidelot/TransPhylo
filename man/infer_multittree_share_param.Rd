@@ -57,7 +57,7 @@ share the offspring distribution. Allowed parameter names are "neg", "off.r", "o
 
 \item{updateTTree}{Whether or not to update the transmission tree}
 
-\item{optiStart}{Whether or not to optimise the MCMC start point}
+\item{optiStart}{Type of optimisation to apply to MCMC start point (0=none, 1=slow, 2=fast)}
 
 \item{dateT}{Date when process stops (this can be Inf for fully simulated outbreaks)}
 }

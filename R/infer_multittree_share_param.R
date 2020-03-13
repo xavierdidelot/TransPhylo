@@ -22,7 +22,7 @@
 #' share the offspring distribution. Allowed parameter names are "neg", "off.r", "off.p" and "pi". 
 #' @param startCTree_lst Optional combined list of trees to start from
 #' @param updateTTree Whether or not to update the transmission tree
-#' @param optiStart Whether or not to optimise the MCMC start point
+#' @param optiStart Type of optimisation to apply to MCMC start point (0=none, 1=slow, 2=fast)
 #' @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @return list the same size as input, each element contains posterior transmission trees inferred from
 #' corresponding phylogenetic tree
@@ -45,7 +45,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
   ctree_lst <- vector("list", length(ptree_lst))
   for(k in seq_along(ptree_lst)){ # starting ctree
     if(is.na(startCTree_lst[[k]]))
-      ctree_lst[[k]] <- makeCtreeFromPTree(ptree_lst[[k]],ifelse(optiStart,off.r,NA),off.p,neg,pi,w.shape,w.scale,ws.shape,ws.scale,dateT)
+      ctree_lst[[k]] <- makeCTreeFromPTree(ptree_lst[[k]],off.r,off.p,neg,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,optiStart)
     else
       ctree_lst[[k]] <- startCTree_lst[[k]]
   }

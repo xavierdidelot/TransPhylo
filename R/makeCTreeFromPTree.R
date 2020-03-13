@@ -9,12 +9,13 @@
 #' @param ws.shape Shape parameter of the Gamma probability density function representing the sampling time
 #' @param ws.scale Scale parameter of the Gamma probability density function representing the sampling time 
 #' @param T Date when process stops (this can be Inf for fully simulated outbreaks)
+#' @param optiStart Method used to optimised colored tree (0=none, 1=slow, 2=fast)
 #' @return A minimal non-zero probability phylogenetic+transmission tree, or an optimised version if parameters are provided
 #' @export
-makeCtreeFromPTree = function(ptree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,w.scale=NA,ws.shape=NA,ws.scale=NA,T=NA)  {
+makeCTreeFromPTree = function(ptree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,w.scale=NA,ws.shape=NA,ws.scale=NA,T=NA,optiStart=0)  {
   nam=ptree$nam
   tree=ptree$ptree
-  if (is.na(off.r)) {
+  if (optiStart==0) {
     #Simple minimal method
     n <- ceiling( nrow(tree)/2 ) 
     tree <- rbind(tree,matrix(0, n, 3)) 
@@ -43,12 +44,13 @@ makeCtreeFromPTree = function(ptree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,w.
     l=list(ctree=tree,nam=nam)
     class(l)<-'ctree'
     return(l)
+  }
     
-  } else {
 
-    #Optimisation method
+  if (optiStart==1) {
+    #Slow optimisation method
     n <- ceiling( nrow(tree)/2 ) 
-    ft=makeCtreeFromPTree(ptree)
+    ft=makeCTreeFromPTree(ptree)
     pTTree <- probTTree((extractTTree(ft))$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,T) 
     pPTree <- probPTreeGivenTTree(ft,neg) 
     try=0
@@ -74,5 +76,39 @@ makeCtreeFromPTree = function(ptree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,w.
     }
     return(ft)
   }
+  
+  if (optiStart==2) {
+    #Fast optimisation method
+    n <- ceiling( nrow(tree)/2) 
+    ft=makeCTreeFromPTree(ptree)
+    tree=ft$ctree[,1:3]
+    
+    #Modify tree
+    for (i in 1:(nrow(tree)-2)) {
+      curi=i
+      cura=tree[i,1]
+      father=which(tree[,2]==i | tree[,3]==i)
+      col=which(tree[father,2:3]==i)+1
+      datefather=tree[father,1]
+      a=rgamma(1,shape = w.shape,scale=w.scale)
+      while (cura-a > datefather) {
+        tree=rbind(tree,c(cura-a,curi,0))
+        tree[father,col]=nrow(tree)
+        cura=cura-a
+        curi=nrow(tree)
+        a=rgamma(1,shape = w.shape,scale=w.scale)
+      }
+    }
+    
+    #Reorder nodes chronologically 
+    ind=order(tree[seq(n + 1,nrow(tree),1),1],decreasing=TRUE)
+    for (i in (n+1):nrow(tree)) for (j in (2:3)) if (tree[i,j] > n) tree[i,j] <- n + which( ind == tree[i,j]-n ) 
+    tree <- tree[c(1:n,n + ind), ] 
+    tree <- cbind(tree,.computeHost(tree)) 
+    l=list(ctree=tree,nam=nam)
+    class(l)<-'ctree'
+    return(l)
+  }
+
 }
 

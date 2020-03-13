@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a transmission tree compatible with the provided phylogenetic tree — makeCtreeFromPTree • TransPhylo</title>
+<title>Create a transmission tree compatible with the provided phylogenetic tree — makeCTreeFromPTree • TransPhylo</title>
 
 
 <!-- jquery -->
@@ -35,7 +35,7 @@
 
 
 
-<meta property="og:title" content="Create a transmission tree compatible with the provided phylogenetic tree — makeCtreeFromPTree" />
+<meta property="og:title" content="Create a transmission tree compatible with the provided phylogenetic tree — makeCTreeFromPTree" />
 <meta property="og:description" content="Create a transmission tree compatible with the provided phylogenetic tree" />
 <meta name="twitter:card" content="summary" />
 
@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.8</span>
       </span>
     </div>
 
@@ -128,16 +128,16 @@
     <div class="page-header">
     <h1>Create a transmission tree compatible with the provided phylogenetic tree</h1>
     <small class="dont-index">Source: <a href='https://github.com/xavierdidelot/TransPhylo/blob/master/R/makeCTreeFromPTree.R'><code>R/makeCTreeFromPTree.R</code></a></small>
-    <div class="hidden name"><code>makeCtreeFromPTree.Rd</code></div>
+    <div class="hidden name"><code>makeCTreeFromPTree.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Create a transmission tree compatible with the provided phylogenetic tree</p>
     </div>
 
-    <pre class="usage"><span class='fu'>makeCtreeFromPTree</span>(<span class='no'>ptree</span>, <span class='kw'>off.r</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>off.p</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>neg</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+    <pre class="usage"><span class='fu'>makeCTreeFromPTree</span>(<span class='no'>ptree</span>, <span class='kw'>off.r</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>off.p</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>neg</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
   <span class='kw'>pi</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>w.shape</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>w.scale</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>ws.shape</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>ws.scale</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>T</span> <span class='kw'>=</span> <span class='fl'>NA</span>)</pre>
+  <span class='kw'>ws.scale</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>T</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>optiStart</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -181,6 +181,10 @@
     <tr>
       <th>T</th>
       <td><p>Date when process stops (this can be Inf for fully simulated outbreaks)</p></td>
+    </tr>
+    <tr>
+      <th>optiStart</th>
+      <td><p>Method used to optimised colored tree (0=none, 1=slow, 2=fast)</p></td>
     </tr>
     </table>
 

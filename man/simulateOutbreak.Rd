@@ -5,8 +5,9 @@
 \title{Simulate an outbreak}
 \usage{
 simulateOutbreak(off.r = 1, off.p = 0.5, neg = 0.25, nSampled = NA,
-  pi = 0.5, w.shape = 2, w.scale = 1, ws.shape = w.shape,
-  ws.scale = w.scale, dateStartOutbreak = 2000, dateT = Inf)
+  pi = 0.5, w.shape = 2, w.scale = 1, ws.shape = NA,
+  ws.scale = NA, w.mean = NA, w.std = NA, ws.mean = NA,
+  ws.std = NA, dateStartOutbreak = 2000, dateT = Inf)
 }
 \arguments{
 \item{off.r}{First parameter of the negative binomial distribution for offspring number}
@@ -26,6 +27,14 @@ simulateOutbreak(off.r = 1, off.p = 0.5, neg = 0.25, nSampled = NA,
 \item{ws.shape}{Shape parameter of the Gamma probability density function representing the sampling time}
 
 \item{ws.scale}{Scale parameter of the Gamma probability density function representing the sampling time}
+
+\item{w.mean}{Mean of the Gamma distribution representing the generation time}
+
+\item{w.std}{Std of the Gamma distribution representing the generation time}
+
+\item{ws.mean}{Mean of the Gamma distribution representing the sampling time}
+
+\item{ws.std}{Std of the Gamma distribution representing the sampling time}
 
 \item{dateStartOutbreak}{Date when index case becomes infected}
 

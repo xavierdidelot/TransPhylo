@@ -20,7 +20,7 @@
 #' @param updatePi Whether or not to update the parameter pi
 #' @param startCTree Optional combined tree to start from
 #' @param updateTTree Whether or not to update the transmission tree
-#' @param optiStart Whether or not to optimise the MCMC start point
+#' @param optiStart Type of optimisation to apply to MCMC start point (0=none, 1=slow, 2=fast)
 #' @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @return posterior sample set of transmission trees
 #' @export
@@ -28,7 +28,7 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
                       w.mean=NA,w.std=NA,ws.mean=NA,ws.std=NA,mcmcIterations=1000,
                       thinning=1, startNeg=100/365, startOff.r=1, startOff.p=0.5, startPi=0.5, updateNeg=TRUE,
                       updateOff.r=TRUE, updateOff.p=FALSE, updatePi=TRUE, startCTree=NA, updateTTree=TRUE,
-                      optiStart=TRUE, dateT=Inf) {
+                      optiStart=2, dateT=Inf) {
 
   ptree$ptree[,1]=ptree$ptree[,1]+runif(nrow(ptree$ptree))*1e-10#Ensure that all leaves have unique times
   if (dateT<dateLastSample(ptree)) stop('The parameter dateT cannot be smaller than the date of last sample')
@@ -46,7 +46,7 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
   off.r <- startOff.r
   off.p <- startOff.p
   pi <- startPi
-  if (is.na(sum(startCTree))) ctree <- makeCtreeFromPTree(ptree,ifelse(optiStart,off.r,NA),off.p,neg,pi,w.shape,w.scale,ws.shape,ws.scale,dateT)#Starting point 
+  if (is.na(sum(startCTree))) ctree <- makeCTreeFromPTree(ptree,off.r,off.p,neg,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,optiStart)#Starting point 
   else ctree<-startCTree
   ttree <- extractTTree(ctree)
   record <- vector('list',mcmcIterations/thinning)
