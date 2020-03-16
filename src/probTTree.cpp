@@ -88,7 +88,7 @@ double alphastar(int d, double p, double r, double wstar)
   NumericVector v(k-d+1);
   for(int i=0; i<v.size(); i++) v[i] = i+d;
   
-  return log_sum_exp_vec(log(choose(v, d)) + ltoSumR) - d*log(wstar);
+  return log_sum_exp_vec(lchoose(v, d) + ltoSumR) - d*log(wstar);
 }
 
 
@@ -124,7 +124,7 @@ double alpha(double tinf, int d, double p, double r, NumericVector wbar0, double
   NumericVector v(k-d+1);
   for(int i=0; i<v.size(); i++) v[i] = i+d;
   
-  return (log_sum_exp_vec( log(choose(v, d))+ltoSumR ) - d*wbar_tinf);
+  return (log_sum_exp_vec( lchoose(v, d)+ltoSumR ) - d*wbar_tinf);
 }
 
 
@@ -228,7 +228,6 @@ double probTTree(NumericMatrix ttree, double rOff, double pOff, double pi,
     for(int i=0; i<numCases; ++i){
       
       accum += alpha(ttree(i,0), progeny[i].size(), pOff, rOff, wbar0, gridStart, delta_t);
-      
       for(int j=0; j<progeny[i].size(); ++j){
         accum += (R::dgamma(ttree(progeny[i][j],0)-ttree(i,0), shGen, scGen, 1) - R::pgamma(dateT-ttree(i,0), shGen, scGen, 1, 1));
       }

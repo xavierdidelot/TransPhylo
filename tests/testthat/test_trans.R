@@ -33,7 +33,7 @@ test_that("Probability of a transmission tree is the same when simulating and ca
   expect_equal(ttree$prob,p2,tolerance=0.001,scale=1)
 })
 
-test_that("Probability of a transmission tree is roughly the same if timeT=Inf and timeT=10000.", {
+test_that("Probability of a transmission tree is roughly the same if timeT=Inf and timeT=100.", {
   set.seed(1)
   pi=1
   off.r=1
@@ -42,7 +42,7 @@ test_that("Probability of a transmission tree is roughly the same if timeT=Inf a
   w.scale=1.2
   ttree=makeTTree(pi=pi,off.r=off.r,off.p=off.p,w.shape=w.shape,w.scale=w.scale,ws.shape=w.shape,ws.scale=w.scale,maxTime=Inf,nSampled = NA)
   p =TransPhylo:::probTTreeR(ttree$ttree,1.1,0.4,0.8,w.shape,w.scale,w.shape,w.scale,Inf)
-  p2=TransPhylo:::probTTreeR(ttree$ttree,1.1,0.4,0.8,w.shape,w.scale,w.shape,w.scale,1000)
+  p2=TransPhylo:::probTTreeR(ttree$ttree,1.1,0.4,0.8,w.shape,w.scale,w.shape,w.scale,100)
   expect_equal(p,p2,tolerance=0.001,scale=1)
   p =probTTree(ttree$ttree,1.1,0.4,0.8,w.shape,w.scale,w.shape,w.scale,Inf)
   p2=probTTree(ttree$ttree,1.1,0.4,0.8,w.shape,w.scale,w.shape,w.scale,100)
