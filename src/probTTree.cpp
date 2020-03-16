@@ -119,7 +119,6 @@ double alpha(double tinf, int d, double p, double r, NumericVector wbar0, double
     if(k>1e6) throw(Rcpp::exception("too many iterations, giving up!"));
     
   }
-  
   NumericVector ltoSumR = wrap(ltoSum); // Convert toSum to Rcpp NumericVector
   NumericVector v(k-d+1);
   for(int i=0; i<v.size(); i++) v[i] = i+d;

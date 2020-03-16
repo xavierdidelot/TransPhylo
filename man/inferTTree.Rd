@@ -10,7 +10,7 @@ inferTTree(ptree, w.shape = 2, w.scale = 1, ws.shape = NA,
   startNeg = 100/365, startOff.r = 1, startOff.p = 0.5,
   startPi = 0.5, updateNeg = TRUE, updateOff.r = TRUE,
   updateOff.p = FALSE, updatePi = TRUE, startCTree = NA,
-  updateTTree = TRUE, optiStart = 2, dateT = Inf)
+  updateTTree = TRUE, optiStart = 2, dateT = Inf, verbose = F)
 }
 \arguments{
 \item{ptree}{Phylogenetic tree}
@@ -58,6 +58,8 @@ inferTTree(ptree, w.shape = 2, w.scale = 1, ws.shape = NA,
 \item{optiStart}{Type of optimisation to apply to MCMC start point (0=none, 1=slow, 2=fast)}
 
 \item{dateT}{Date when process stops (this can be Inf for fully simulated outbreaks)}
+
+\item{verbose}{Whether or not to use verbose mode (default is false)}
 }
 \value{
 posterior sample set of transmission trees
