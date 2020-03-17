@@ -51,35 +51,43 @@ The MCMC procedure to infer the transmission tree given the phylogenetic tree ca
 res<-inferTTree(ptree,mcmcIterations=1000,w.shape=w.shape,w.scale=w.scale,dateT=dateT)
 ```
 
-## Interpretation of results
+## Checking convergence
 
-The last command returned a record of all MCMC iterations. This is what the transmission tree looks like at the end of the MCMC:
-
-```{r}
-last=extractCTree(res,1000)
-plot(last)
-```
-
+The last command returned a record of all MCMC iterations. 
 Traces of the MCMC can be plotted as follows:
 
 ```{r}
 plot(res)
 ```
 
-Further assessment of the MCMC convergence and mixing can be obtained using the CODA package, for example to obtain the effective sample size of paramaters as follows:
+These traces need to look stable (after initial convergence) for the MCMC to be well mixed and the results to be meaningful. Otherwise, the MCMC needs to be run for longer by increasing the `mcmcIterations` parameter in the `inferTTree` function (in the example above we had `mcmcIterations=1000` which was clearly not sufficient).
+
+Further assessment of the MCMC convergence and mixing can be obtained using the CODA package, for example to obtain the effective sample size (ESS) of paramaters as follows, making sure that the ESS of each parameter is at least 100:
 ```{r}
 library(coda)
 mcmc=convertToCoda(res)
 effectiveSize(mcmc)
 ```
 
-A consensus transmission tree can be built as follows:
+## Interpretation of output
+
+Based on the MCMC sample, we can find the most representative (aka medoid) colored tree as follows:
+
 ```{r}
-cons=consTTree(res)
-plot(cons,type='detailed',w.shape,w.scale)
+med=medTTree(res)
+plot(med)
+```
+
+
+
+We can plot the corresponding transmission tree:
+```{r}
+ttree=extractTTree(med)
+plot(ttree,type='detailed',w.shape,w.scale)
 ```
 
 A matrix of probability of direct transmission for all pairs of individuals can be drawn as follows:
+
 ```{r}
 mat=computeMatWIW(res)
 lattice::levelplot(mat,xlab='',ylab='')

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.10</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
       <h1>Inference of transmission tree from a dated phylogeny</h1>
                         <h4 class="author">Xavier Didelot</h4>
             
-            <h4 class="date">2020-03-16</h4>
+            <h4 class="date">2020-03-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/xavierdidelot/TransPhylo/blob/master/vignettes/infer.Rmd"><code>vignettes/infer.Rmd</code></a></small>
       <div class="hidden name"><code>infer.Rmd</code></div>
@@ -124,25 +124,30 @@
 <p>The MCMC procedure to infer the transmission tree given the phylogenetic tree can be run as follows:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">res&lt;-<span class="kw"><a href="../reference/inferTTree.html">inferTTree</a></span>(ptree,<span class="dt">mcmcIterations=</span><span class="dv">1000</span>,<span class="dt">w.shape=</span>w.shape,<span class="dt">w.scale=</span>w.scale,<span class="dt">dateT=</span>dateT)</a></code></pre></div>
 </div>
-<div id="interpretation-of-results" class="section level2">
+<div id="checking-convergence" class="section level2">
 <h2 class="hasAnchor">
-<a href="#interpretation-of-results" class="anchor"></a>Interpretation of results</h2>
-<p>The last command returned a record of all MCMC iterations. This is what the transmission tree looks like at the end of the MCMC:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">last=<span class="kw"><a href="../reference/extractCTree.html">extractCTree</a></span>(res,<span class="dv">1000</span>)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(last)</a></code></pre></div>
+<a href="#checking-convergence" class="anchor"></a>Checking convergence</h2>
+<p>The last command returned a record of all MCMC iterations. Traces of the MCMC can be plotted as follows:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(res)</a></code></pre></div>
 <p><img src="infer_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
-<p>Traces of the MCMC can be plotted as follows:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(res)</a></code></pre></div>
-<p><img src="infer_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
-<p>Further assessment of the MCMC convergence and mixing can be obtained using the CODA package, for example to obtain the effective sample size of paramaters as follows:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(coda)</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">mcmc=<span class="kw"><a href="../reference/convertToCoda.html">convertToCoda</a></span>(res)</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/pkg/coda/man/effectiveSize.html">effectiveSize</a></span>(mcmc)</a></code></pre></div>
+<p>These traces need to look stable (after initial convergence) for the MCMC to be well mixed and the results to be meaningful. Otherwise, the MCMC needs to be run for longer by increasing the <code>mcmcIterations</code> parameter in the <code>inferTTree</code> function (in the example above we had <code>mcmcIterations=1000</code> which was clearly not sufficient).</p>
+<p>Further assessment of the MCMC convergence and mixing can be obtained using the CODA package, for example to obtain the effective sample size (ESS) of paramaters as follows, making sure that the ESS of each parameter is at least 100:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(coda)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">mcmc=<span class="kw"><a href="../reference/convertToCoda.html">convertToCoda</a></span>(res)</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/pkg/coda/man/effectiveSize.html">effectiveSize</a></span>(mcmc)</a></code></pre></div>
 <pre><code>##        pi       neg     off.r     off.p 
 ##  5.827005 28.022034  9.398865  0.000000</code></pre>
-<p>A consensus transmission tree can be built as follows:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">cons=<span class="kw"><a href="../reference/consTTree.html">consTTree</a></span>(res)</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(cons,<span class="dt">type=</span><span class="st">'detailed'</span>,w.shape,w.scale)</a></code></pre></div>
+</div>
+<div id="interpretation-of-output" class="section level2">
+<h2 class="hasAnchor">
+<a href="#interpretation-of-output" class="anchor"></a>Interpretation of output</h2>
+<p>Based on the MCMC sample, we can find the most representative (aka medoid) colored tree as follows:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">med=<span class="kw"><a href="../reference/medTTree.html">medTTree</a></span>(res)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(med)</a></code></pre></div>
+<p><img src="infer_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<p>We can plot the corresponding transmission tree:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">ttree=<span class="kw"><a href="../reference/extractTTree.html">extractTTree</a></span>(med)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(ttree,<span class="dt">type=</span><span class="st">'detailed'</span>,w.shape,w.scale)</a></code></pre></div>
 <p><img src="infer_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <p>A matrix of probability of direct transmission for all pairs of individuals can be drawn as follows:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">mat=<span class="kw"><a href="../reference/computeMatWIW.html">computeMatWIW</a></span>(res)</a>
@@ -174,7 +179,8 @@
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#inference-of-transmission-tree-from-a-dated-phylogeny">Inference of transmission tree from a dated phylogeny</a></li>
-      <li><a href="#interpretation-of-results">Interpretation of results</a></li>
+      <li><a href="#checking-convergence">Checking convergence</a></li>
+      <li><a href="#interpretation-of-output">Interpretation of output</a></li>
       </ul>
 </div>
       </div>
