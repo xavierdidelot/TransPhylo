@@ -93,12 +93,9 @@ double alphastar(int d, double p, double r, double wstar)
 
 
 
-/* alpha() computes equation (10) in TransPhylo paper
-wbar0 --- wbar computed from wbar() using the oldest infection time. */
-double alpha(double tinf, int d, double p, double r, NumericVector wbar0, double gridStart, double delta_t)
+/* alpha() computes equation (10) in TransPhylo paper*/
+double alpha(int d, double p, double r,double wbar_tinf)
 {
-  
-  double wbar_tinf = wbar0[std::round((tinf - gridStart)/delta_t)];
   if(std::abs(r-1.0)<1e-6) // Exact solution available
     return log((1-p))-log_subtract_exp(0.0,log(p)+wbar_tinf)+d*(log(p)-log_subtract_exp(0.0, log(p)+wbar_tinf));
   //    return log(1-p)+d*log(p)-(d+1)*log(1-p*exp(wbar_tinf));
@@ -126,11 +123,10 @@ double alpha(double tinf, int d, double p, double r, NumericVector wbar0, double
   return (log_sum_exp_vec( lchoose(v, d)+ltoSumR ) - d*wbar_tinf);
 }
 
-
 // [[Rcpp::export]]
 NumericVector wbar(double tinf, double dateT, double rOff, double pOff, double pi, double shGen, double scGen, double shSam, double scSam, double delta_t)
 {
-  int n = std::round((dateT-tinf)/delta_t); 
+  int n = std::round((dateT-tinf)/delta_t);
   NumericVector grid(n);
   for(int i=0; i<n; ++i) // use the left point of each subinterval
     grid[i] = dateT-n*delta_t+i*delta_t;
@@ -146,8 +142,9 @@ NumericVector wbar(double tinf, double dateT, double rOff, double pOff, double p
   double sumPrev = 0.5 * gam[0];
   for(int i=n-1; i>=0; --i){
     
-    w[i] = (1-pi2[i]) * pow((1-pOff)/(1-pOff*F[i]-pOff*delta_t*sumPrev), rOff);
     out[i] = F[i] + sumPrev*delta_t;
+    if (out[i]>1) out[i]=1;
+    w[i] = (1-pi2[i]) * pow((1-pOff)/(1-pOff*out[i]), rOff);
     
     sumPrev = 0.0;
     for(int j=0; j<n-i; ++j)
@@ -226,7 +223,7 @@ double probTTree(NumericMatrix ttree, double rOff, double pOff, double pi,
     
     for(int i=0; i<numCases; ++i){
       
-      accum += alpha(ttree(i,0), progeny[i].size(), pOff, rOff, wbar0, gridStart, delta_t);
+      accum += alpha(progeny[i].size(), pOff, rOff,wbar0[std::round((ttree(i,0) - gridStart)/delta_t)]);
       for(int j=0; j<progeny[i].size(); ++j){
         accum += (R::dgamma(ttree(progeny[i][j],0)-ttree(i,0), shGen, scGen, 1) - R::pgamma(dateT-ttree(i,0), shGen, scGen, 1, 1));
       }
