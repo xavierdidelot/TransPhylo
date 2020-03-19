@@ -61,6 +61,8 @@ test_that("Typical session can be run.", {
    expect_is(a,'matrix')
    expect_silent(a<-getInfectionTimeDist(res,k='1',show.plot = T))
    expect_is(a,'numeric')
+   expect_silent(a<-getOffspringDist(res,k='1',show.plot = T))
+   expect_is(a,'numeric')
 })
 
 test_that("Inference with multiple trees runs", {

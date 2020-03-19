@@ -114,8 +114,14 @@ Distribution of realised sampling times:
 a=getSamplingTimeDist(res,show.plot = T)
 ```
 
-Distribution of infection time for the individual labelled '1':
+Distribution of infection time for the individuals labelled '1' and '2':
 
 ```{r}
-a=getInfectionTimeDist(res,k='1',show.plot = T)
+a=getInfectionTimeDist(res,k=c('1','2'),show.plot = T)
+```
+
+Offspring distribution for the individuals labelled '1' and '2':
+
+```{r}
+a=getOffspringDist(res,k=c('1','2'),show.plot = T)
 ```

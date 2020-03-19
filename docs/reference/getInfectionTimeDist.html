@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract and return distribution of infection time of a given sampled case — getInfectionTimeDist • TransPhylo</title>
+<title>Extract and return distribution of infection time of given sampled case(s) — getInfectionTimeDist • TransPhylo</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Extract and return distribution of infection time of a given sampled case — getInfectionTimeDist" />
-<meta property="og:description" content="Extract and return distribution of infection time of a given sampled case" />
+<meta property="og:title" content="Extract and return distribution of infection time of given sampled case(s) — getInfectionTimeDist" />
+<meta property="og:description" content="Extract and return distribution of infection time of given sampled case(s)" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.12</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.13</span>
       </span>
     </div>
 
@@ -126,16 +126,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract and return distribution of infection time of a given sampled case</h1>
+    <h1>Extract and return distribution of infection time of given sampled case(s)</h1>
     <small class="dont-index">Source: <a href='https://github.com/xavierdidelot/TransPhylo/blob/master/R/interpret.R'><code>R/interpret.R</code></a></small>
     <div class="hidden name"><code>getInfectionTimeDist.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Extract and return distribution of infection time of a given sampled case</p>
+    <p>Extract and return distribution of infection time of given sampled case(s)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getInfectionTimeDist</span>(<span class='no'>record</span>, <span class='kw'>burnin</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='no'>k</span>, <span class='kw'>show.plot</span> <span class='kw'>=</span> <span class='no'>F</span>)</pre>
+    <pre class="usage"><span class='fu'>getInfectionTimeDist</span>(<span class='no'>record</span>, <span class='kw'>burnin</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='no'>k</span>, <span class='kw'>numBins</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+  <span class='kw'>show.plot</span> <span class='kw'>=</span> <span class='no'>F</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,7 +151,11 @@
     </tr>
     <tr>
       <th>k</th>
-      <td><p>Case whose posterior infection times are to be extracted. Either an integer or a string matching one of the case names in the data</p></td>
+      <td><p>Case(s) whose posterior infection times are to be extracted. Either a string matching one of the case names in the data, or a vector of such strings</p></td>
+    </tr>
+    <tr>
+      <th>numBins</th>
+      <td><p>Number of bins to use for plot</p></td>
     </tr>
     <tr>
       <th>show.plot</th>
@@ -160,7 +165,7 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A vector of posterior infection times for case k</p>
+    <p>Posterior infection times for the case(s) in k. If length(k)==1 then a vector is returned, otherwise a matrix</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

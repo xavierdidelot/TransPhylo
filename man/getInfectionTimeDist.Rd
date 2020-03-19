@@ -2,22 +2,25 @@
 % Please edit documentation in R/interpret.R
 \name{getInfectionTimeDist}
 \alias{getInfectionTimeDist}
-\title{Extract and return distribution of infection time of a given sampled case}
+\title{Extract and return distribution of infection time of given sampled case(s)}
 \usage{
-getInfectionTimeDist(record, burnin = 0.5, k, show.plot = F)
+getInfectionTimeDist(record, burnin = 0.5, k, numBins = 10,
+  show.plot = F)
 }
 \arguments{
 \item{record}{MCMC output produced by inferTTree}
 
 \item{burnin}{Proportion of the MCMC output to be discarded as burnin}
 
-\item{k}{Case whose posterior infection times are to be extracted. Either an integer or a string matching one of the case names in the data}
+\item{k}{Case(s) whose posterior infection times are to be extracted. Either a string matching one of the case names in the data, or a vector of such strings}
+
+\item{numBins}{Number of bins to use for plot}
 
 \item{show.plot}{Show a barplot of the distribution}
 }
 \value{
-A vector of posterior infection times for case k
+Posterior infection times for the case(s) in k. If length(k)==1 then a vector is returned, otherwise a matrix
 }
 \description{
-Extract and return distribution of infection time of a given sampled case
+Extract and return distribution of infection time of given sampled case(s)
 }

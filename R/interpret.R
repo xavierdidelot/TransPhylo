@@ -40,7 +40,7 @@ getIncidentCases <- function(record,burnin=0.5,numBins=10,show.plot=FALSE) {
   runsamp=runsamp/length(sampcounts)
   rununsamp=rununsamp/length(unsampcounts)
   
-  res=list(Time=allcounts[[1]]$mids,allCases=runsum, sampledCases=runsamp, unsampCases=rununsamp);
+  res=list(Time=allcounts[[1]]$mids,allCases=runsum, sampledCases=runsamp, unsampCases=rununsamp)
   
   if (show.plot) {
     mydata=t(cbind(res$sampledCases,res$unsampCases))
@@ -52,21 +52,69 @@ getIncidentCases <- function(record,burnin=0.5,numBins=10,show.plot=FALSE) {
   return(res)
 }
 
-#' Extract and return distribution of infection time of a given sampled case
+#' Extract and return distribution of infection time of given sampled case(s)
 #' @param record MCMC output produced by inferTTree
 #' @param burnin Proportion of the MCMC output to be discarded as burnin
-#' @param k Case whose posterior infection times are to be extracted. Either an integer or a string matching one of the case names in the data
+#' @param k Case(s) whose posterior infection times are to be extracted. Either a string matching one of the case names in the data, or a vector of such strings
+#' @param numBins Number of bins to use for plot
 #' @param show.plot Show a barplot of the distribution
-#' @return A vector of posterior infection times for case k 
+#' @return Posterior infection times for the case(s) in k. If length(k)==1 then a vector is returned, otherwise a matrix
 #' @export
-getInfectionTimeDist <- function(record,burnin=0.5,k,show.plot=F) {
-  record=record[max(1,round(length(record)*burnin)):length(record)]  
-  if (is.numeric(k)) 
-    mytimes= vapply(1:length(record), function(x) { tt=extractTTree(record[[x]]$ctree); return(tt$ttree[k,1])},FUN.VALUE=1)
-  else 
-    mytimes= vapply(1:length(record), function(x) { tt=extractTTree(record[[x]]$ctree); ii=which(tt$nam==k); return(tt$ttree[ii,1])},FUN.VALUE=1)
-  if (show.plot) hist(mytimes,main='',xlab='',ylab='')
-  return(mytimes)
+getInfectionTimeDist <- function(record,burnin=0.5,k,numBins=10,show.plot=F) {
+  record=record[max(1,round(length(record)*burnin)):length(record)]
+  for (i in 1:length(record)) record[[i]]=extractTTree(record[[i]]$ctree)
+  times=matrix(NA,length(k),length(record))
+  for (i in 1:length(k)) for (j in 1:length(record)) {
+    ii=which(record[[j]]$nam==k[i])
+    times[i,j]=record[[j]]$ttree[ii,1]
+  }
+  if (show.plot) {
+    par(mfrow=c(length(k),1))
+    xlim=c(min(times),max(times))
+    uni=length(unique(as.vector(times)))
+    numBins=min(numBins,uni)
+    br=seq(xlim[1],xlim[2],length.out=numBins+1)
+    for (i in 1:length(k)) {
+      h=hist(times[i,],breaks=br,plot=F)$counts/length(record)
+      barplot(h,main='',xlab='',ylab=sprintf('Infection time of %s',k[i]))
+      if (xlim[1]==xlim[2]) axis(1,at=0.7,labels=xlim[1]) else {
+        labs=pretty(xlim,6)
+        axis(1,at = (labs-xlim[1])/(xlim[2]-xlim[1])*1.2*numBins,labels=labs)
+      }
+    }
+    par(mfrow=c(1,1))
+  }
+  if (length(k)==1) times=as.vector(times)
+  return(times)
+}
+
+#' Extract and return offspring distribution of given sampled case(s)
+#' @param record MCMC output produced by inferTTree
+#' @param burnin Proportion of the MCMC output to be discarded as burnin
+#' @param k Case(s) whose offspring distribution are to be extracted. Either a string matching one of the case names in the data, or a vector of such strings
+#' @param show.plot Show a barplot of the distribution
+#' @return Posterior offspring distribution for the case(s) in k. If length(k)==1 then a vector is returned, otherwise a matrix
+#' @export
+getOffspringDist <- function(record,burnin=0.5,k,show.plot=F) {
+  record=record[max(1,round(length(record)*burnin)):length(record)]
+  for (i in 1:length(record)) record[[i]]=extractTTree(record[[i]]$ctree)
+  offspring=matrix(NA,length(k),length(record))
+  for (i in 1:length(k)) for (j in 1:length(record)) {
+    ii=which(record[[j]]$nam==k[i])
+    offspring[i,j]=as.numeric(length(which(record[[j]]$ttree[,3]==ii)))
+  }
+  if (show.plot) {
+    par(mfrow=c(length(k),1))
+    xlim=c(-0.5,max(offspring)+0.5)
+    br=seq(xlim[1],xlim[2])
+    for (i in 1:length(k)) {
+      h=hist(offspring[i,],breaks=br,plot=F)$counts/length(record)
+      barplot(h,main='',xlab='',ylab=sprintf('Offspring of %s',k[i]),names.arg = 0:max(offspring))
+    }
+    par(mfrow=c(1,1))
+  }
+  if (length(k)==1) offspring=as.vector(offspring)
+  return(offspring)
 }
 
 #' Extract and return realised generation time distribution
@@ -133,7 +181,6 @@ getSamplingTimeDist <-  function(record,burnin=0.5,maxi=2,numBins=20,show.plot=F
     labs=pretty(c(0,maxi),6)
     axis(1,at = labs/maxi*1.2*numBins,labels=labs)
   }
-  
   return(res)
 }
 
