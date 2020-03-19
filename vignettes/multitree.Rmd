@@ -64,14 +64,13 @@ record_tp2 <- inferTTree(ptree2, w.shape, w.scale, ws.shape, ws.scale,
                          mcmcIterations = iters, thinning = thin, dateT = 2005)
 record_tpj <- infer_multittree_share_param(list(ptree1,ptree2), w.shape, w.scale, ws.shape, ws.scale, 
                                     mcmcIterations = iters, thinning = thin, dateT = 2005,
-                                    share = c("neg", "off.r", "off.p", "pi"),
-                                    prior_pi_a = 1, prior_pi_b = 1)
+                                    share = c("neg", "off.r", "off.p", "pi"))
 ```
 
 Take the last 50% trees. Note that the multiple tree inference returns list of length two where each element contains the result corresponding to the input phylogenetic tree.
 ```{r}
-begin <- (iters * 0.5) %/% thin + 1
-end <- iters %/% thin
+begin <- (iters * 0.5) / thin + 1
+end <- iters / thin
 record_tp1 <- record_tp1[begin:end]
 record_tp2 <- record_tp2[begin:end]
 record_tpj[[1]] <- record_tpj[[1]][begin:end]
@@ -101,21 +100,18 @@ df <- data.frame(run = rep(c("tp1","tp2","tp_multitree"), each = length(record_t
 
 In this example where we explictly set the parameters when simulating the outbreaks, we see that the posterior estimates from the multiple tree inference generally have lower variance than those resulting from single tree inference. The true parameter values are shown in gray reference line.
 ```{r}
-library(ggplot2)
-ggplot(df, aes(run, pi)) +
-  geom_boxplot() +
-  geom_hline(yintercept = 0.8, size = 2, color = "gray")
+boxplot(df$pi~df$run,ylab='pi')
+lines(c(0,4),rep(0.8,2),col='grey')
 ```
 
 ```{r}
-ggplot(df, aes(run, off.r)) +
-  geom_boxplot() +
-  geom_hline(yintercept = 1.5, size = 2, color = "gray")
+boxplot(df$off.r~df$run,ylab='off.r')
+lines(c(0,4),rep(1.5,2),col='grey')
+
 ```
 
 ```{r}
-ggplot(df, aes(run, neg)) +
-  geom_boxplot() +
-  geom_hline(yintercept = 100/365, size = 2, color = "gray")
+boxplot(df$neg~df$run,ylab='Ne*g')
+lines(c(0,4),rep(100/365,2),col='grey')
 ```
 

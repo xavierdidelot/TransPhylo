@@ -12,8 +12,8 @@ infer_multittree_share_param(ptree_lst, w.shape = 2, w.scale = 1,
   startOff.p = 0.5, startPi = 0.5, prior_pi_a = 5, prior_pi_b = 1,
   updateNeg = TRUE, updateOff.r = TRUE, updateOff.p = FALSE,
   updatePi = TRUE, share = NULL, startCTree_lst = rep(NA,
-  length(ptree_lst)), updateTTree = TRUE, optiStart = TRUE,
-  dateT = Inf)
+  length(ptree_lst)), updateTTree = TRUE, optiStart = 2, dateT = Inf,
+  verbose = F)
 }
 \arguments{
 \item{ptree_lst}{List of phylogenetic tree}
@@ -60,6 +60,8 @@ share the offspring distribution. Allowed parameter names are "neg", "off.r", "o
 \item{optiStart}{Type of optimisation to apply to MCMC start point (0=none, 1=slow, 2=fast)}
 
 \item{dateT}{Date when process stops (this can be Inf for fully simulated outbreaks)}
+
+\item{verbose}{Whether or not to use verbose mode (default is false)}
 }
 \value{
 list the same size as input, each element contains posterior transmission trees inferred from

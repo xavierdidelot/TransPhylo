@@ -24,15 +24,15 @@
 #' @param updateTTree Whether or not to update the transmission tree
 #' @param optiStart Type of optimisation to apply to MCMC start point (0=none, 1=slow, 2=fast)
 #' @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
+#' @param verbose Whether or not to use verbose mode (default is false)
 #' @return list the same size as input, each element contains posterior transmission trees inferred from
 #' corresponding phylogenetic tree
 #' @author Yuanwei Xu
 #' @export
 infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w.shape,ws.scale=w.scale,mcmcIterations=1000,
-                      thinning=1,startNeg=100/365,startOff.r=1,startOff.p=0.5,startPi=0.5,prior_pi_a=5,prior_pi_b=1,
-                      updateNeg=TRUE,updateOff.r=TRUE,updateOff.p=FALSE,updatePi=TRUE,
-                      share=NULL,
-                      startCTree_lst=rep(NA,length(ptree_lst)),updateTTree=TRUE,optiStart=TRUE,dateT=Inf) {
+                      thinning=1,startNeg=100/365,startOff.r=1,startOff.p=0.5,startPi=0.5,prior_pi_a=1,prior_pi_b=1,
+                      updateNeg=TRUE,updateOff.r=TRUE,updateOff.p=FALSE,updatePi=TRUE,share=NULL,
+                      startCTree_lst=rep(NA,length(ptree_lst)),updateTTree=TRUE,optiStart=2,dateT=Inf,verbose=F) {
 
   if (length(ptree_lst)>=1) for (i in 1:length(ptree_lst)) class(ptree_lst[[i]])<-'list'
   ptree_lst <- purrr::map(ptree_lst, function(x) within(x, ptree[,1] <- ptree[,1]+runif(nrow(ptree))*1e-10))
@@ -62,6 +62,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
     
     if (updateTTree) {
       #Metropolis update for transmission tree 
+      if (verbose) message("Proposing ttree update")
       prop <- proposal(ctree$ctree)
       ctree2 <- list(ctree=prop$tree,nam=ctree$nam)
       class(ctree2)<-'ctree'
@@ -79,6 +80,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
     if (("neg" %in% not_share) && updateNeg) {
       #Metropolis update for Ne*g, assuming Exp(1) prior 
       neg2 <- abs(neg + (runif(1)-0.5)*0.5)
+      if (verbose) message(sprintf("Proposing unshared Ne*g update %f->%f",neg,neg2))
       pPTree2 <- probPTreeGivenTTree(ctree,neg2) 
       if (log(runif(1)) < pPTree2-pPTree-neg2+neg)  {neg <- neg2;pPTree <- pPTree2} 
     }
@@ -86,6 +88,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
     if (("off.r" %in% not_share) && updateOff.r) {
       #Metropolis update for off.r, assuming Exp(1) prior 
       off.r2 <- abs(off.r + (runif(1)-0.5)*0.5)
+      if (verbose) message(sprintf("Proposing unshared off.r update %f->%f",off.r,off.r2))
       pTTree2 <- probTTree(ttree$ttree,off.r2,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT) 
       if (log(runif(1)) < pTTree2-pTTree-off.r2+off.r)  {off.r <- off.r2;pTTree <- pTTree2}
     }
@@ -94,6 +97,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
       #Metropolis update for off.p, assuming Unif(0,1) prior 
       off.p2 <- abs(off.p + (runif(1)-0.5)*0.1)
       if (off.p2>1) off.p2=2-off.p2
+      if (verbose) message(sprintf("Proposing unshared off.p update %f->%f",off.p,off.p2))
       pTTree2 <- probTTree(ttree$ttree,off.r,off.p2,pi,w.shape,w.scale,ws.shape,ws.scale,dateT) 
       if (log(runif(1)) < pTTree2-pTTree)  {off.p <- off.p2;pTTree <- pTTree2}
     }
@@ -103,6 +107,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
       pi2 <- pi + (runif(1)-0.5)*0.1
       if (pi2<0.01) pi2=0.02-pi2
       if (pi2>1) pi2=2-pi2
+      if (verbose) message(sprintf("Proposing unshared pi update %f->%f",pi,pi2))
       pTTree2 <- probTTree(ttree$ttree,off.r,off.p,pi2,w.shape,w.scale,ws.shape,ws.scale,dateT) 
       log_beta_ratio <- (prior_pi_a - 1) * log(pi2) + (prior_pi_b - 1) * log(1 - pi2) -
         (prior_pi_a - 1) * log(pi) - (prior_pi_b - 1) * log(1 - pi)
@@ -120,6 +125,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
       neg <- neg_lst[[1]]
       #Metropolis update for Ne*g, assuming Exp(1) prior 
       neg2 <- abs(neg + (runif(1)-0.5)*0.5)
+      if (verbose) message(sprintf("Proposing shared Ne*g update %f->%f",neg,neg2))
       pPTree <- purrr::flatten_dbl(pPTree_lst)
       pPTree2 <- purrr::map_dbl(ctree_lst, probPTreeGivenTTree, neg = neg2) 
       if (log(runif(1)) < sum(pPTree2)-sum(pPTree)-neg2+neg){
@@ -132,6 +138,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
       off.r <- off.r_lst[[1]]
       #Metropolis update for off.r, assuming Exp(1) prior 
       off.r2 <- abs(off.r + (runif(1)-0.5)*0.5)
+      if (verbose) message(sprintf("Proposing shared off.r update %f->%f",off.r,off.r2))
       pTTree <- purrr::flatten_dbl(pTTree_lst)
       pTTree2 <- purrr::pmap_dbl(list(ttree=ttree_lst, pOff=off.p_lst, pi=pi_lst), probTTree, rOff=off.r2,  
                                  shGen=w.shape, scGen=w.scale, shSam=ws.shape, scSam=ws.scale, dateT=dateT)
@@ -146,6 +153,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
       #Metropolis update for off.p, assuming Unif(0,1) prior 
       off.p2 <- abs(off.p + (runif(1)-0.5)*0.1)
       if (off.p2>1) off.p2=2-off.p2
+      if (verbose) message(sprintf("Proposing shared off.p update %f->%f",off.p,off.p2))
       pTTree <- purrr::flatten_dbl(pTTree_lst)
       pTTree2 <- purrr::pmap_dbl(list(ttree=ttree_lst, rOff=off.r_lst, pi=pi_lst), probTTree, pOff=off.p2, 
                                  shGen=w.shape, scGen=w.scale, shSam=ws.shape, scSam=ws.scale, dateT=dateT)
@@ -161,6 +169,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
       pi2 <- pi + (runif(1)-0.5)*0.1
       if (pi2<0.01) pi2=0.02-pi2
       if (pi2>1) pi2=2-pi2
+      if (verbose) message(sprintf("Proposing shared pi update %f->%f",pi,pi2))
       pTTree <- purrr::flatten_dbl(pTTree_lst)
       pTTree2 <- purrr::pmap_dbl(list(ttree=ttree_lst, rOff=off.r_lst, pOff=off.p_lst), probTTree, pi=pi2, 
                                  shGen=w.shape, scGen=w.scale, shSam=ws.shape, scSam=ws.scale, dateT=dateT)
@@ -193,7 +202,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
                      neg=neg_lst, off.r=off.r_lst, off.p=off.p_lst, pi=pi_lst)
   
   #Main MCMC loop
-  pb <- utils::txtProgressBar(min=0,max=mcmcIterations,style = 3)
+  if (verbose==F) pb <- utils::txtProgressBar(min=0,max=mcmcIterations,style = 3)
   for (i in 1:mcmcIterations) {
     
     # Update shared parameters
@@ -211,7 +220,8 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
     
     if (i%%thinning == 0) {
       #Record things 
-      utils::setTxtProgressBar(pb, i)
+      if (verbose==F) utils::setTxtProgressBar(pb, i)
+      if (verbose==T) message(sprintf('it=%d',i))
       for(k in seq_along(ctree_lst)){
         record[[k]][[i/thinning]]$ctree <- state_new[[k]]$ctree
         record[[k]][[i/thinning]]$pTTree <- state_new[[k]]$pTTree 

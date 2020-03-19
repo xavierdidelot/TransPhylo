@@ -30,6 +30,8 @@ test_that("Typical session can be run.", {
    expect_is(ptree,'ptree')
    expect_is(capture_output(res<-inferTTree(ptree,mcmcIterations=100,w.shape=w.shape,w.scale=w.scale,dateT=dateT,updateOff.p = T,verbose=T)),'character')
    expect_is(res,'resTransPhylo')
+   expect_is(capture_output(res<-inferTTree(ptree,mcmcIterations=100,w.shape=w.shape,w.scale=w.scale,dateT=dateT,updateOff.p = T,optiStart=1,verbose=T)),'character')
+   expect_is(res,'resTransPhylo')
    expect_is(capture_output(print(res)),'character')
    expect_is(capture_output(summary(res)),'character')
    expect_silent(last<-extractCTree(res,100))
@@ -75,6 +77,8 @@ test_that("Inference with multiple trees runs", {
   expect_is(capture.output(res<-infer_multittree_share_param(list(ptree),mcmcIterations=100,updateOff.p=T,w.shape=w.shape,w.scale=w.scale,dateT=dateT)),'character')
   expect_is(res,'resTransPhylo')
   expect_is(capture.output(res<-infer_multittree_share_param(list(ptree),mcmcIterations=100,updateOff.p=T,w.shape=w.shape,w.scale=w.scale,dateT=dateT,share=c('off.r','off.p','neg','pi'))),'character')
+  expect_is(res,'resTransPhylo')
+  expect_is(capture.output(res<-infer_multittree_share_param(list(ptree),mcmcIterations=100,updateOff.p=T,w.shape=w.shape,w.scale=w.scale,dateT=dateT,share=c('off.r','off.p','neg','pi')),verbose=T),'character')
   expect_is(res,'resTransPhylo')
 })
 

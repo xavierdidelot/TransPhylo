@@ -75,7 +75,7 @@ the argument &quot;share&quot;." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.12</span>
       </span>
     </div>
 
@@ -151,8 +151,8 @@ the argument "share".</p>
   <span class='kw'>startOff.p</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>startPi</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>prior_pi_a</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>prior_pi_b</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>updateNeg</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>updateOff.r</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>updateOff.p</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>updatePi</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>share</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>startCTree_lst</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>NA</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>ptree_lst</span>)), <span class='kw'>updateTTree</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>optiStart</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>dateT</span> <span class='kw'>=</span> <span class='fl'>Inf</span>)</pre>
+  <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>ptree_lst</span>)), <span class='kw'>updateTTree</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>optiStart</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>dateT</span> <span class='kw'>=</span> <span class='fl'>Inf</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='no'>F</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -245,6 +245,10 @@ share the offspring distribution. Allowed parameter names are "neg", "off.r", "o
     <tr>
       <th>dateT</th>
       <td><p>Date when process stops (this can be Inf for fully simulated outbreaks)</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Whether or not to use verbose mode (default is false)</p></td>
     </tr>
     </table>
 

@@ -1,13 +1,13 @@
 Package: TransPhylo
 Type: Package
 Title: Inference of Transmission Tree under a Within-Host Evolution Model
-Version: 1.3.11
-Date: 2020-03-18
+Version: 1.3.12
+Date: 2020-03-19
 Authors@R: person("Xavier","Didelot",email="xavier.didelot@gmail.com",role=c("aut", "cre"))
 Maintainer: Xavier Didelot <xavier.didelot@gmail.com>
 Depends: R (>= 3.0.0)
 Imports: Rcpp (>= 0.12.8), stats, graphics, ape
-Suggests: knitr, testthat, purrr, ggplot2, coda, grDevices, lattice
+Suggests: knitr, testthat, purrr, coda, grDevices, lattice
 Description: Inference of transmission tree under a within-host evolution model.
 VignetteBuilder: knitr
 License: GPL (>=2)
