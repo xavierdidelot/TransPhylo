@@ -12,11 +12,12 @@ extractTTree = function(ctree)  {
   ntot <- nsam+nh
   ttree <- c(ttree,rep(NA,nh))
   ttree <- cbind(matrix(0, ntot, 1),ttree,matrix(0, ntot, 1),deparse.level=0) 
+  parents <- rep(NA, nrow(ctree))
+  parents[ctree[ ,2:3] + 1] <- 1:nrow(ctree)
+  parents=parents[-1]
   for (i in (1:ntot)) { 
-    j <- min(which(host==i)) 
-    while (host[j] == i)  { 
-      j <- which( ctree[ ,2] == j | ctree[ ,3] == j ) 
-    } 
+    j<-max(which(host==i))
+    j<-parents[j]
     ttree[i,1] <- ctree[j,1] 
     ttree[i,3] <- host[j] 
   } 
