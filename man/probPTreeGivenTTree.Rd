@@ -4,12 +4,14 @@
 \alias{probPTreeGivenTTree}
 \title{Calculate the probability of a phylogenetic tree given a transmission tree}
 \usage{
-probPTreeGivenTTree(ctree, neg)
+probPTreeGivenTTree(ctree, neg, w = NULL)
 }
 \arguments{
 \item{ctree}{Combined phylogenetic/transmission tree}
 
 \item{neg}{Within-host coalescent rate}
+
+\item{w}{Vector of hosts for which to calculate the probability, or NULL for all}
 }
 \value{
 Probability of phylogeny given transmission tree

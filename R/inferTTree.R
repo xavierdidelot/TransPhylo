@@ -54,6 +54,7 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
   pTTree <- probTTree(ttree$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT) 
   pPTree <- probPTreeGivenTTree(ctree,neg) 
   if (verbose==F) pb <- utils::txtProgressBar(min=0,max=mcmcIterations,style = 3)
+  
   for (i in 1:mcmcIterations) {#Main MCMC loop
     if (i%%thinning == 0) {
       #Record things 
@@ -82,12 +83,13 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
     class(ctree2)<-'ctree'
     ttree2 <- extractTTree(ctree2)
     pTTree2 <- probTTree(ttree2$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT) 
-    pPTree2 <- probPTreeGivenTTree(ctree2,neg) 
-    if (log(runif(1)) < log(prop$qr)+pTTree2 + pPTree2-pTTree-pPTree)  { 
+    #pPTree2 <- probPTreeGivenTTree(ctree2,neg) 
+    pPTreeDiff <- probPTreeGivenTTree(ctree2,neg,prop$new)-probPTreeGivenTTree(ctree,neg,prop$old)
+    if (log(runif(1)) < log(prop$qr)+pTTree2+pPTreeDiff-pTTree)  { 
       ctree <- ctree2 
       ttree <- ttree2
       pTTree <- pTTree2 
-      pPTree <- pPTree2 
+      pPTree <- pPTree+pPTreeDiff
     } 
     }
     

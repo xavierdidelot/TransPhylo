@@ -1,14 +1,16 @@
 #' Calculate the probability of a phylogenetic tree given a transmission tree
 #' @param ctree Combined phylogenetic/transmission tree
 #' @param neg Within-host coalescent rate
+#' @param w Vector of hosts for which to calculate the probability, or NULL for all
 #' @return Probability of phylogeny given transmission tree
 #' @export
-probPTreeGivenTTree = function(ctree,neg)  {
+probPTreeGivenTTree = function(ctree,neg,w=NULL)  {
   if (is.list(ctree)) ctree=ctree$ctree
-  n <- max(ctree[,4])
   prob <- 0 
-  for (i in (1:n)) { 
-    if (length(which(ctree[,4]==i))==1) next
+  tab=table(ctree[,4])[-1]
+  wi=which(tab>1)
+  if (!is.null(w)) wi=intersect(wi,w)
+  for (i in wi) { 
     subtree <- extractSubtree(ctree,i) 
     prob <- prob + probSubtree(subtree,neg) 
   } 

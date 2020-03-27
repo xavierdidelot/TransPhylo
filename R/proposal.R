@@ -1,5 +1,7 @@
 #Proposal distribution used in rjMCMC to update the transmission tree
 #Returns the proposed tree as well as qr=proposal ratio part of the Metropolis-Hastings ratio
+#And also old=list of hosts in previous tree for which subtree changed
+#And also new=list of hosts in new tree for which subtree changed
 proposal = function(tree)  {
   which=sample.int(3,1)
   if (which==1) return(move1(tree))#Add
@@ -18,18 +20,22 @@ move1 = function(tree) {
     loc=loc- (tree[bra,1]-tree[fathers[bra],1])
     bra=bra+1}
   nsam <- sum(tree[ ,2] == 0&tree[ ,3] == 0) 
-  tree=treeAdd(tree,tree[fathers[bra],1]+loc,bra,fathers[bra])
+  old=tree[bra,4]
+  nage=tree[fathers[bra],1]+loc
+  tree=treeAdd(tree,nage,bra,fathers[bra])
   tree <- cbind(tree[ ,1:3],.computeHost(tree)) 
   ntraeve=sum( tree[ ,2] > 0&tree[ ,3] == 0)
   qr=totbralen/(ntraeve-nsam)
-  return(list(tree=tree,qr=qr))
+  a=which(tree[,1]==nage)#find the new transmission event
+  b=tree[a,2]
+  return(list(tree=tree,qr=qr,old=old,new=c(tree[a,4],tree[b,4])))
 }
 
 #MOVE2: remove a transmission event if possible
 move2 = function(tree) {
   nsam <- sum(tree[ ,2] == 0&tree[ ,3] == 0) 
   ntraeve=sum(tree[ ,2]  > 0&tree[ ,3] == 0)
-  if (nsam==ntraeve) return(list(tree=tree,qr=1))#Nothing to remove
+  if (nsam==ntraeve) return(list(tree=tree,qr=1,old=c(),new=c()))#Nothing to remove
   
   #Choose a transmission event that can be removed
   host <- tree[ ,4]
@@ -37,8 +43,9 @@ move2 = function(tree) {
   totbralen=sum(utils::head(tree[,1],-2)-utils::head(tree[fathers,1],-1))
   w=0
   while (w==0||w==nrow(tree)||(infector<=nsam && infected<=nsam)){
-    w<-which( tree[ ,2] > 0&tree[ ,3] == 0 )
+    w<-which( tree[ ,2] > 0&tree[ ,3] == 0)
     if (length(w)>1) w <- sample(w ,1)
+    tmp=tree[w,2]
     infector <- host[w] 
     infected <- host[tree[w,2]]}
   
@@ -46,7 +53,7 @@ move2 = function(tree) {
   tree=treeRem(tree,w,fathers[w])
   tree <- cbind(tree[ ,1:3],.computeHost(tree)) 
   qr=(ntraeve-nsam)/totbralen
-  return(list(tree=tree,qr=qr))
+  return(list(tree=tree,qr=qr,old=c(infector,infected),new=tree[tmp,4]))
 }
 
 #MOVE3: update a transmission event
@@ -71,7 +78,7 @@ move3 = function(tree) {
     #tree[1:(nrow(tree)-1),1] <- tree[1:(nrow(tree)-1),1] + r 
     tree[nrow(tree),1]<-tree[nrow(tree),1]-r
     if (tree[nrow(tree),1]>tree[nrow(tree)-1,1]) print('error with root age')
-    return(list(tree=tree,qr=1))          
+    return(list(tree=tree,qr=1,old=tree[nrow(tree)-1,4],new=tree[nrow(tree)-1,4]))          
   } 
     
   #Remove the transmission node 
@@ -113,10 +120,13 @@ move3 = function(tree) {
   while (r>lens[i]) {r<-r-lens[i];i=i+1}
   
   #Add it back
-  tree=treeAdd(tree,tree[locs[i],1]-r,locs[i],fathers[locs[i]])
+  nage=tree[locs[i],1]-r
+  tree=treeAdd(tree,nage,locs[i],fathers[locs[i]])
   tree <- cbind(tree[ ,1:3],.computeHost(tree)) 
   
-  return(list(tree=tree,qr=1))  
+  a=which(tree[,1]==nage)#find the new transmission event
+  b=tree[a,2]
+  return(list(tree=tree,qr=1,old=c(infector,infected),new=c(tree[a,4],tree[b,4])))  
 }
 
 #.reordernodes = function(tree) {
