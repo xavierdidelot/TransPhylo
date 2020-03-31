@@ -24,7 +24,7 @@ probTTreeR = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dat
       offspring <- which( ttree[ ,3] == i ) 
       d <- length(offspring)
       if (is.na(alphaStar[d+1])) {
-        notinf=max(d,200)
+        notinf=max(d,1000)
         alphaStar[d+1]=sum(choose(d:notinf,d)*dnbinom(d:notinf,off.r,1-off.p)*omegaStar^{0:(notinf-d)})#This is Equation (4)
         alphaStar[d+1]=log(alphaStar[d+1])
       }
@@ -49,7 +49,7 @@ probTTreeR = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dat
       else prob<-prob+log(pi)+dgamma((ttree[i,2]-tinf),shape=ws.shape,scale=ws.scale,log=TRUE) #This is the second term in the product in Equation (11) Note simplification of truncWS/truncWS
       offspring <- which(ttree[ ,3]==i)
       d <- length(offspring)
-      notinf=max(200,d)
+      notinf=max(1000,d)
       alpha=sum(choose(d:notinf,d)*dnbinom(d:notinf,off.r,1-off.p)*fomegabar(tinf)^{0:(notinf-d)}) #This is Equation (10)
       prob <- prob + log(alpha) #This is the third term in the product in Equation (11)
       prob <- prob + sum(dgamma((ttree[offspring,1]-tinf),shape=w.shape,scale=w.scale,log=TRUE)-ltruncW)#This is the fourth term in the product in Equation (11)
