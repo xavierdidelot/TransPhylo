@@ -35,7 +35,7 @@ move1 = function(tree) {
 move2 = function(tree) {
   nsam <- sum(tree[ ,2] == 0&tree[ ,3] == 0) 
   ntraeve=sum(tree[ ,2]  > 0&tree[ ,3] == 0)
-  if (nsam==ntraeve) return(list(tree=tree,qr=1,old=c(),new=c()))#Nothing to remove
+  if (nsam==ntraeve) return(list(tree=tree,qr=1,old=as.numeric(c()),new=as.numeric(c())))#Nothing to remove
   
   #Choose a transmission event that can be removed
   host <- tree[ ,4]
