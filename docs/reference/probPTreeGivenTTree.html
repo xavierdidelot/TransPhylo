@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.17</span>
       </span>
     </div>
 
@@ -127,7 +127,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Calculate the probability of a phylogenetic tree given a transmission tree</h1>
-    <small class="dont-index">Source: <a href='https://github.com/xavierdidelot/TransPhylo/blob/master/R/probPTreeGivenTTree.R'><code>R/probPTreeGivenTTree.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/xavierdidelot/TransPhylo/blob/master/R/RcppExports.R'><code>R/RcppExports.R</code></a></small>
     <div class="hidden name"><code>probPTreeGivenTTree.Rd</code></div>
     </div>
 
@@ -135,7 +135,7 @@
     <p>Calculate the probability of a phylogenetic tree given a transmission tree</p>
     </div>
 
-    <pre class="usage"><span class='fu'>probPTreeGivenTTree</span>(<span class='no'>ctree</span>, <span class='no'>neg</span>, <span class='kw'>w</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>probPTreeGivenTTree</span>(<span class='no'>ctree</span>, <span class='no'>neg</span>, <span class='kw'>w</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,7 +150,7 @@
     </tr>
     <tr>
       <th>w</th>
-      <td><p>Vector of hosts for which to calculate the probability, or NULL for all</p></td>
+      <td><p>Vector of hosts for which to calculate the probability, or nothing for all</p></td>
     </tr>
     </table>
 

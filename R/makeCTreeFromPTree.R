@@ -52,7 +52,7 @@ makeCTreeFromPTree = function(ptree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,w.
     n <- ceiling( nrow(tree)/2 ) 
     ft=makeCTreeFromPTree(ptree)
     pTTree <- probTTree((extractTTree(ft))$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,T) 
-    pPTree <- probPTreeGivenTTree(ft,neg) 
+    pPTree <- probPTreeGivenTTree(ft$ctree,neg) 
     try=0
     sumbralen=0
     for (i in (n+1):nrow(tree)) for (j in 2:3) sumbralen=sumbralen+tree[tree[i,j],1]-tree[i,1]
@@ -64,7 +64,7 @@ makeCTreeFromPTree = function(ptree,off.r=NA,off.p=NA,neg=NA,pi=NA,w.shape=NA,w.
       ctree2=list(ctree=ctree2,nam=nam)
       class(ctree2)<-'ctree'
       pTTree2 <- probTTree((extractTTree(ctree2))$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,T) 
-      pPTree2 <- probPTreeGivenTTree(ctree2,neg) 
+      pPTree2 <- probPTreeGivenTTree(ctree2$ctree,neg) 
       if (pTTree2 + pPTree2>pTTree+pPTree)  { 
         ft <- ctree2 
         pTTree <- pTTree2 

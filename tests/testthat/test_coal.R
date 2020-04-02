@@ -1,10 +1,19 @@
 context("Test coalescent functions")
 
-test_that("Coalescent probability function gives expected result on small example.", {
+test_that("Coalescent probability function gives expected result on small ultrametric example.", {
   neg=2.1
   a=TransPhylo:::probSubtree(cbind(c(2010+1e-10,2010+2e-10,2010,2009,2008,0),c(4,4,5,5,6,0)),neg)
   b=dexp(1,choose(3,2)/neg,T)+dexp(1,choose(2,2)/neg,T)+log(1/3)
+  c=TransPhylo:::coalescent(c(2010+1e-10,2010+2e-10,2010),c(2009,2008),neg)
   expect_equal(a,b)
+  expect_equal(a,c)
+})
+
+test_that("Coalescent probability function gives expected result on small non-ultrametric example.", {
+  neg=2.1
+  a=TransPhylo:::probSubtree(cbind(c(2012,2011,2010,2009,2008,0),c(4,4,5,5,6,0)),neg)
+  c=TransPhylo:::coalescent(c(2012,2011,2010),c(2009,2008),neg)
+  expect_equal(a,c)
 })
 
 test_that("Probabilities of a coalescent tree are the same when simulating and evaluating.",{
@@ -38,7 +47,7 @@ test_that("Probabilities of coalescence in an outbreak is same when simulation a
   }
   ft<-TransPhylo:::.glueTrees(ttree,wtree)
   ft=list(ctree=ft,nam=as.character(1:n))
-  expect_equal(p1,probPTreeGivenTTree(ft,1.1))
+  expect_equal(p1,probPTreeGivenTTree(ft$ctree,1.1))
 })
 
 test_that("Probabilities of coalescence in an outbreak is same when simulation and evaluating.",{
@@ -58,7 +67,7 @@ test_that("Probabilities of coalescence in an outbreak is same when simulation a
   }
   ft<-TransPhylo:::.glueTrees(ttree,wtree)
   ft=list(ctree=ft,nam=as.character(1:n))
-  expect_equal(p1,probPTreeGivenTTree(ft,neg))
+  expect_equal(p1,probPTreeGivenTTree(ft$ctree,neg))
 })
 
 test_that("Probabilities of an outbreak is same when simulation and evaluating.",{
@@ -67,8 +76,18 @@ test_that("Probabilities of an outbreak is same when simulation and evaluating."
   shape=1.1
   scale=1.2
   out=simulateOutbreak(off.r=1,neg=neg,pi = 1,w.shape=shape,w.scale=scale,dateStartOutbreak = 2000,dateT = Inf)
-  expect_equal(out$probwithin,probPTreeGivenTTree(out,neg))
+  expect_equal(out$probwithin,probPTreeGivenTTree(out$ctree,neg))
   expect_equal(out$probttree,probTTree(extractTTree(out)$ttree,rOff = 1,pOff = 0.5,pi = 1,shGen = shape,scGen = scale,shSam = shape,scSam = scale,dateT=Inf),tolerance=0.001,scale=1)
+})
+
+
+test_that("Probabilities probPTreeGivenTTree are the same in R and Rcpp.",{
+  set.seed(4)
+  neg=1.1
+  shape=1.1
+  scale=1.2
+  out=simulateOutbreak(off.r=2,neg=neg,pi = 1,w.shape=shape,w.scale=scale,dateStartOutbreak = 2000,dateT = 2005)
+  expect_equal(probPTreeGivenTTreeR(out$ctree,neg),probPTreeGivenTTree(out$ctree,neg))
 })
 
 

@@ -52,7 +52,7 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
   ttree <- extractTTree(ctree)
   record <- vector('list',mcmcIterations/thinning)
   pTTree <- probTTree(ttree$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT) 
-  pPTree <- probPTreeGivenTTree(ctree,neg) 
+  pPTree <- probPTreeGivenTTree(ctree$ctree,neg) 
   if (verbose==F) pb <- utils::txtProgressBar(min=0,max=mcmcIterations,style = 3)
   
   for (i in 1:mcmcIterations) {#Main MCMC loop
@@ -83,8 +83,8 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
     class(ctree2)<-'ctree'
     ttree2 <- extractTTree(ctree2)
     pTTree2 <- probTTree(ttree2$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT) 
-    #pPTree2 <- probPTreeGivenTTree(ctree2,neg) 
-    pPTreeDiff <- probPTreeGivenTTree(ctree2,neg,prop$new)-probPTreeGivenTTree(ctree,neg,prop$old)
+    #pPTree2 <- probPTreeGivenTTree(ctree2$ctree,neg) 
+    pPTreeDiff <- probPTreeGivenTTree(ctree2$ctree,neg,prop$new)-probPTreeGivenTTree(ctree$ctree,neg,prop$old)
     if (log(runif(1)) < log(prop$qr)+pTTree2+pPTreeDiff-pTTree)  { 
       ctree <- ctree2 
       ttree <- ttree2
@@ -97,7 +97,7 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
       #Metropolis update for Ne*g, assuming Exp(1) prior 
       neg2 <- abs(neg + (runif(1)-0.5)*0.5)
       if (verbose) message(sprintf("Proposing Ne*g update %f->%f",neg,neg2))
-      pPTree2 <- probPTreeGivenTTree(ctree,neg2) 
+      pPTree2 <- probPTreeGivenTTree(ctree$ctree,neg2) 
       if (log(runif(1)) < pPTree2-pPTree-neg2+neg)  {neg <- neg2;pPTree <- pPTree2} 
     }
     

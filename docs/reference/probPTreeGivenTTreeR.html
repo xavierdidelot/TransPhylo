@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot a transmission tree in an economic format — plotTTree2 • TransPhylo</title>
+<title>Calculate the probability of a phylogenetic tree given a transmission tree — probPTreeGivenTTreeR • TransPhylo</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Plot a transmission tree in an economic format — plotTTree2" />
-<meta property="og:description" content="Plot a transmission tree in an economic format" />
+<meta property="og:title" content="Calculate the probability of a phylogenetic tree given a transmission tree — probPTreeGivenTTreeR" />
+<meta property="og:description" content="Calculate the probability of a phylogenetic tree given a transmission tree" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -126,40 +126,44 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot a transmission tree in an economic format</h1>
-    <small class="dont-index">Source: <a href='https://github.com/xavierdidelot/TransPhylo/blob/master/R/plotTTree2.R'><code>R/plotTTree2.R</code></a></small>
-    <div class="hidden name"><code>plotTTree2.Rd</code></div>
+    <h1>Calculate the probability of a phylogenetic tree given a transmission tree</h1>
+    <small class="dont-index">Source: <a href='https://github.com/xavierdidelot/TransPhylo/blob/master/R/probPTreeGivenTTree.R'><code>R/probPTreeGivenTTree.R</code></a></small>
+    <div class="hidden name"><code>probPTreeGivenTTreeR.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Plot a transmission tree in an economic format</p>
+    <p>Calculate the probability of a phylogenetic tree given a transmission tree</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plotTTree2</span>(<span class='no'>ttree</span>, <span class='kw'>showLabels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>showMissingLinks</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
+    <pre class="usage"><span class='fu'>probPTreeGivenTTreeR</span>(<span class='no'>ctree</span>, <span class='no'>neg</span>, <span class='kw'>w</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>ttree</th>
-      <td><p>Transmission tree</p></td>
+      <th>ctree</th>
+      <td><p>Combined phylogenetic/transmission tree</p></td>
     </tr>
     <tr>
-      <th>showLabels</th>
-      <td><p>Boolean for whether or not to show the labels</p></td>
+      <th>neg</th>
+      <td><p>Within-host coalescent rate</p></td>
     </tr>
     <tr>
-      <th>showMissingLinks</th>
-      <td><p>Option for how to show missing links: (0) as dots, (1) as several gray levels, (2) as a single gray level</p></td>
+      <th>w</th>
+      <td><p>Vector of hosts for which to calculate the probability, or NULL for all</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Probability of phylogeny given transmission tree</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
     </ul>
 
   </div>

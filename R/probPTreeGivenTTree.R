@@ -4,33 +4,42 @@
 #' @param w Vector of hosts for which to calculate the probability, or NULL for all
 #' @return Probability of phylogeny given transmission tree
 #' @export
-probPTreeGivenTTree = function(ctree,neg,w=NULL)  {
-  if (is.list(ctree)) ctree=ctree$ctree
+probPTreeGivenTTreeR = function(ctree,neg,w=NULL)  {
+  #if (is.list(ctree)) ctree=ctree$ctree
   prob <- 0 
   tab=table(ctree[,4])[-1]
   wi=which(tab>1)
   if (!is.null(w)) wi=intersect(wi,w)
-  for (i in wi) { 
-    subtree <- extractSubtree(ctree,i) 
+  parents <- rep(NA, nrow(ctree))
+  parents[ctree[ ,2:3] + 1] <- 1:nrow(ctree)
+  parents=parents[-1]
+  for (i in wi) {
+    #subtree <- extractSubtree(ctree,i,parents) 
+    toinc <- which(ctree[,4]==i)
+    toinc <- c(toinc,parents[toinc[length(toinc)]])
+    revtoinc <- rep(0,nrow(ctree))
+    revtoinc[toinc] <- 1:length(toinc)
+    subtree <- cbind(ctree[toinc,1],revtoinc[parents[toinc]])
+    subtree[nrow(subtree),2]=0
     prob <- prob + probSubtree(subtree,neg) 
   } 
   return(prob)
 } 
 
-extractSubtree = function(ctree,w)  {
-  #Take all nodes in host 
-  ind <- which(ctree[,4] == w)
-  #Add father of oldest node 
-  ind <- c(ind,which(ctree[,2]==ind[length(ind)]|ctree[,3]==ind[length(ind)]))
-  #Create subtree 
-  subtree <- matrix(0, length(ind), 2) 
-  for (i in 1:length(ind)) { 
-    subtree[i,1] <- ctree[ind[i],1]
-    subtree[which(ind==ctree[ind[i],2]),2]=i
-    subtree[which(ind==ctree[ind[i],3]),2]=i
-  } 
-  return(subtree)
-} 
+#extractSubtree = function(ctree,w)  {
+#  #Take all nodes in host 
+#  ind <- which(ctree[,4] == w)
+#  #Add father of oldest node 
+#  ind <- c(ind,which(ctree[,2]==ind[length(ind)]|ctree[,3]==ind[length(ind)]))
+#  #Create subtree 
+#  subtree <- matrix(0, length(ind), 2) 
+#  for (i in 1:length(ind)) { 
+#    subtree[i,1] <- ctree[ind[i],1]
+#    subtree[which(ind==ctree[ind[i],2]),2]=i
+#    subtree[which(ind==ctree[ind[i],3]),2]=i
+#  } 
+#  return(subtree)
+#} 
 
 probSubtree=function(tab,rate)  {
   #tab[,1]=times at bottom;tab[,2]=father;rate=coalescence rate 

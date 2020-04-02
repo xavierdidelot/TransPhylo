@@ -68,7 +68,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
       class(ctree2)<-'ctree'
       ttree2 <- extractTTree(ctree2)
       pTTree2 <- probTTree(ttree2$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT) 
-      pPTree2 <- probPTreeGivenTTree(ctree2,neg) 
+      pPTree2 <- probPTreeGivenTTree(ctree2$ctree,neg) 
       if (log(runif(1)) < log(prop$qr)+pTTree2 + pPTree2-pTTree-pPTree)  { 
         ctree <- ctree2 
         ttree <- ttree2
@@ -81,7 +81,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
       #Metropolis update for Ne*g, assuming Exp(1) prior 
       neg2 <- abs(neg + (runif(1)-0.5)*0.5)
       if (verbose) message(sprintf("Proposing unshared Ne*g update %f->%f",neg,neg2))
-      pPTree2 <- probPTreeGivenTTree(ctree,neg2) 
+      pPTree2 <- probPTreeGivenTTree(ctree$ctree,neg2) 
       if (log(runif(1)) < pPTree2-pPTree-neg2+neg)  {neg <- neg2;pPTree <- pPTree2} 
     }
     
@@ -120,14 +120,14 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
   one_update_share <- function(ctree_lst, pTTree_lst, pPTree_lst, neg_lst, off.r_lst, off.p_lst, pi_lst, share){
     ttree_lst <- purrr::map(ctree_lst, extractTTree)
     ttree_lst <- purrr::map(ttree_lst, "ttree") # list of ttree matrices
-    
+
     if(("neg" %in% share) && updateNeg){
       neg <- neg_lst[[1]]
       #Metropolis update for Ne*g, assuming Exp(1) prior 
       neg2 <- abs(neg + (runif(1)-0.5)*0.5)
       if (verbose) message(sprintf("Proposing shared Ne*g update %f->%f",neg,neg2))
       pPTree <- purrr::flatten_dbl(pPTree_lst)
-      pPTree2 <- purrr::map_dbl(ctree_lst, probPTreeGivenTTree, neg = neg2) 
+      pPTree2 <- purrr::map_dbl(ctree_lst, function (x,neg) probPTreeGivenTTree(x$ctree,neg), neg = neg2) 
       if (log(runif(1)) < sum(pPTree2)-sum(pPTree)-neg2+neg){
         neg_lst <- as.list(rep(neg2, ntree))
         pPTree_lst <- as.list(pPTree2)
@@ -196,7 +196,7 @@ infer_multittree_share_param = function(ptree_lst,w.shape=2,w.scale=1,ws.shape=w
   for(k in 1:ntree){
     ttree <- extractTTree(ctree_lst[[k]])
     pTTree_lst[[k]] <- probTTree(ttree$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT) 
-    pPTree_lst[[k]] <- probPTreeGivenTTree(ctree_lst[[k]],neg)  
+    pPTree_lst[[k]] <- probPTreeGivenTTree(ctree_lst[[k]]$ctree,neg)  
   }
   mcmc_state <- list(ctree=ctree_lst, pTTree=pTTree_lst, pPTree=pPTree_lst, 
                      neg=neg_lst, off.r=off.r_lst, off.p=off.p_lst, pi=pi_lst)

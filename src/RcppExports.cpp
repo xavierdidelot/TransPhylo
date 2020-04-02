@@ -5,6 +5,32 @@
 
 using namespace Rcpp;
 
+// probPTreeGivenTTree
+double probPTreeGivenTTree(NumericMatrix ctree, double neg, IntegerVector w);
+RcppExport SEXP _TransPhylo_probPTreeGivenTTree(SEXP ctreeSEXP, SEXP negSEXP, SEXP wSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type ctree(ctreeSEXP);
+    Rcpp::traits::input_parameter< double >::type neg(negSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type w(wSEXP);
+    rcpp_result_gen = Rcpp::wrap(probPTreeGivenTTree(ctree, neg, w));
+    return rcpp_result_gen;
+END_RCPP
+}
+// coalescent
+double coalescent(NumericVector leaves, NumericVector nodes, double alpha);
+RcppExport SEXP _TransPhylo_coalescent(SEXP leavesSEXP, SEXP nodesSEXP, SEXP alphaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type leaves(leavesSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type nodes(nodesSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    rcpp_result_gen = Rcpp::wrap(coalescent(leaves, nodes, alpha));
+    return rcpp_result_gen;
+END_RCPP
+}
 // wbar
 NumericVector wbar(double tinf, double dateT, double rOff, double pOff, double pi, double shGen, double scGen, double shSam, double scSam, double delta_t);
 RcppExport SEXP _TransPhylo_wbar(SEXP tinfSEXP, SEXP dateTSEXP, SEXP rOffSEXP, SEXP pOffSEXP, SEXP piSEXP, SEXP shGenSEXP, SEXP scGenSEXP, SEXP shSamSEXP, SEXP scSamSEXP, SEXP delta_tSEXP) {
@@ -47,6 +73,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_TransPhylo_probPTreeGivenTTree", (DL_FUNC) &_TransPhylo_probPTreeGivenTTree, 3},
+    {"_TransPhylo_coalescent", (DL_FUNC) &_TransPhylo_coalescent, 3},
     {"_TransPhylo_wbar", (DL_FUNC) &_TransPhylo_wbar, 10},
     {"_TransPhylo_probTTree", (DL_FUNC) &_TransPhylo_probTTree, 10},
     {NULL, NULL, 0}
