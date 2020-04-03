@@ -15,6 +15,18 @@ coalescent <- function(leaves, nodes, alpha) {
     .Call('_TransPhylo_coalescent', PACKAGE = 'TransPhylo', leaves, nodes, alpha)
 }
 
+log_sum_exp <- function(u, v) {
+    .Call('_TransPhylo_log_sum_exp', PACKAGE = 'TransPhylo', u, v)
+}
+
+log_subtract_exp <- function(u, v) {
+    .Call('_TransPhylo_log_subtract_exp', PACKAGE = 'TransPhylo', u, v)
+}
+
+log_sum_exp_vec <- function(w) {
+    .Call('_TransPhylo_log_sum_exp_vec', PACKAGE = 'TransPhylo', w)
+}
+
 wbar <- function(tinf, dateT, rOff, pOff, pi, shGen, scGen, shSam, scSam, delta_t) {
     .Call('_TransPhylo_wbar', PACKAGE = 'TransPhylo', tinf, dateT, rOff, pOff, pi, shGen, scGen, shSam, scSam, delta_t)
 }

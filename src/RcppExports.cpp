@@ -31,6 +31,41 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// log_sum_exp
+double log_sum_exp(double u, double v);
+RcppExport SEXP _TransPhylo_log_sum_exp(SEXP uSEXP, SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type u(uSEXP);
+    Rcpp::traits::input_parameter< double >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_sum_exp(u, v));
+    return rcpp_result_gen;
+END_RCPP
+}
+// log_subtract_exp
+double log_subtract_exp(double u, double v);
+RcppExport SEXP _TransPhylo_log_subtract_exp(SEXP uSEXP, SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type u(uSEXP);
+    Rcpp::traits::input_parameter< double >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_subtract_exp(u, v));
+    return rcpp_result_gen;
+END_RCPP
+}
+// log_sum_exp_vec
+double log_sum_exp_vec(NumericVector w);
+RcppExport SEXP _TransPhylo_log_sum_exp_vec(SEXP wSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_sum_exp_vec(w));
+    return rcpp_result_gen;
+END_RCPP
+}
 // wbar
 NumericVector wbar(double tinf, double dateT, double rOff, double pOff, double pi, double shGen, double scGen, double shSam, double scSam, double delta_t);
 RcppExport SEXP _TransPhylo_wbar(SEXP tinfSEXP, SEXP dateTSEXP, SEXP rOffSEXP, SEXP pOffSEXP, SEXP piSEXP, SEXP shGenSEXP, SEXP scGenSEXP, SEXP shSamSEXP, SEXP scSamSEXP, SEXP delta_tSEXP) {
@@ -75,6 +110,9 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_TransPhylo_probPTreeGivenTTree", (DL_FUNC) &_TransPhylo_probPTreeGivenTTree, 3},
     {"_TransPhylo_coalescent", (DL_FUNC) &_TransPhylo_coalescent, 3},
+    {"_TransPhylo_log_sum_exp", (DL_FUNC) &_TransPhylo_log_sum_exp, 2},
+    {"_TransPhylo_log_subtract_exp", (DL_FUNC) &_TransPhylo_log_subtract_exp, 2},
+    {"_TransPhylo_log_sum_exp_vec", (DL_FUNC) &_TransPhylo_log_sum_exp_vec, 1},
     {"_TransPhylo_wbar", (DL_FUNC) &_TransPhylo_wbar, 10},
     {"_TransPhylo_probTTree", (DL_FUNC) &_TransPhylo_probTTree, 10},
     {NULL, NULL, 0}

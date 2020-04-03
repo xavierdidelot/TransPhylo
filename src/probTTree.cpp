@@ -40,6 +40,7 @@ double wstar_rootFinder(double pi, double p, double r)
 }
 
 //returns log(exp(u)+exp(v))
+// [[Rcpp::export]]
 double log_sum_exp(double u, double v)
 {
   if (u == R_NegInf) return v;
@@ -47,7 +48,8 @@ double log_sum_exp(double u, double v)
   return(std::max(u, v) + log(exp(u - std::max(u, v)) + exp(v - std::max(u, v))));
 }
 
- 
+//returns log(exp(u)-exp(v))
+// [[Rcpp::export]]
 double log_subtract_exp(double u, double v) {
   // if(u <= v) throw(Rcpp::exception("error!! computing the log of a negative number"));
   if(v == R_NegInf)
@@ -55,7 +57,7 @@ double log_subtract_exp(double u, double v) {
   return u + log1p(-exp(v-u));
 }
 
-/*
+// [[Rcpp::export]]
 double log_sum_exp_vec(NumericVector w)
 {
   double total=w[0];
@@ -64,7 +66,6 @@ double log_sum_exp_vec(NumericVector w)
   }
   return(total);
 }
-*/
 
 /*
 double alphastar(int d, double p, double r, double wstar)

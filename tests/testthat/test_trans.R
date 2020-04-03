@@ -80,3 +80,10 @@ test_that("Probability of a transmission tree is the same in R and C++.", {
   p2=TransPhylo:::probTTreeR(ttree$ttree,off.r,off.p,pi,w.shape,w.scale,w.shape,w.scale,3)
   expect_equal(p,p2,tolerance=0.01)
 })
+
+test_that("Basic C functions for log/exp computations behave as expected.",{
+  set.seed(0)
+  expect_equal(TransPhylo:::log_sum_exp(1.1,2.2),log(sum(exp(c(1.1,2.2)))))
+  expect_equal(TransPhylo:::log_sum_exp_vec(c(1.1,2.2,3.3)),log(sum(exp(c(1.1,2.2,3.3)))))
+  expect_equal(TransPhylo:::log_subtract_exp(2.1,1.1),log(exp(2.1)-exp(1.1)))
+})
