@@ -44,7 +44,7 @@ plot.ptree = function(x,...) {
   stopifnot(inherits(x, "ptree"))
   phy=phyloFromPTree(x)
   ape::plot.phylo(phy,...)
-  ape::axisPhylo()
+  ape::axisPhylo(backward = F)
 }
 
 #' Print function for resTransPhylo objects

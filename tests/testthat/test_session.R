@@ -38,6 +38,7 @@ test_that("Typical session can be run.", {
    expect_is(last,'ctree')
    expect_silent(plot(last))
    expect_silent(plot(res))
+   expect_silent(plotTraces(res,burnin=0.5,extend=T))
    expect_silent(mcmc<-as.mcmc.resTransPhylo(res))
    expect_is(mcmc,'mcmc')
    expect_is(capture_output(cons<-consTTree(res,debug=T)),'character')

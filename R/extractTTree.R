@@ -15,8 +15,10 @@ extractTTree = function(ctree)  {
   parents <- rep(NA, nrow(ctree))
   parents[ctree[ ,2:3] + 1] <- 1:nrow(ctree)
   parents=parents[-1]
+  maxs=rep(0,ntot)
+  for (i in 1:length(host)) maxs[host[i]]=i
   for (i in (1:ntot)) { 
-    j<-max(which(host==i))
+    j<-maxs[i]#(which(host==i))
     j<-parents[j]
     ttree[i,1] <- ctree[j,1] 
     ttree[i,3] <- host[j] 

@@ -1,9 +1,10 @@
 #' Plot MCMC traces
 #' @param record Output from inferTTree function
 #' @param burnin Proportion of the MCMC output to be discarded as burnin
+#' @param extend Whether to also show traces of off.r and off.p
 #' @export
-plotTraces = function(record,burnin=0) {
-  par(mfrow=c(2,2))
+plotTraces = function(record,burnin=0,extend=F) {
+  par(mfrow=c(2,ifelse(extend,3,2)))
   record=record[max(1,round(length(record)*burnin)):length(record)]
   plot(sapply(record,function(x) x$pTTree+x$pPTree),ylab='Posterior probability',
        xlab='MCMC iterations',type='l')
@@ -13,6 +14,12 @@ plotTraces = function(record,burnin=0) {
        xlab='MCMC iterations',type='l')
   plot(sapply(record,function(x) x$off.r*x$off.p/(1-x$off.p)),ylab='Basic reproduction number R',
        xlab='MCMC iterations',type='l')
+  if (extend) {
+    plot(sapply(record,function(x) x$off.r),ylab='off.r',
+         xlab='MCMC iterations',type='l')    
+    plot(sapply(record,function(x) x$off.p),ylab='off.p',
+         xlab='MCMC iterations',type='l')    
+  }
 }
 
 #' Convert to coda mcmc format

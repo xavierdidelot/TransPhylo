@@ -39,14 +39,14 @@ double wstar_rootFinder(double pi, double p, double r)
   return result;
 }
 
-/*
+//returns log(exp(u)+exp(v))
 double log_sum_exp(double u, double v)
 {
   if (u == R_NegInf) return v;
   if (v == R_NegInf) return u;
   return(std::max(u, v) + log(exp(u - std::max(u, v)) + exp(v - std::max(u, v))));
 }
-*/
+
  
 double log_subtract_exp(double u, double v) {
   // if(u <= v) throw(Rcpp::exception("error!! computing the log of a negative number"));
@@ -128,7 +128,7 @@ double alpha(int d, double p, double r,double wbar_tinf)
 }
 */
 
-/* alpha() computes equation (10) in TransPhylo paper*/
+// alpha() computes equation (10) in TransPhylo paper
 double alpha(int d, double p, double r,double wbar_tinf)
 {
   if(std::abs(r-1.0)<1e-6) // Exact solution available
@@ -137,7 +137,7 @@ double alpha(int d, double p, double r,double wbar_tinf)
   double term=R::dnbinom(d,r,1-p,1);
   double eterm=exp(term);
   for (int k=d;k<1e4;k++) {
-    toret+=eterm;//toret=log_sum_exp(term,toret);
+    toret+=eterm;
     term+=log(p*(k+r)/(k-d+1))+wbar_tinf;
     eterm=exp(term);
     if (eterm<0.001*toret) break;
