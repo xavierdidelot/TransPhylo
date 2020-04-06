@@ -1,10 +1,10 @@
 // [[Rcpp::depends(BH)]]
 // [[Rcpp::plugins(cpp11)]]
-#include <Rcpp.h>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/distributions/negative_binomial.hpp>
 #include <boost/math/distributions/gamma.hpp>
 #include <limits>
+#include <Rcpp.h>
 using namespace Rcpp;
 
 struct wstar_functor
