@@ -5,6 +5,18 @@
 
 using namespace Rcpp;
 
+// probSubtree
+double probSubtree(NumericMatrix tab, double rate);
+RcppExport SEXP _TransPhylo_probSubtree(SEXP tabSEXP, SEXP rateSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type tab(tabSEXP);
+    Rcpp::traits::input_parameter< double >::type rate(rateSEXP);
+    rcpp_result_gen = Rcpp::wrap(probSubtree(tab, rate));
+    return rcpp_result_gen;
+END_RCPP
+}
 // probPTreeGivenTTree
 double probPTreeGivenTTree(NumericMatrix ctree, double neg, IntegerVector w);
 RcppExport SEXP _TransPhylo_probPTreeGivenTTree(SEXP ctreeSEXP, SEXP negSEXP, SEXP wSEXP) {
@@ -108,6 +120,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_TransPhylo_probSubtree", (DL_FUNC) &_TransPhylo_probSubtree, 2},
     {"_TransPhylo_probPTreeGivenTTree", (DL_FUNC) &_TransPhylo_probPTreeGivenTTree, 3},
     {"_TransPhylo_coalescent", (DL_FUNC) &_TransPhylo_coalescent, 3},
     {"_TransPhylo_log_sum_exp", (DL_FUNC) &_TransPhylo_log_sum_exp, 2},

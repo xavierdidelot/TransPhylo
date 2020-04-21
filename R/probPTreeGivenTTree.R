@@ -21,7 +21,7 @@ probPTreeGivenTTreeR = function(ctree,neg,w=NULL)  {
     revtoinc[toinc] <- 1:length(toinc)
     subtree <- cbind(ctree[toinc,1],revtoinc[parents[toinc]])
     subtree[nrow(subtree),2]=0
-    prob <- prob + probSubtree(subtree,neg) 
+    prob <- prob + probSubtreeR(subtree,neg) 
   } 
   return(prob)
 } 
@@ -41,7 +41,7 @@ probPTreeGivenTTreeR = function(ctree,neg,w=NULL)  {
 #  return(subtree)
 #} 
 
-probSubtree=function(tab,rate)  {
+probSubtreeR=function(tab,rate)  {
   #tab[,1]=times at bottom;tab[,2]=father;rate=coalescence rate 
   #Return the log-prior probability of a subtree 
   #This is an extension to Eq1 of Drummond et al(2002) Genetics 161:1307-1320 that accounts for condition TMRCA<INCUBATION_PERIOD 

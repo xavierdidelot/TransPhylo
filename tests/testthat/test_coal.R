@@ -5,14 +5,18 @@ test_that("Coalescent probability function gives expected result on small ultram
   a=TransPhylo:::probSubtree(cbind(c(2010+1e-10,2010+2e-10,2010,2009,2008,0),c(4,4,5,5,6,0)),neg)
   b=dexp(1,choose(3,2)/neg,T)+dexp(1,choose(2,2)/neg,T)+log(1/3)
   c=TransPhylo:::coalescent(c(2010+1e-10,2010+2e-10,2010),c(2009,2008),neg)
+  d=TransPhylo:::probSubtreeR(cbind(c(2010+1e-10,2010+2e-10,2010,2009,2008,0),c(4,4,5,5,6,0)),neg)
   expect_equal(a,b)
   expect_equal(a,c)
+  expect_equal(a,d)
 })
 
 test_that("Coalescent probability function gives expected result on small non-ultrametric example.", {
   neg=2.1
   a=TransPhylo:::probSubtree(cbind(c(2012,2011,2010,2009,2008,0),c(4,4,5,5,6,0)),neg)
+  b=TransPhylo:::probSubtreeR(cbind(c(2012,2011,2010,2009,2008,0),c(4,4,5,5,6,0)),neg)
   c=TransPhylo:::coalescent(c(2012,2011,2010),c(2009,2008),neg)
+  expect_equal(a,b)
   expect_equal(a,c)
 })
 
@@ -28,7 +32,9 @@ test_that("Probabilities of a coalescent tree are the same when simulating and e
   revind=ind;revind[ind]=1:length(ind)
   subtree=cbind(tre[ind,1],c(revind[fathers[ind[1:(length(ind)-1)]]],0))
   p=TransPhylo:::probSubtree(subtree,1.1)
+  p2=TransPhylo:::probSubtreeR(subtree,1.1)
   expect_equal(p,tree$prob)
+  expect_equal(p2,tree$prob)
 })
 
 test_that("Probabilities of coalescence in an outbreak is same when simulation and evaluating.",{
