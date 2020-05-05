@@ -72,3 +72,7 @@ getOmegabarR=function(L,dt,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale) {
   }
   return(omegabar)
 }
+
+wstar_rootFinderR=function(pi,off.p,off.r) {
+  omegaStar <- uniroot(function(x) {x-(1-pi)*((1-off.p)/(1-off.p*x))^off.r},c(0,1))$root #This is Equation (2)
+}

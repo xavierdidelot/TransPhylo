@@ -1,12 +1,14 @@
+#include <Rcpp.h>
+using namespace Rcpp;
+
+/*
 // [[Rcpp::depends(BH)]]
 // [[Rcpp::plugins(cpp11)]]
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/distributions/negative_binomial.hpp>
 #include <boost/math/distributions/gamma.hpp>
 #include <limits>
-#include <Rcpp.h>
-using namespace Rcpp;
-
+ 
 struct wstar_functor
 { // Functor also returning 1st derivative.
   wstar_functor(double const& pi, double const& p, double const& r) : pi(pi), p(p), r(r){};
@@ -37,6 +39,14 @@ double wstar_rootFinder(double pi, double p, double r)
   boost::uintmax_t it = maxit;
   double result = newton_raphson_iterate(wstar_functor(pi, p, r), 0.5, 0.0, 1.0, get_digits, it);
   return result;
+}*/
+
+double wstar_rootFinder(double pi, double p, double r)
+{
+  Environment pkg = Environment::namespace_env("TransPhylo");
+  Function wstar_rootFinderR = pkg["wstar_rootFinderR"];
+  RObject res = wstar_rootFinderR(pi,p,r);
+  return(as<double>(res));  
 }
 
 //returns log(exp(u)+exp(v))
