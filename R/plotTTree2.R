@@ -2,8 +2,9 @@
 #' @param ttree Transmission tree
 #' @param showLabels Boolean for whether or not to show the labels
 #' @param showMissingLinks Option for how to show missing links: (0) as dots, (1) as several gray levels, (2) as a single gray level
+#' @param cex Expansion factor
 #' @export
-plotTTree2 = function(ttree,showLabels=TRUE,showMissingLinks=0) {
+plotTTree2 = function(ttree,showLabels=TRUE,showMissingLinks=0,cex=1) {
   nam=ttree$nam
   ttree=ttree$ttree
   ttree=cbind(ttree,rep(1,nrow(ttree)))
@@ -54,12 +55,12 @@ plotTTree2 = function(ttree,showLabels=TRUE,showMissingLinks=0) {
     }
     #ma=max(ttree[i,1],ttree[which(ttree[,3]==i),1])
     #mi=min(ttree[i,1],ttree[i,1],ttree[which(ttree[,3]==i),1])
-    if (showLabels && !is.na(ttree[i,2])) text(ttree[i,1],ys[i],nam[i],pos=4,cex=0.5)
+    if (showLabels && !is.na(ttree[i,2])) text(ttree[i,1],ys[i],nam[i],pos=4,cex=cex)
     #lines(c(mi,ma),c(ys[i],ys[i]))
   }
   for (i in 1:n) {
     #points(ttree[i,1],ys[i],pch=21,bg='black',cex=0.2+0.2*(!is.na(ttree[i,2])))
-    points(ttree[i,1],ys[i],pch=21,bg=ifelse(is.na(ttree[i,2]),'white','black'),cex=0.5)
+    points(ttree[i,1],ys[i],pch=21,bg=ifelse(is.na(ttree[i,2]),'white','black'),cex=cex)
   }
-  if (length(pal)>2) legend('topleft',legend = 0:(length(pal)-1),col = pal,lty=1,cex=0.5,title='Missing links')
+  if (length(pal)>2) legend('topleft',legend = 0:(length(pal)-1),col = pal,lty=1,cex=cex,title='Missing links')
 }

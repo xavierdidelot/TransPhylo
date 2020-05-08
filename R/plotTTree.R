@@ -1,11 +1,12 @@
-#' Plot a transmission tree
+#' Plot a transmission tree in a detailed format
 #' @param ttree Transmission tree
 #' @param w.shape Shape parameter of the Gamma probability density function representing the generation time
 #' @param w.scale Scale parameter of the Gamma probability density function representing the generation time 
 #' @param showLabels Whether or not to show the labels 
 #' @param maxTime Maximum value of time to show on x axis
+#' @param cex Expansion factor
 #' @export
-plotTTree = function(ttree,w.shape,w.scale,showLabels=TRUE,maxTime=NA) {
+plotTTree = function(ttree,w.shape,w.scale,showLabels=TRUE,maxTime=NA,cex=1) {
   nam=ttree$nam
   ttree=ttree$ttree
   n=nrow(ttree)
@@ -34,7 +35,7 @@ plotTTree = function(ttree,w.shape,w.scale,showLabels=TRUE,maxTime=NA) {
     cs=grDevices::gray(cs)
     segments(as,bs,x1=as+xstep,col=cs)
     points(ttree[i,2],ys[i],col = 'red') 
-    if (showLabels) text(ma+(ma-mi)*0.05,ys[i],nam[i])
+    if (showLabels) text(ma+(ma-mi)*0.05,ys[i],nam[i],cex=cex)
     if (ttree[i,3]==0) {next}
     arrows(ttree[i,1],ys[ttree[i,3]],ttree[i,1],ys[i],length=0.1)
   }

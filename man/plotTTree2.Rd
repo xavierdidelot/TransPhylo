@@ -4,7 +4,7 @@
 \alias{plotTTree2}
 \title{Plot a transmission tree in an economic format}
 \usage{
-plotTTree2(ttree, showLabels = TRUE, showMissingLinks = 0)
+plotTTree2(ttree, showLabels = TRUE, showMissingLinks = 0, cex = 1)
 }
 \arguments{
 \item{ttree}{Transmission tree}
@@ -12,6 +12,8 @@ plotTTree2(ttree, showLabels = TRUE, showMissingLinks = 0)
 \item{showLabels}{Boolean for whether or not to show the labels}
 
 \item{showMissingLinks}{Option for how to show missing links: (0) as dots, (1) as several gray levels, (2) as a single gray level}
+
+\item{cex}{Expansion factor}
 }
 \description{
 Plot a transmission tree in an economic format

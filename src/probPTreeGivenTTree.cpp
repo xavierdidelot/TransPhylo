@@ -102,9 +102,9 @@ double probPTreeGivenTTree(NumericMatrix ctree, double neg, IntegerVector w = In
     for (int j=0;j<ctree.nrow();j++) if (ctree(j,3)==w(i)) toinc.push_back(j+1);
     toinc.push_back(parents(toinc.back()));
     IntegerVector revtoinc=IntegerVector(ctree.nrow()+1);
-    for (int j=0;j<toinc.size();j++) revtoinc[toinc[j]]=j+1;
+    for (unsigned int j=0;j<toinc.size();j++) revtoinc[toinc[j]]=j+1;
     NumericMatrix subtree=NumericMatrix(toinc.size(),2);
-    for (int j=0;j<toinc.size();j++) {
+    for (unsigned int j=0;j<toinc.size();j++) {
       subtree(j,0)=ctree(toinc[j]-1,0);
       subtree(j,1)=revtoinc(parents(toinc[j]));
     }

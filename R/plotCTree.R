@@ -1,12 +1,14 @@
 #' Plot both phylogenetic and transmission trees using colors on the phylogeny
 #' @param tree Combined phylogenetic/transmission tree
 #' @param showLabels Whether or not to show the labels 
+#' @param showStars Whether or not to show stars representing transmission events
 #' @param cols Colors to use for hosts
 #' @param maxTime Maximum time to show on the x axis
+#' @param cex Expansion factor
 #' @examples
 #' plotCTree(simulateOutbreak())
 #' @export
-plotCTree = function(tree,showLabels=TRUE,cols=NA,maxTime=NA)  {
+plotCTree = function(tree,showLabels=TRUE,showStars=TRUE,cols=NA,maxTime=NA,cex=1)  {
   nam=tree$nam
   tree=tree$ctree
   nsam <- sum(tree[ ,2]+tree[ ,3] == 0) 
@@ -23,7 +25,7 @@ plotCTree = function(tree,showLabels=TRUE,cols=NA,maxTime=NA)  {
   #Determine ys for leaves
   root<-which(host==0)
   ys <- matrix(0, nsam, 1) 
-  todo <- cbind(root,0,0.5,1);#Matrix of nodes to do,with associated starting x and y coordinates and scale 
+  todo <- cbind(root,0,0.5,1)#Matrix of nodes to do,with associated starting x and y coordinates and scale 
   while (nrow(todo) > 0)  { 
     w <- todo[1,1] 
     x <- todo[1,2] 
@@ -54,7 +56,7 @@ plotCTree = function(tree,showLabels=TRUE,cols=NA,maxTime=NA)  {
     ys[i] <- mean(ys[children[which(children<=nsam)]])
   } 
   
-  todo <- cbind(root,tree[root,1]);
+  todo <- cbind(root,tree[root,1])
   while (nrow(todo) > 0)  { 
     w <- todo[1,1] 
     x <- todo[1,2] 
@@ -63,11 +65,11 @@ plotCTree = function(tree,showLabels=TRUE,cols=NA,maxTime=NA)  {
     if (tree[w,2] == 0 && tree[w,3] == 0)  { 
       #Leaf node 
       lines(c(x,tree[w,1]),c(y,y),col=col,lwd=2) 
-      if (showLabels) text(tree[w,1] + (max(cbind(tree[ ,1]))-min(cbind(tree[ ,1])))/100,y,nam[w])
+      if (showLabels) text(tree[w,1],y,nam[w],cex=cex,pos=4)
     } else if (tree[w,3] == 0)  { 
       #Transmission node 
       lines(c(x,tree[w,1]),c(y,y),col=col,lwd=2) 
-      points(tree[w,1],y,col = 'red',pch=8) 
+      #points(tree[w,1],y,col = 'red',pch=8) 
       todo <- rbind(todo,cbind(tree[w,2],tree[w,1])) 
     } else { 
       #Binary node 
@@ -75,6 +77,27 @@ plotCTree = function(tree,showLabels=TRUE,cols=NA,maxTime=NA)  {
       lines(c(tree[w,1],tree[w,1]),cbind(ys[tree[w,2]],ys[tree[w,3]]),col=col,lwd=2)
       todo <- rbind(todo,cbind(tree[w,2],tree[w,1]),cbind(tree[w,3],tree[w,1])) 
     } 
-    todo <- rbind(todo[-1,]);
-  } 
+    todo <- rbind(todo[-1,])
+  }
+  
+  todo <- cbind(root,tree[root,1])
+  while (nrow(todo) > 0 && showStars)  { 
+    w <- todo[1,1] 
+    x <- todo[1,2] 
+    y <- ys[w] 
+    col=host[w]
+    if (tree[w,2] == 0 && tree[w,3] == 0)  { 
+      #Leaf node 
+    } else if (tree[w,3] == 0)  {
+      #Transmission node 
+      points(tree[w,1],y,col = 'red',pch=8) 
+      todo <- rbind(todo,cbind(tree[w,2],tree[w,1])) 
+    } else { 
+      #Binary node 
+      todo <- rbind(todo,cbind(tree[w,2],tree[w,1]),cbind(tree[w,3],tree[w,1])) 
+    } 
+    todo <- rbind(todo[-1,])
+  }
+  
+    
 } 

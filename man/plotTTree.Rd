@@ -2,9 +2,10 @@
 % Please edit documentation in R/plotTTree.R
 \name{plotTTree}
 \alias{plotTTree}
-\title{Plot a transmission tree}
+\title{Plot a transmission tree in a detailed format}
 \usage{
-plotTTree(ttree, w.shape, w.scale, showLabels = TRUE, maxTime = NA)
+plotTTree(ttree, w.shape, w.scale, showLabels = TRUE, maxTime = NA,
+  cex = 1)
 }
 \arguments{
 \item{ttree}{Transmission tree}
@@ -16,7 +17,9 @@ plotTTree(ttree, w.shape, w.scale, showLabels = TRUE, maxTime = NA)
 \item{showLabels}{Whether or not to show the labels}
 
 \item{maxTime}{Maximum value of time to show on x axis}
+
+\item{cex}{Expansion factor}
 }
 \description{
-Plot a transmission tree
+Plot a transmission tree in a detailed format
 }

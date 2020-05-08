@@ -4,16 +4,21 @@
 \alias{plotCTree}
 \title{Plot both phylogenetic and transmission trees using colors on the phylogeny}
 \usage{
-plotCTree(tree, showLabels = TRUE, cols = NA, maxTime = NA)
+plotCTree(tree, showLabels = TRUE, showStars = TRUE, cols = NA,
+  maxTime = NA, cex = 1)
 }
 \arguments{
 \item{tree}{Combined phylogenetic/transmission tree}
 
 \item{showLabels}{Whether or not to show the labels}
 
+\item{showStars}{Whether or not to show stars representing transmission events}
+
 \item{cols}{Colors to use for hosts}
 
 \item{maxTime}{Maximum time to show on the x axis}
+
+\item{cex}{Expansion factor}
 }
 \description{
 Plot both phylogenetic and transmission trees using colors on the phylogeny
