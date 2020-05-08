@@ -1,0 +1,29 @@
+navbar:
+  structure:
+    left:
+    - home
+    - intro
+    - reference
+    - articles
+    - tutorials
+    - news
+    right: github
+  components:
+    home:
+      icon: fas fa-home fa-lg
+      href: index.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    intro:
+      text: Get started
+      href: articles/TransPhylo.html
+    articles:
+      text: Articles
+      menu:
+      - text: Simulation of outbreak data
+        href: articles/simulate.html
+      - text: Inference of transmission tree from a dated phylogeny
+        href: articles/infer.html
+      - text: Simultaneous Inference of Multiple Transmission Trees
+        href: articles/multitree.html
