@@ -98,7 +98,7 @@ df <- data.frame(run = rep(c("tp1","tp2","tp_multitree"), each = length(record_t
 ```
 
 
-In this example where we explictly set the parameters when simulating the outbreaks, we see that the posterior estimates from the multiple tree inference generally have lower variance than those resulting from single tree inference. The true parameter values are shown in gray reference line.
+In this example where we explicitly set the parameters when simulating the outbreaks, we see that the posterior estimates from the multiple tree inference generally have lower variance than those resulting from single tree inference. The true parameter values are shown in gray reference line.
 ```{r}
 boxplot(df$pi~df$run,ylab='pi')
 lines(c(0,4),rep(0.8,2),col='grey')
