@@ -12,6 +12,7 @@ plot.resTransPhylo = function(x,...) {
 #' @param x Object of class ctree, ie a colored phylogenetic tree
 #' @param ... Additional parameters are passed on
 #' @return Plot of ctree
+#' @examples plot(simulateOutbreak())
 #' @export
 plot.ctree = function(x,...) {
   stopifnot(inherits(x, "ctree"))
@@ -25,6 +26,8 @@ plot.ctree = function(x,...) {
 #' @param w.scale Scale parameter of the generation time, needed for detailed plot only
 #' @param ... Additional parameters are passed on
 #' @return Plot of ttree
+#' @examples 
+#' plot(extractTTree(simulateOutbreak()))
 #' @export
 plot.ttree = function(x,type='summarised',w.shape=NA,w.scale=NA,...) {
   stopifnot(inherits(x, "ttree"))
@@ -37,8 +40,10 @@ plot.ttree = function(x,type='summarised',w.shape=NA,w.scale=NA,...) {
 
 #' Plotting for ptree
 #' @param x Object of class ptree, ie  a phylogenetic tree
-#' @param ... Additional parameters are passed on
+#' @param ... Additional parameters are passed on to ape::plot.phylo
 #' @return Plot of ptree
+#' @examples 
+#' plot(ptreeFromPhylo(ape::rtree(5),2020))
 #' @export
 plot.ptree = function(x,...) {
   stopifnot(inherits(x, "ptree"))
@@ -70,6 +75,8 @@ print.resTransPhylo <- function(x, ...)
 #' @param x Object of class ctree, ie a colored phylogenetic tree
 #' @param ... Additional parameters are passed on
 #' @return Print out details of the ctree
+#' @examples 
+#' print(simulateOutbreak())
 #' @export
 print.ctree <- function(x, ...)
 {
@@ -84,6 +91,8 @@ print.ctree <- function(x, ...)
 #' @param x Object of class ttree, ie a transmission tree
 #' @param ... Additional parameters are passed on
 #' @return Print out details of the ttree
+#' @examples 
+#' print(extractTTree(simulateOutbreak()))
 #' @export
 print.ttree <- function(x, ...)
 {
@@ -98,6 +107,8 @@ print.ttree <- function(x, ...)
 #' @param x Object of class ptree, ie a phylogenetic tree
 #' @param ... Additional parameters are passed on
 #' @return Print out details of the ptree
+#' @examples 
+#' print(extractPTree(simulateOutbreak()))
 #' @export
 print.ptree <- function(x, ...)
 {
@@ -127,7 +138,7 @@ as.mcmc.resTransPhylo <- function(x,burnin=0.5) {
   return(convertToCoda(x,burnin))
 }
 
-#' Return the data of last sample from a ttree or ctree or ptree
+#' Return the date of last sample from a ttree or ctree or ptree
 #' @param x A transmission tree or colored tree or phylogenetic tree
 #' @return date of the last sample
 #' @export

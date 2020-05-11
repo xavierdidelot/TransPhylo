@@ -9,11 +9,14 @@
 \arguments{
 \item{x}{Object of class ptree, ie  a phylogenetic tree}
 
-\item{...}{Additional parameters are passed on}
+\item{...}{Additional parameters are passed on to ape::plot.phylo}
 }
 \value{
 Plot of ptree
 }
 \description{
 Plotting for ptree
+}
+\examples{
+plot(ptreeFromPhylo(ape::rtree(5),2020))
 }

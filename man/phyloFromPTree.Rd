@@ -15,3 +15,6 @@ phylo object
 \description{
 Converts a phylogenetic tree into an ape phylo object
 }
+\examples{
+phyloFromPTree(extractPTree(simulateOutbreak()))
+}

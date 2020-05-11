@@ -17,3 +17,6 @@ Print out details of the ttree
 \description{
 Print function for ttree objects
 }
+\examples{
+print(extractTTree(simulateOutbreak()))
+}

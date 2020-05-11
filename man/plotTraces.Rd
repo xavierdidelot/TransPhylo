@@ -13,6 +13,9 @@ plotTraces(record, burnin = 0, extend = F)
 
 \item{extend}{Whether to also show traces of off.r and off.p}
 }
+\value{
+Returns invisibly the first parameter
+}
 \description{
 Plot MCMC traces
 }

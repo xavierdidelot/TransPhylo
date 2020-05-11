@@ -17,3 +17,6 @@ Print out details of the ptree
 \description{
 Print function for ptree objects
 }
+\examples{
+print(extractPTree(simulateOutbreak()))
+}

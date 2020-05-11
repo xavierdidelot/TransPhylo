@@ -31,7 +31,7 @@ withinhost = function(times,neg)  {
         break 
       } 
     } 
-    if (r>0) print('error: this should not happen')
+    if (r>0) warning('Warning: r>0 should not happen')
     #Create new node 
     a <- nodes[ ,2:3];a[a >= j + n] <- a[a >= j + n] + 1;nodes[ ,2:3] <- a;#Renumbering according to table insertion in next line 
     nodes <- rbind(nodes[seqML(1,j-1), ],c(curt,ind[i],0),nodes[seqML(j,nrow(nodes)),]) 
@@ -85,7 +85,7 @@ withinhostLinear = function(times,neg)  {
         break 
       } 
     } 
-    if (r>1e-6) print(sprintf('error: this should not happen %f',r))
+    if (r>1e-6) warning(sprintf('Warning: r>1e-6 should not happen, r=%f',r))
     #Create new node 
     a <- nodes[ ,2:3];a[a >= j + n] <- a[a >= j + n] + 1;nodes[ ,2:3] <- a;#Renumbering according to table insertion in next line 
     nodes <- rbind(nodes[seqML(1,j-1), ],c(curt,ind[i],0),nodes[seqML(j,nrow(nodes)),]) 

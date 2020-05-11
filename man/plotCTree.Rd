@@ -20,6 +20,9 @@ plotCTree(tree, showLabels = TRUE, showStars = TRUE, cols = NA,
 
 \item{cex}{Expansion factor}
 }
+\value{
+Returns invisibly the first parameter
+}
 \description{
 Plot both phylogenetic and transmission trees using colors on the phylogeny
 }

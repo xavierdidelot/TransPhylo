@@ -15,3 +15,6 @@ transmission tree
 \description{
 Extracts transmission tree from a combined phylogenetic/transmission tree
 }
+\examples{
+extractTTree(simulateOutbreak())
+}

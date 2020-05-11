@@ -69,6 +69,8 @@ getInfectionTimeDist <- function(record,burnin=0.5,k,numBins=10,show.plot=F) {
     times[i,j]=record[[j]]$ttree[ii,1]
   }
   if (show.plot) {
+    oldpar <- par(no.readonly = TRUE)
+    on.exit(par(oldpar))
     par(mfrow=c(length(k),1))
     xlim=c(min(times),max(times))
     uni=length(unique(as.vector(times)))
@@ -82,7 +84,6 @@ getInfectionTimeDist <- function(record,burnin=0.5,k,numBins=10,show.plot=F) {
         axis(1,at = (labs-xlim[1])/(xlim[2]-xlim[1])*1.2*numBins,labels=labs)
       }
     }
-    par(mfrow=c(1,1))
   }
   if (length(k)==1) times=as.vector(times)
   return(times)
@@ -104,6 +105,8 @@ getOffspringDist <- function(record,burnin=0.5,k,show.plot=F) {
     offspring[i,j]=as.numeric(length(which(record[[j]]$ttree[,3]==ii)))
   }
   if (show.plot) {
+    oldpar <- par(no.readonly = TRUE)
+    on.exit(par(oldpar))
     par(mfrow=c(length(k),1))
     xlim=c(-0.5,max(offspring)+0.5)
     br=seq(xlim[1],xlim[2])
@@ -111,7 +114,6 @@ getOffspringDist <- function(record,burnin=0.5,k,show.plot=F) {
       h=hist(offspring[i,],breaks=br,plot=F)$counts/length(record)
       barplot(h,main='',xlab='',ylab=sprintf('Offspring of %s',k[i]),names.arg = 0:max(offspring))
     }
-    par(mfrow=c(1,1))
   }
   if (length(k)==1) offspring=as.vector(offspring)
   return(offspring)

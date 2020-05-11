@@ -114,7 +114,7 @@ consTTree = function(record,burnin=0.5,minimum=0.2,debug=F)
   
   #Plot transmission tree as a phylogenetic tree; this is only for the purpose of debugging
   if (debug) {
-    for (i in 1:length(comb)) cat(comb[[i]]$c,', w=',mean(comb[[i]]$w),', n=',comb[[i]]$n,', bralen=',round(mean(comb[[i]]$w)*comb[[i]]$n/m),'\n',sep='')
+    for (i in 1:length(comb)) message(comb[[i]]$c,', w=',mean(comb[[i]]$w),', n=',comb[[i]]$n,', bralen=',round(mean(comb[[i]]$w)*comb[[i]]$n/m))
     tr=list()
     tr$Nnode=length(comb)-n
     tr$edge=cbind(parents[which(!is.na(parents))],which(!is.na(parents)))

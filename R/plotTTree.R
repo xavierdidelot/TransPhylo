@@ -5,6 +5,9 @@
 #' @param showLabels Whether or not to show the labels 
 #' @param maxTime Maximum value of time to show on x axis
 #' @param cex Expansion factor
+#' @return Returns invisibly the first parameter
+#' @examples 
+#' plotTTree(extractTTree(simulateOutbreak()),2,1)
 #' @export
 plotTTree = function(ttree,w.shape,w.scale,showLabels=TRUE,maxTime=NA,cex=1) {
   nam=ttree$nam
@@ -22,6 +25,8 @@ plotTTree = function(ttree,w.shape,w.scale,showLabels=TRUE,maxTime=NA,cex=1) {
     todo=todo[-1]
   }
   ys=rank(ys)
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
   par(yaxt='n',bty='n')
   mi=min(ttree[,1])
   if (is.na(maxTime)) ma=max(ttree[which(!is.na(ttree[,2])),2]) else ma=maxTime
@@ -39,4 +44,5 @@ plotTTree = function(ttree,w.shape,w.scale,showLabels=TRUE,maxTime=NA,cex=1) {
     if (ttree[i,3]==0) {next}
     arrows(ttree[i,1],ys[ttree[i,3]],ttree[i,1],ys[i],length=0.1)
   }
+  return(invisible(ttree))
 }

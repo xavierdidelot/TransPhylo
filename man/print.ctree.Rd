@@ -17,3 +17,6 @@ Print out details of the ctree
 \description{
 Print function for ctree objects
 }
+\examples{
+print(simulateOutbreak())
+}

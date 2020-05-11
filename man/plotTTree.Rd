@@ -20,6 +20,12 @@ plotTTree(ttree, w.shape, w.scale, showLabels = TRUE, maxTime = NA,
 
 \item{cex}{Expansion factor}
 }
+\value{
+Returns invisibly the first parameter
+}
 \description{
 Plot a transmission tree in a detailed format
+}
+\examples{
+plotTTree(extractTTree(simulateOutbreak()),2,1)
 }

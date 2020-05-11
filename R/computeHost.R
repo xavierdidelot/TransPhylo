@@ -9,7 +9,7 @@
   for (i in 1:nsam) { 
     j <- i 
     while (1)  { 
-      if (host[j]>0) print('Error: two leaves in same host')
+      if (host[j]>0) warning('Warning: two leaves in same host')
       host[j] <- i 
       j <- fathers[j] 
       if (ctree[j,3] == 0) break 

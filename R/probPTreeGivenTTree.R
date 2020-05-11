@@ -87,8 +87,8 @@ probSubtreeR=function(tab,rate)  {
       if (isiso[i])  k <- k + 1 else k <- k-ex[i] + 1
     } 
     p <- p-log(rate)-bra1/rate-log(1-exp(-bra2/rate))
-    if (k != 1) print('errorHere')
-    if (bra1 >= bra2)  print('errorThere')
+    if (k != 1) warning('k!=1')
+    if (bra1 >= bra2)  warning('bra1>=bra2')
     #Make all ancestors of current node active
     cur <- l
     while (TRUE) {
@@ -97,8 +97,8 @@ probSubtreeR=function(tab,rate)  {
       cur <- tab[cur,2]
     } 
   }
-  if (min(ex)==0) {print('error: some nodes have not been activated');print(tab)}
-  if (length(which(ex==2))!=(length(iso)-1)) print('error: some internal nodes have not been activated twice')
+  if (min(ex)==0) warning('Warning: some nodes have not been activated')
+  if (length(which(ex==2))!=(length(iso)-1)) warning('Warning: some internal nodes have not been activated twice')
   return(p)
 }
 

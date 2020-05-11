@@ -3,6 +3,9 @@
 #' @param showLabels Boolean for whether or not to show the labels
 #' @param showMissingLinks Option for how to show missing links: (0) as dots, (1) as several gray levels, (2) as a single gray level
 #' @param cex Expansion factor
+#' @return Returns invisibly the first parameter
+#' @examples 
+#' plotTTree2(extractTTree(simulateOutbreak()))
 #' @export
 plotTTree2 = function(ttree,showLabels=TRUE,showMissingLinks=0,cex=1) {
   nam=ttree$nam
@@ -41,6 +44,8 @@ plotTTree2 = function(ttree,showLabels=TRUE,showMissingLinks=0,cex=1) {
   
   
   #Do the plot
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
   par(yaxt='n',bty='n')
   #mi=min(ttree[,2])#,ttree[,1])
   mi=min(ttree[which(!is.na(ttree[,1])),1])
@@ -63,4 +68,5 @@ plotTTree2 = function(ttree,showLabels=TRUE,showMissingLinks=0,cex=1) {
     points(ttree[i,1],ys[i],pch=21,bg=ifelse(is.na(ttree[i,2]),'white','black'),cex=cex)
   }
   if (length(pal)>2) legend('topleft',legend = 0:(length(pal)-1),col = pal,lty=1,cex=cex,title='Missing links')
+  return(invisible(ttree))
 }

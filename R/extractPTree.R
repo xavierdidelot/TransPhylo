@@ -1,6 +1,8 @@
 #' Extracts phylogenetic tree from a combined phylogenetic/transmission tree 
 #' @param ctree Combined tree
 #' @return phylogenetic tree
+#' @examples
+#' extractPTree(simulateOutbreak())
 #' @export
 extractPTree = function(ctree)  {
   tree=ctree$ctree

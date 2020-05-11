@@ -15,6 +15,9 @@
 #' @param dateStartOutbreak Date when index case becomes infected
 #' @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @return Combined phylogenetic and transmission tree
+#' @examples
+#' simulateOutbreak()
+#' simulateOutbreak(off.r=2,dateStartOutbreak=2010,dateT=2015)
 #' @export
 simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shape=2,w.scale=1,ws.shape=NA,ws.scale=NA,w.mean=NA,w.std=NA,ws.mean=NA,ws.std=NA,dateStartOutbreak=2000,dateT=Inf) {
   if (!is.na( w.mean)&&!is.na( w.std)) { w.shape= w.mean^2/ w.std^2; w.scale= w.std^2/ w.mean}
@@ -35,14 +38,14 @@ simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shap
       probttree<-mtt$prob
       if (mtt$pruned>0) {
         dateStartOutbreak=dateStartOutbreak+mtt$pruned
-        cat(sprintf('Note that simulated outbreak was pruned: in order to have %d sampled by present date %f, the start date was set to %f\n',nSampled,dateT,dateStartOutbreak))
+        message(sprintf('Note that simulated outbreak was pruned: in order to have %d sampled by present date %f, the start date was set to %f',nSampled,dateT,dateStartOutbreak))
       }
       }
     nsam<-length(which(!is.na(ttree[,2])))
     nh=nrow(ttree)-nsam
     if (is.na(nSampled)) nSampled=nsam
   }
-  if (rejected>0) cat(sprintf('Note that rejection sampling was used %d times to simulate outbreak with %d sampled individuals\n',rejected,nSampled))
+  if (rejected>0) message(sprintf('Note that rejection sampling was used %d times',rejected))
   n<-nsam+nh
   
   #Create a within-host phylogenetic tree for each infected host

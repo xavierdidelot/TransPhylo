@@ -24,6 +24,8 @@
 #' @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
 #' @param verbose Whether or not to use verbose mode (default is false)
 #' @return posterior sample set of transmission trees
+#' @examples 
+#' inferTTree(ptreeFromPhylo(ape::rtree(5),2020),mcmcIterations=100)
 #' @export
 inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA, 
                       w.mean=NA,w.std=NA,ws.mean=NA,ws.std=NA,mcmcIterations=1000,

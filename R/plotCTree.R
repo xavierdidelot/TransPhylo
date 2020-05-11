@@ -5,6 +5,7 @@
 #' @param cols Colors to use for hosts
 #' @param maxTime Maximum time to show on the x axis
 #' @param cex Expansion factor
+#' @return Returns invisibly the first parameter
 #' @examples
 #' plotCTree(simulateOutbreak())
 #' @export
@@ -14,6 +15,8 @@ plotCTree = function(tree,showLabels=TRUE,showStars=TRUE,cols=NA,maxTime=NA,cex=
   nsam <- sum(tree[ ,2]+tree[ ,3] == 0) 
   nh <- nrow(tree)-3*nsam+1
   ntot <- nsam+nh
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
   par(yaxt='n',bty='n')
   plot(0,0,type='l',xlim=c(min(tree[,1]),ifelse(is.na(maxTime),max(tree[,1]),maxTime)),ylim=c(0,nsam+1),xlab='',ylab='')
   host <- tree[ ,4] 
@@ -98,6 +101,5 @@ plotCTree = function(tree,showLabels=TRUE,showStars=TRUE,cols=NA,maxTime=NA,cex=
     } 
     todo <- rbind(todo[-1,])
   }
-  
-    
+  return(invisible(tree))
 } 

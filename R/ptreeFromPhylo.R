@@ -2,6 +2,8 @@
 #' @param tr phylo object
 #' @param dateLastSample date of the last sample
 #' @return phylogenetic tree
+#' @examples
+#' ptreeFromPhylo(ape::rtree(5),2020)
 #' @export
 ptreeFromPhylo <- function(tr,dateLastSample) {
   if (dateLastSample>1900 && dateLastSample<2100 && sum(tr$edge.length)<1)

@@ -11,6 +11,9 @@ convertToCoda(record, burnin = 0.5)
 
 \item{burnin}{Proportion of the MCMC output to be discarded as burnin}
 }
+\value{
+Object of class mcmc from coda package
+}
 \description{
 Convert to coda mcmc format
 }

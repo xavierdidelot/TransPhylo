@@ -77,7 +77,7 @@ move3 = function(tree) {
     } 
     #tree[1:(nrow(tree)-1),1] <- tree[1:(nrow(tree)-1),1] + r 
     tree[nrow(tree),1]<-tree[nrow(tree),1]-r
-    if (tree[nrow(tree),1]>tree[nrow(tree)-1,1]) print('error with root age')
+    if (tree[nrow(tree),1]>tree[nrow(tree)-1,1]) warning('Warning with root age')
     return(list(tree=tree,qr=1,old=tree[nrow(tree)-1,4],new=tree[nrow(tree)-1,4]))          
   } 
     

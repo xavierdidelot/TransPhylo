@@ -15,6 +15,12 @@ plotTTree2(ttree, showLabels = TRUE, showMissingLinks = 0, cex = 1)
 
 \item{cex}{Expansion factor}
 }
+\value{
+Returns invisibly the first parameter
+}
 \description{
 Plot a transmission tree in an economic format
+}
+\examples{
+plotTTree2(extractTTree(simulateOutbreak()))
 }

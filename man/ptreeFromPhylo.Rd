@@ -17,3 +17,6 @@ phylogenetic tree
 \description{
 Converts an ape phylo object into a phylogenetic tree
 }
+\examples{
+ptreeFromPhylo(ape::rtree(5),2020)
+}

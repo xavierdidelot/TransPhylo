@@ -68,7 +68,7 @@ getOmegabarR=function(L,dt,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale) {
     omega[k+1]=(1-pi*pgamma(k*dt,shape=ws.shape,scale=ws.scale))*((1-off.p)/(1-off.p*omegabar[k+1]))^off.r #This is Equation (S3)
     #if (abs(omega[k+1]-omegaStar)<0.0001) {omegabar[(k+2):L]=omegaStar;omega[(k+2):L]=omegaStar;break} 
     #if (k==L-1) {warning('Convergence not reached in getOmegabarR')
-    #  print(sprintf('omegaStar=%f,omegabar[L]=%f,w.shape=%f,w.scale=%f,pi=%f,off.r=%f,off.p=%f',omegaStar,omegabar[L],w.shape,w.scale,pi,off.r,off.p))}
+    #  warning(sprintf('omegaStar=%f,omegabar[L]=%f,w.shape=%f,w.scale=%f,pi=%f,off.r=%f,off.p=%f',omegaStar,omegabar[L],w.shape,w.scale,pi,off.r,off.p))}
   }
   return(omegabar)
 }

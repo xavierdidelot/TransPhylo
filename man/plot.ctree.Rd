@@ -17,3 +17,6 @@ Plot of ctree
 \description{
 Plotting for ctree
 }
+\examples{
+plot(simulateOutbreak())
+}

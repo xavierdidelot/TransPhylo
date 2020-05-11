@@ -2,7 +2,7 @@
 % Please edit documentation in R/methods.R
 \name{dateLastSample}
 \alias{dateLastSample}
-\title{Return the data of last sample from a ttree or ctree or ptree}
+\title{Return the date of last sample from a ttree or ctree or ptree}
 \usage{
 dateLastSample(x)
 }
@@ -13,5 +13,5 @@ dateLastSample(x)
 date of the last sample
 }
 \description{
-Return the data of last sample from a ttree or ctree or ptree
+Return the date of last sample from a ttree or ctree or ptree
 }

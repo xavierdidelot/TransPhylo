@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.2</span>
       </span>
     </div>
 
@@ -207,6 +207,12 @@
 
     <p>Combined phylogenetic and transmission tree</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>simulateOutbreak</span>()</div><div class='output co'>#&gt; <span class='message'>Note that rejection sampling was used 2 times</span></div><div class='output co'>#&gt; Colored phylogenetic tree
+#&gt; Number of sampled individuals=45
+#&gt; Total number of hosts=75</div><div class='input'><span class='fu'>simulateOutbreak</span>(<span class='kw'>off.r</span><span class='kw'>=</span><span class='fl'>2</span>,<span class='kw'>dateStartOutbreak</span><span class='kw'>=</span><span class='fl'>2010</span>,<span class='kw'>dateT</span><span class='kw'>=</span><span class='fl'>2015</span>)</div><div class='output co'>#&gt; <span class='message'>Note that rejection sampling was used 1 times</span></div><div class='output co'>#&gt; Colored phylogenetic tree
+#&gt; Number of sampled individuals=2
+#&gt; Total number of hosts=3</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

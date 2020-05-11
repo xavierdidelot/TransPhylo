@@ -24,3 +24,6 @@ Plot of ttree
 \description{
 Plotting for ttree
 }
+\examples{
+plot(extractTTree(simulateOutbreak()))
+}

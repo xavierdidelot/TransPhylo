@@ -67,3 +67,6 @@ posterior sample set of transmission trees
 \description{
 Infer transmission tree given a phylogenetic tree
 }
+\examples{
+inferTTree(ptreeFromPhylo(ape::rtree(5),2020),mcmcIterations=100)
+}

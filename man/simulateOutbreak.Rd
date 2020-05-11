@@ -46,3 +46,7 @@ Combined phylogenetic and transmission tree
 \description{
 Simulate an outbreak
 }
+\examples{
+simulateOutbreak()
+simulateOutbreak(off.r=2,dateStartOutbreak=2010,dateT=2015)
+}
