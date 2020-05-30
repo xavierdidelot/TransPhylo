@@ -253,7 +253,7 @@ double probTTree(NumericMatrix ttree, double rOff, double pOff, double pi,
     
     for(int i=0; i<numCases; ++i){
       
-      accum += alpha(progeny[i].size(), pOff, rOff,wbar0[std::round((ttree(i,0) - gridStart)/delta_t)]);
+      accum += alpha(progeny[i].size(), pOff, rOff,wbar0[std::min(wbar0.size()-1.0,std::round((ttree(i,0) - gridStart)/delta_t))]);
       for(unsigned int j=0; j<progeny[i].size(); ++j){
         accum += (R::dgamma(ttree(progeny[i][j],0)-ttree(i,0), shGen, scGen, 1) - R::pgamma(dateT-ttree(i,0), shGen, scGen, 1, 1));
       }
