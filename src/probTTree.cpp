@@ -167,22 +167,20 @@ NumericVector wbar(double tinf, double dateT, double rOff, double pOff, double p
   NumericVector pi2 = pi*pgamma(dateT-grid, shSam, scSam);
   NumericVector F = 1-pgamma(dateT-grid, shGen, scGen);
   
-  NumericVector w(n+1), out(n+1);
-  out[n] = w[n] = 1.0;
-  
+  NumericVector w(n), out(n);
+
   IntegerVector seq = seq_len(n);
   NumericVector gam = dgamma(as<NumericVector>(seq)*delta_t,shGen,scGen);
   double sumPrev = 0.5 * gam[0];
-  for(int i=n-1; i>=0; --i){
-    
-    out[i] = F[i] + sumPrev*delta_t;
-    if (out[i]>1) out[i]=1;
+  out[n-1]=std::min(1.0,F[n-1]+sumPrev*delta_t);
+  for(int i=n-1; i>0; --i){
     w[i] = (1-pi2[i]) * pow((1-pOff)/(1-pOff*out[i]), rOff);
     
     sumPrev = 0.0;
     for(int j=0; j<n-i; ++j)
       sumPrev += gam[j]*w[i+j];
     sumPrev += 0.5 * gam[n-i];
+    out[i-1] = std::min(1.0,F[i-1] + sumPrev*delta_t);
   }
   return log(out);
 }
@@ -251,8 +249,7 @@ double probTTree(NumericMatrix ttree, double rOff, double pOff, double pi,
     double tinfmin = min(ttree(_,0));
     NumericVector wbar0 = wbar(tinfmin, dateT, rOff, pOff, pi, shGen, scGen, shSam, scSam, delta_t);
     
-    // wbar0.size = grid size +1 
-    double gridStart = dateT-(wbar0.size()-1)*delta_t;
+    double gridStart = dateT-wbar0.size()*delta_t;
     
     for(int i=0; i<numCases; ++i){
       

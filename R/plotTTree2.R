@@ -44,7 +44,7 @@ plotTTree2 = function(ttree,showLabels=TRUE,showMissingLinks=0,cex=1) {
   
   
   #Do the plot
-  oldpar <- par(no.readonly = TRUE)
+  oldpar <- par('yaxt','bty')
   on.exit(par(oldpar))
   par(yaxt='n',bty='n')
   #mi=min(ttree[,2])#,ttree[,1])
