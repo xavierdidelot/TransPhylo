@@ -13,6 +13,7 @@ plotTTree = function(ttree,w.shape,w.scale,showLabels=TRUE,maxTime=NA,cex=1) {
   nam=ttree$nam
   ttree=ttree$ttree
   n=nrow(ttree)
+  
   #Determine ys 
   ys <- rep(0, n)
   scale <- rep(1,n)

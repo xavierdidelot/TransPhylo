@@ -2,7 +2,7 @@
 title: "Introducing the R package TransPhylo"
 author: "Xavier Didelot"
 date: '`r Sys.Date()`'
-output: html_document
+output: html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Introducing the R package TransPhylo}

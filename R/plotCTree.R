@@ -15,9 +15,9 @@ plotCTree = function(tree,showLabels=TRUE,showStars=TRUE,cols=NA,maxTime=NA,cex=
   nsam <- sum(tree[ ,2]+tree[ ,3] == 0) 
   nh <- nrow(tree)-3*nsam+1
   ntot <- nsam+nh
-  oldpar <- par('yaxt','bty')
+  oldpar <- par('yaxt','bty','xpd')
   on.exit(par(oldpar))
-  par(yaxt='n',bty='n')
+  par(yaxt='n',bty='n',xpd=T)
   plot(0,0,type='l',xlim=c(min(tree[,1]),ifelse(is.na(maxTime),max(tree[,1]),maxTime)),ylim=c(0,nsam+1),xlab='',ylab='')
   host <- tree[ ,4] 
   if (ntot>1) {

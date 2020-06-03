@@ -2,18 +2,18 @@
 title: "Simultaneous Inference of Multiple Transmission Trees"
 author: "Yuanwei Xu"
 date: "`r Sys.Date()`"
-output: html_document
+output: html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Simultaneous Inference of Multiple Transmission Trees}
   %\usepackage[utf8]{inputenc}
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r echo=F}
+knitr::opts_chunk$set(fig.width=6, fig.height=4) 
 ```
 
-TransPhylo has been used successfuly to draw inference on transmission events from a timed phylogenetic tree. In this tutorial, we demonstrate an extension, `infer_multittree_shar_param`, that allows simultaneous inference of multiple transmission trees from corresponding phylogenetic trees, with the possibility of sharing any subset of TransPhylo parameters. This may be useful when one is faced with multiple transmission clusters, which may be define genetically through SNP cutoff coupled with epidemiological data, and it may be the case that jointly analyzing these clusters is desirable assuming they share the same underlying epidemiological parameters. It is also computational efficient since fewer number of parameters will be estimated. Another use case might be that sometimes it is difficult to summarise a single representative tree from a collection of phylogenetic trees, such as BEAST trees. In this case, one could run multiple tree inference on a subsample of BEAST trees. This has additional benefit of incorporating some degree of uncertainty from the BEAST posterior.
+TransPhylo can draw inference on transmission events from a dated phylogenetic tree. In this tutorial, we demonstrate an extension, `infer_multittree_shar_param`, that allows simultaneous inference of multiple transmission trees from corresponding phylogenetic trees, with the possibility of sharing any subset of TransPhylo parameters. This may be useful when one is faced with multiple transmission clusters, which may be define genetically through SNP cutoff coupled with epidemiological data, and it may be the case that jointly analyzing these clusters is desirable assuming they share the same underlying epidemiological parameters. It is also computational efficient since fewer number of parameters will be estimated. Another use case might be that sometimes it is difficult to summarise a single representative tree from a collection of phylogenetic trees, such as BEAST trees. In this case, one could run multiple tree inference on a subsample of BEAST trees. This has additional benefit of incorporating some degree of uncertainty from the BEAST posterior.
 
 
 ## Simulated Data

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.4</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@
       <h1 data-toc-skip>Simulation of outbreak data</h1>
                         <h4 class="author">Xavier Didelot</h4>
             
-            <h4 class="date">2020-05-30</h4>
+            <h4 class="date">2020-06-03</h4>
       
       
       <div class="hidden name"><code>simulate.rmd</code></div>
@@ -107,29 +107,29 @@
                          <span class="kw">w.scale</span><span class="kw">=</span><span class="no">w.scale</span>,<span class="kw">dateStartOutbreak</span><span class="kw">=</span><span class="fl">2005</span>,<span class="kw">dateT</span><span class="kw">=</span><span class="fl">2008</span>)</pre></body></html></div>
 <p>This simulation contains both the transmission tree between infected hosts and the within-host phylogenetic tree of each host. This can be visualised as a colored phlogenetic tree, where each host is represented by a unique color:</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">simu</span>)</pre></body></html></div>
-<p><img src="simulate_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<p><img src="simulate_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
 <p>The transmission tree can be extracted and plotted separately from the phylogeny:</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">ttree</span><span class="kw">&lt;-</span><span class="fu"><a href="../reference/extractTTree.html">extractTTree</a></span>(<span class="no">simu</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">ttree</span>)</pre></body></html></div>
-<p><img src="simulate_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="simulate_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 <p>A more detailed plot can be displayed as follows:</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">ttree</span>,<span class="kw">type</span><span class="kw">=</span><span class="st">'detailed'</span>,<span class="no">w.shape</span>,<span class="no">w.scale</span>)</pre></body></html></div>
-<p><img src="simulate_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p><img src="simulate_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
 <p>The phylogenetic tree can be extracted and plotted separately from the transmission tree:</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">ptree</span><span class="kw">&lt;-</span><span class="fu"><a href="../reference/extractPTree.html">extractPTree</a></span>(<span class="no">simu</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">ptree</span>)</pre></body></html></div>
-<p><img src="simulate_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="simulate_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
 <p>The extracted phylogenetic tree can also be converted into a phylo object from the ape package:</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ape</span>)
 <span class="no">p</span><span class="kw">&lt;-</span><span class="fu"><a href="../reference/phyloFromPTree.html">phyloFromPTree</a></span>(<span class="no">ptree</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">p</span>)
-<span class="fu"><a href="https://rdrr.io/pkg/ape/man/axisPhylo.html">axisPhylo</a></span>()</pre></body></html></div>
-<p><img src="simulate_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<span class="fu"><a href="https://rdrr.io/pkg/ape/man/axisPhylo.html">axisPhylo</a></span>(<span class="kw">backward</span> <span class="kw">=</span> <span class="no">F</span>)</pre></body></html></div>
+<p><img src="simulate_files/figure-html/unnamed-chunk-9-1.png" width="576"></p>
 <p>You can save this tree into a Newick file for further analysis. This is the tree that is used as the starting poit of the tutorial on inference of a transmission tree from a dated phylogeny.</p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/ape/man/write.tree.html">write.tree</a></span>(<span class="no">p</span>,<span class="st">'tree.nwk'</span>)</pre></body></html></div>
 <p>The content of this Newick file is:</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/ape/man/write.tree.html">write.tree</a></span>(<span class="no">p</span>,<span class="st">''</span>)</pre></body></html></div>
-<pre><code>## [1] "(((2:0.007344035611,6:0.656820028):0.7562780805,3:1.643413444):1.293120815,((5:1.519248672,1:1.231048819):0.303038892,4:1.257652937):0.784065883);"</code></pre>
+<pre><code>## [1] "((4:1.257652937,(1:1.231048819,5:1.519248672):0.303038892):0.784065883,(3:1.643413444,(6:0.656820028,2:0.007344035611):0.7562780805):1.293120815);"</code></pre>
 <p>This phylogeny is scaled in years, but time is measured only relatively to the date of the last sample which is at 0 on the x-axis of the figure above. To use this tree again we also need to know exactly when was the last sample taken:</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/dateLastSample.html">dateLastSample</a></span>(<span class="no">simu</span>)</pre></body></html></div>
 <pre><code>## [1] 2007.964</code></pre>

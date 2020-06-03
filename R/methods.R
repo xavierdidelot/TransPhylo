@@ -48,7 +48,7 @@ plot.ttree = function(x,type='summarised',w.shape=NA,w.scale=NA,...) {
 plot.ptree = function(x,...) {
   stopifnot(inherits(x, "ptree"))
   phy=phyloFromPTree(x)
-  ape::plot.phylo(phy,y.lim=c(ape::Ntip(phy)+1,0),...)
+  ape::plot.phylo(phy,...)
   ape::axisPhylo(backward = F)
 }
 

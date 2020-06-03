@@ -29,5 +29,8 @@ phyloFromPTree <- function(ptree) {
   }
   tr$root.time=min(ptree[,1])
   class(tr)<-'phylo'
+  tr=ape::reorder.phylo(tr, order = "cladewise")
+  ordered_tips=rev(tr$edge[tr$edge[,2]<=n, 2])
+  tr=ape::rotateConstr(tr,ordered_tips)
   return(tr)
 }

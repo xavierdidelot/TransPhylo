@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.4</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@
       <h1 data-toc-skip>Simultaneous Inference of Multiple Transmission Trees</h1>
                         <h4 class="author">Yuanwei Xu</h4>
             
-            <h4 class="date">2020-05-30</h4>
+            <h4 class="date">2020-06-03</h4>
       
       
       <div class="hidden name"><code>multitree.Rmd</code></div>
@@ -93,7 +93,7 @@
 
     
     
-<p>TransPhylo has been used successfuly to draw inference on transmission events from a timed phylogenetic tree. In this tutorial, we demonstrate an extension, <code>infer_multittree_shar_param</code>, that allows simultaneous inference of multiple transmission trees from corresponding phylogenetic trees, with the possibility of sharing any subset of TransPhylo parameters. This may be useful when one is faced with multiple transmission clusters, which may be define genetically through SNP cutoff coupled with epidemiological data, and it may be the case that jointly analyzing these clusters is desirable assuming they share the same underlying epidemiological parameters. It is also computational efficient since fewer number of parameters will be estimated. Another use case might be that sometimes it is difficult to summarise a single representative tree from a collection of phylogenetic trees, such as BEAST trees. In this case, one could run multiple tree inference on a subsample of BEAST trees. This has additional benefit of incorporating some degree of uncertainty from the BEAST posterior.</p>
+<p>TransPhylo can draw inference on transmission events from a dated phylogenetic tree. In this tutorial, we demonstrate an extension, <code>infer_multittree_shar_param</code>, that allows simultaneous inference of multiple transmission trees from corresponding phylogenetic trees, with the possibility of sharing any subset of TransPhylo parameters. This may be useful when one is faced with multiple transmission clusters, which may be define genetically through SNP cutoff coupled with epidemiological data, and it may be the case that jointly analyzing these clusters is desirable assuming they share the same underlying epidemiological parameters. It is also computational efficient since fewer number of parameters will be estimated. Another use case might be that sometimes it is difficult to summarise a single representative tree from a collection of phylogenetic trees, such as BEAST trees. In this case, one could run multiple tree inference on a subsample of BEAST trees. This has additional benefit of incorporating some degree of uncertainty from the BEAST posterior.</p>
 <div id="simulated-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#simulated-data" class="anchor"></a>Simulated Data</h2>
@@ -115,9 +115,9 @@
                          <span class="kw">w.scale</span><span class="kw">=</span><span class="no">w.scale</span>, <span class="kw">dateStartOutbreak</span><span class="kw">=</span><span class="fl">2000</span>,<span class="kw">dateT</span><span class="kw">=</span><span class="fl">2005</span>)</pre></body></html></div>
 <p>We plot the combined phylogenetic and transmission trees, each colour represents an infected host, colour changes when there is a transmission event.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">simu1</span>)</pre></body></html></div>
-<p><img src="multitree_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
+<p><img src="multitree_files/figure-html/unnamed-chunk-2-1.png" width="576"></p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">simu2</span>)</pre></body></html></div>
-<p><img src="multitree_files/figure-html/unnamed-chunk-1-2.png" width="700"></p>
+<p><img src="multitree_files/figure-html/unnamed-chunk-2-2.png" width="576"></p>
 </div>
 <div id="run-single-and-multiple-tree-inference-algorithm" class="section level2">
 <h2 class="hasAnchor">
@@ -164,13 +164,13 @@
 <p>In this example where we explicitly set the parameters when simulating the outbreaks, we see that the posterior estimates from the multiple tree inference generally have lower variance than those resulting from single tree inference. The true parameter values are shown in gray reference line.</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span>(<span class="no">df</span>$<span class="no">pi</span>~<span class="no">df</span>$<span class="no">run</span>,<span class="kw">ylab</span><span class="kw">=</span><span class="st">'pi'</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">4</span>),<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">0.8</span>,<span class="fl">2</span>),<span class="kw">col</span><span class="kw">=</span><span class="st">'grey'</span>)</pre></body></html></div>
-<p><img src="multitree_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="multitree_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span>(<span class="no">df</span>$<span class="no">off.r</span>~<span class="no">df</span>$<span class="no">run</span>,<span class="kw">ylab</span><span class="kw">=</span><span class="st">'off.r'</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">4</span>),<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">1.5</span>,<span class="fl">2</span>),<span class="kw">col</span><span class="kw">=</span><span class="st">'grey'</span>)</pre></body></html></div>
-<p><img src="multitree_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p><img src="multitree_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span>(<span class="no">df</span>$<span class="no">neg</span>~<span class="no">df</span>$<span class="no">run</span>,<span class="kw">ylab</span><span class="kw">=</span><span class="st">'Ne*g'</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">4</span>),<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">100</span>/<span class="fl">365</span>,<span class="fl">2</span>),<span class="kw">col</span><span class="kw">=</span><span class="st">'grey'</span>)</pre></body></html></div>
-<p><img src="multitree_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="multitree_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
 </div>
   </div>
 

@@ -2,13 +2,15 @@
 title: "Simulation of outbreak data"
 author: "Xavier Didelot"
 date: '`r Sys.Date()`'
-output: html_document
+output: html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Simulation of outbreak data}
   %\usepackage[utf8]{inputenc}
 ---
-
+```{r echo=F}
+knitr::opts_chunk$set(fig.width=6, fig.height=4) 
+```
 
 If you want to reproduce exactly the same results as the ones shown in this tutorial, you need to set the seed of your random number generator to zero:
 ```{r}
@@ -28,7 +30,7 @@ pi=0.25
 We simulate an outbreak that starts in 2005 and which and is observed up to 2008:
 
 ```{r}
-simu <- simulateOutbreak(neg=neg,pi=pi,off.r=off.r,w.shape=w.shape,
+simu <- simulateOutbreak(neg=neg,pi=pi,off.r=off.r+1,w.shape=w.shape,
                          w.scale=w.scale,dateStartOutbreak=2005,dateT=2008)
 ```
 
@@ -64,7 +66,7 @@ The extracted phylogenetic tree can also be converted into a phylo object from t
 library(ape)
 p<-phyloFromPTree(ptree)
 plot(p)
-axisPhylo()
+axisPhylo(backward = F)
 ```
 
 You can save this tree into a Newick file for further analysis. This is the tree that is used as the starting poit of the tutorial on inference of a transmission tree from a dated phylogeny.
