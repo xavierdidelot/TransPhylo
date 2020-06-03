@@ -30,7 +30,7 @@ pi=0.25
 We simulate an outbreak that starts in 2005 and which and is observed up to 2008:
 
 ```{r}
-simu <- simulateOutbreak(neg=neg,pi=pi,off.r=off.r+1,w.shape=w.shape,
+simu <- simulateOutbreak(neg=neg,pi=pi,off.r=off.r,w.shape=w.shape,
                          w.scale=w.scale,dateStartOutbreak=2005,dateT=2008)
 ```
 
