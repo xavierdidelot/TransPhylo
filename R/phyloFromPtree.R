@@ -20,17 +20,15 @@ phyloFromPTree <- function(ptree) {
   tra2<-1:length(tra)
   tra[tra]<-tra2
   for (i in (n+1):(2*n-1)) {
-    tr$edge[iedge,]<-c(tra[i],tra[ptree[i,2]])
-    tr$edge.length[iedge]<-ptree[ptree[i,2],1]-ptree[i,1]
-    iedge<-iedge+1
     tr$edge[iedge,]<-c(tra[i],tra[ptree[i,3]])
     tr$edge.length[iedge]<-ptree[ptree[i,3],1]-ptree[i,1]
+    iedge<-iedge+1
+    tr$edge[iedge,]<-c(tra[i],tra[ptree[i,2]])
+    tr$edge.length[iedge]<-ptree[ptree[i,2],1]-ptree[i,1]
     iedge<-iedge+1
   }
   tr$root.time=min(ptree[,1])
   class(tr)<-'phylo'
   tr=ape::reorder.phylo(tr, order = "cladewise")
-  ordered_tips=rev(tr$edge[tr$edge[,2]<=n, 2])
-  tr=ape::rotateConstr(tr,ordered_tips)
   return(tr)
 }
