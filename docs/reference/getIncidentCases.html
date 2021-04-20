@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.5</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -133,8 +133,13 @@
     <p>Returns and/or plot numbers of sampled and unsampled cases over time</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getIncidentCases</span>(<span class='no'>record</span>, <span class='kw'>burnin</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>numBins</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>show.plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>getIncidentCases</span><span class='op'>(</span>
+  <span class='va'>record</span>,
+  burnin <span class='op'>=</span> <span class='fl'>0.5</span>,
+  numBins <span class='op'>=</span> <span class='fl'>10</span>,
+  dateT <span class='op'>=</span> <span class='cn'>NA</span>,
+  show.plot <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,6 +155,10 @@
     <tr>
       <th>numBins</th>
       <td><p>Number of time bins to compute and display incident cases</p></td>
+    </tr>
+    <tr>
+      <th>dateT</th>
+      <td><p>Date when process stops (this can be Inf for fully resolved outbreaks)</p></td>
     </tr>
     <tr>
       <th>show.plot</th>
@@ -176,7 +185,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

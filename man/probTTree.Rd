@@ -4,8 +4,18 @@
 \alias{probTTree}
 \title{Calculates the log-probability of a transmission tree}
 \usage{
-probTTree(ttree, rOff, pOff, pi, shGen, scGen, shSam, scSam, dateT,
-  delta_t = 0.01)
+probTTree(
+  ttree,
+  rOff,
+  pOff,
+  pi,
+  shGen,
+  scGen,
+  shSam,
+  scSam,
+  dateT,
+  delta_t = 0.01
+)
 }
 \arguments{
 \item{ttree}{Transmission tree}

@@ -4,8 +4,7 @@
 \alias{plotTTree}
 \title{Plot a transmission tree in a detailed format}
 \usage{
-plotTTree(ttree, w.shape, w.scale, showLabels = TRUE, maxTime = NA,
-  cex = 1)
+plotTTree(ttree, w.shape, w.scale, showLabels = TRUE, maxTime = NA, cex = 1)
 }
 \arguments{
 \item{ttree}{Transmission tree}

@@ -2,12 +2,13 @@
 #' @param ttree Transmission tree
 #' @param showLabels Boolean for whether or not to show the labels
 #' @param showMissingLinks Option for how to show missing links: (0) as dots, (1) as several gray levels, (2) as a single gray level
+#' @param maxTime Maximum value of time to show on x axis
 #' @param cex Expansion factor
 #' @return Returns invisibly the first parameter
 #' @examples 
 #' plotTTree2(extractTTree(simulateOutbreak()))
 #' @export
-plotTTree2 = function(ttree,showLabels=TRUE,showMissingLinks=0,cex=1) {
+plotTTree2 = function(ttree,showLabels=TRUE,showMissingLinks=0,maxTime=NA,cex=1) {
   nam=ttree$nam
   ttree=ttree$ttree
   ttree=cbind(ttree,rep(1,nrow(ttree)))
@@ -50,7 +51,8 @@ plotTTree2 = function(ttree,showLabels=TRUE,showMissingLinks=0,cex=1) {
   #mi=min(ttree[,2])#,ttree[,1])
   mi=min(ttree[which(!is.na(ttree[,1])),1])
   ma=max(ttree[which(!is.na(ttree[,1])),1])
-  plot(c(),c(),xlim=c(mi-(ma-mi)*0.05,ma+(ma-mi)*0.05),ylim=c(0,n+1),xlab='',ylab='')
+  if (!is.na(maxTime)) ma=maxTime
+  plot(c(),c(),xlim=c(mi,ma),ylim=c(0,n+1),xlab='',ylab='')
   pal=grDevices::gray.colors(max(ttree[,4]))
   for (i in 1:n) {
     if (ttree[i,3]!=0) {

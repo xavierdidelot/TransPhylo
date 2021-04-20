@@ -4,8 +4,7 @@
 \alias{plot.ttree}
 \title{Plotting for ttree}
 \usage{
-\method{plot}{ttree}(x, type = "summarised", w.shape = NA,
-  w.scale = NA, ...)
+\method{plot}{ttree}(x, type = "summarised", w.shape = NA, w.scale = NA, ...)
 }
 \arguments{
 \item{x}{Object of class ttree, ie  a transmission tree}

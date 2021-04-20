@@ -4,8 +4,13 @@
 \alias{getSamplingTimeDist}
 \title{Extract and return realised sampling time distribution}
 \usage{
-getSamplingTimeDist(record, burnin = 0.5, maxi = 2, numBins = 20,
-  show.plot = F)
+getSamplingTimeDist(
+  record,
+  burnin = 0.5,
+  maxi = 2,
+  numBins = 20,
+  show.plot = F
+)
 }
 \arguments{
 \item{record}{MCMC output produced by inferTTree}

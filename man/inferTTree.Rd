@@ -4,13 +4,32 @@
 \alias{inferTTree}
 \title{Infer transmission tree given a phylogenetic tree}
 \usage{
-inferTTree(ptree, w.shape = 2, w.scale = 1, ws.shape = NA,
-  ws.scale = NA, w.mean = NA, w.std = NA, ws.mean = NA,
-  ws.std = NA, mcmcIterations = 1000, thinning = 1,
-  startNeg = 100/365, startOff.r = 1, startOff.p = 0.5,
-  startPi = 0.5, updateNeg = TRUE, updateOff.r = TRUE,
-  updateOff.p = FALSE, updatePi = TRUE, startCTree = NA,
-  updateTTree = TRUE, optiStart = 2, dateT = Inf, verbose = F)
+inferTTree(
+  ptree,
+  w.shape = 2,
+  w.scale = 1,
+  ws.shape = NA,
+  ws.scale = NA,
+  w.mean = NA,
+  w.std = NA,
+  ws.mean = NA,
+  ws.std = NA,
+  mcmcIterations = 1000,
+  thinning = 1,
+  startNeg = 100/365,
+  startOff.r = 1,
+  startOff.p = 0.5,
+  startPi = 0.5,
+  updateNeg = TRUE,
+  updateOff.r = TRUE,
+  updateOff.p = FALSE,
+  updatePi = TRUE,
+  startCTree = NA,
+  updateTTree = TRUE,
+  optiStart = 2,
+  dateT = Inf,
+  verbose = F
+)
 }
 \arguments{
 \item{ptree}{Phylogenetic tree}

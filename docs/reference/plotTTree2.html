@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.5</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -133,7 +133,13 @@
     <p>Plot a transmission tree in an economic format</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plotTTree2</span>(<span class='no'>ttree</span>, <span class='kw'>showLabels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>showMissingLinks</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+    <pre class="usage"><span class='fu'>plotTTree2</span><span class='op'>(</span>
+  <span class='va'>ttree</span>,
+  showLabels <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  showMissingLinks <span class='op'>=</span> <span class='fl'>0</span>,
+  maxTime <span class='op'>=</span> <span class='cn'>NA</span>,
+  cex <span class='op'>=</span> <span class='fl'>1</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,6 +157,10 @@
       <td><p>Option for how to show missing links: (0) as dots, (1) as several gray levels, (2) as a single gray level</p></td>
     </tr>
     <tr>
+      <th>maxTime</th>
+      <td><p>Maximum value of time to show on x axis</p></td>
+    </tr>
+    <tr>
       <th>cex</th>
       <td><p>Expansion factor</p></td>
     </tr>
@@ -161,7 +171,8 @@
     <p>Returns invisibly the first parameter</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>plotTTree2</span>(<span class='fu'><a href='extractTTree.html'>extractTTree</a></span>(<span class='fu'><a href='simulateOutbreak.html'>simulateOutbreak</a></span>()))</div><div class='output co'>#&gt; <span class='message'>Note that rejection sampling was used 1 times</span></div><div class='img'><img src='plotTTree2-1.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>plotTTree2</span><span class='op'>(</span><span class='fu'><a href='extractTTree.html'>extractTTree</a></span><span class='op'>(</span><span class='fu'><a href='simulateOutbreak.html'>simulateOutbreak</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='img'><img src='plotTTree2-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -177,7 +188,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -4,8 +4,13 @@
 \alias{getGenerationTimeDist}
 \title{Extract and return realised generation time distribution}
 \usage{
-getGenerationTimeDist(record, burnin = 0.5, maxi = 2, numBins = 20,
-  show.plot = F)
+getGenerationTimeDist(
+  record,
+  burnin = 0.5,
+  maxi = 2,
+  numBins = 20,
+  show.plot = F
+)
 }
 \arguments{
 \item{record}{MCMC output produced by inferTTree}

@@ -2,45 +2,49 @@
 #' @param record Output from inferTTree function
 #' @param burnin Proportion of the MCMC output to be discarded as burnin
 #' @param numBins Number of time bins to compute and display incident cases
+#' @param dateT Date when process stops (this can be Inf for fully resolved outbreaks)
 #' @param show.plot Show a plot of incident cases over time with stacked bars
 #' @return List with four entries. Time is a vector of the time points. allCases is the average number of cases at each time in the posterior. sampledCases: average number of sampled cases. unsampCases: average number of unsampled cases.
 #' @export
-getIncidentCases <- function(record,burnin=0.5,numBins=10,show.plot=FALSE) {
+getIncidentCases <- function(record,burnin=0.5,numBins=10,dateT=NA,show.plot=FALSE) {
   record=record[max(1,round(length(record)*burnin)):length(record)]
+  lr=length(record)
   minTime=Inf
   maxTime=-Inf
-  for (n in 1:length(record))  {
-    #minTime=min(minTime,min(record[[n]]$ctree$ctree[,1]))
-    #maxTime=max(maxTime,max(record[[n]]$ctree$ctree[,1]))
-    thisTT <- extractTTree(record[[n]]$ctree)$ttree
+  for (i in 1:lr)  {
+    thisTT <- extractTTree(record[[i]]$ctree)$ttree
     minTime=min(minTime,min(thisTT[,1]))
     maxTime=max(maxTime,max(thisTT[,1]))
   }
   breaks=(0:numBins)/numBins*(maxTime-minTime)+minTime
-  allcounts=list()
-  sampcounts=list()
-  unsampcounts=list()
-  for (n in 1:length(record))  {
-    thisTT <- extractTTree(record[[n]]$ctree)$ttree
-    allcounts[[n]]=hist(thisTT[,1],breaks=breaks,plot=FALSE)
-    IND=!is.na(thisTT[,2]) # SAMPLED
-    sampcounts[[n]]=hist(thisTT[IND,1],breaks=breaks,plot=FALSE) # sampled
-    unsampcounts[[n]]=hist(thisTT[!IND,1],breaks=breaks,plot=FALSE) # not sampled
+  mids=(breaks[1:(length(breaks)-1)]+breaks[2:length(breaks)])/2
+  sampcounts=matrix(NA,lr,numBins)
+  unsampcounts=matrix(NA,lr,numBins)
+  for (i in 1:lr)  {
+    thisTT <- extractTTree(record[[i]]$ctree)$ttree
+    IND=!is.na(thisTT[,2])
+    sampcounts[i,]=tabulate(findInterval(thisTT[IND,1],breaks),numBins) # sampled
+    unsampcounts[i,]=tabulate(findInterval(thisTT[!IND,1],breaks),numBins) # not sampled
   }
-  # find average numbers of sampled, unsampled and total cases in each time bin
-  runsum=0*allcounts[[1]]$counts
-  runsamp=0*sampcounts[[1]]$counts
-  rununsamp=0*unsampcounts[[1]]$counts
-  for (n in 1:length(allcounts)) {
-    runsum=runsum+allcounts[[n]]$counts
-    runsamp=runsamp+sampcounts[[n]]$counts
-    rununsamp=rununsamp+unsampcounts[[n]]$counts
-  }
-  runsum=runsum/length(allcounts)
-  runsamp=runsamp/length(sampcounts)
-  rununsamp=rununsamp/length(unsampcounts)
+  samp=colSums(sampcounts)/lr
+  unsamp=colSums(unsampcounts)/lr
+  res=list(Time=mids,sampledCases=samp, unsampCases=unsamp)
   
-  res=list(Time=allcounts[[1]]$mids,allCases=runsum, sampledCases=runsamp, unsampCases=rununsamp)
+  if (!is.na(dateT)) {
+    pinc=rep(NA,numBins)
+    coda=convertToCoda(record,0)
+    if (dateT==Inf) pinc[]=1-uniroot(function(x) {x-(1-mean(coda[,'pi']))*((1-mean(coda[,'off.p']))/(1-mean(coda[,'off.p'])*x))^mean(coda[,'off.r'])},c(0,1))$root
+    else {
+      dt=0.01
+      L=round((dateT-minTime)/dt)
+      omega=getOmegaR(L,dt,mean(coda[,'off.r']),mean(coda[,'off.p']),mean(coda[,'pi']),record[[1]]$w.shape,record[[1]]$w.scale,record[[1]]$ws.shape,record[[1]]$ws.scale)
+      fomega   =function(x) {omega   [max(1,min(L,round((dateT-x)/dt)))] }
+      for (j in 1:numBins) {
+        pinc[j]=1-fomega(mids[j])
+      }
+    }
+    res$pinc=pinc
+  }
   
   if (show.plot) {
     mydata=t(cbind(res$sampledCases,res$unsampCases))
@@ -48,6 +52,11 @@ getIncidentCases <- function(record,burnin=0.5,numBins=10,show.plot=FALSE) {
     labs=pretty(c(minTime,maxTime),6)
     axis(1,at = (labs-minTime)/(maxTime-minTime)*1.2*numBins,labels=labs)
     legend("topleft", legend=c('Unsampled','Sampled'), pch=15, col=c('red','blue'))
+    if (!is.na(dateT)) {
+      maxy=max(res$sampledCases+res$unsampCases)
+      lines((1:length(res$Time))*1.2-0.5,res$pinc*maxy)
+      axis(4,at=maxy*seq(0,1,0.25),labels=seq(0,1,0.25))
+    }
   }
   return(res)
 }
@@ -136,7 +145,7 @@ getGenerationTimeDist <-  function(record,burnin=0.5,maxi=2,numBins=20,show.plot
   tt=extractTTree(record[[i]]$ctree)$ttree
   t1=tt[tt[tt[,3]!=0,3],1]
   t2=tt[tt[,3]!=0,1]
-  dist=dist+hist(t2-t1,breaks=breaks,plot=F)$counts
+  dist=dist+tabulate(findInterval(t2-t1,breaks),length(breaks)-1)
   }
   dist=dist/sum(dist)
   dist=dist[1:numBins]
@@ -170,7 +179,7 @@ getSamplingTimeDist <-  function(record,burnin=0.5,maxi=2,numBins=20,show.plot=F
     tt=extractTTree(record[[i]]$ctree)$ttree
     t1=tt[!is.na(tt[,2]),1]
     t2=tt[!is.na(tt[,2]),2]
-    dist=dist+hist(t2-t1,breaks=breaks,plot=F)$counts
+    dist=dist+tabulate(findInterval(t2-t1,breaks),length(breaks)-1)
   }
   dist=dist/sum(dist)
   dist=dist[1:numBins]

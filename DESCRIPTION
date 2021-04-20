@@ -1,6 +1,6 @@
 Package: TransPhylo
-Version: 1.4.4
-Date: 2020-06-01
+Version: 1.4.5
+Date: 2021-04-20
 Title: Inference of Transmission Tree from a Dated Phylogeny
 Authors@R: c(person("Xavier","Didelot",
                   email="xavier.didelot@gmail.com",
@@ -18,10 +18,10 @@ Description: Inference of transmission tree from a dated phylogeny.
 License: GPL (>=2)
 Depends: R (>= 3.0.0)
 Imports: Rcpp (>= 0.12.8), stats, graphics, ape
-Suggests: knitr, testthat, purrr, coda, grDevices, lattice
+Suggests: knitr, testthat, purrr, coda, grDevices, lattice, rmarkdown
 LinkingTo: Rcpp
 Encoding: UTF-8
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 SystemRequirements: C++11
 VignetteBuilder: knitr
 NeedsCompilation: yes

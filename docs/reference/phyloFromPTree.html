@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.5</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -133,7 +133,7 @@
     <p>Converts a phylogenetic tree into an ape phylo object</p>
     </div>
 
-    <pre class="usage"><span class='fu'>phyloFromPTree</span>(<span class='no'>ptree</span>)</pre>
+    <pre class="usage"><span class='fu'>phyloFromPTree</span><span class='op'>(</span><span class='va'>ptree</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,13 +149,14 @@
     <p>phylo object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>phyloFromPTree</span>(<span class='fu'><a href='extractPTree.html'>extractPTree</a></span>(<span class='fu'><a href='simulateOutbreak.html'>simulateOutbreak</a></span>()))</div><div class='output co'>#&gt; <span class='message'>Note that rejection sampling was used 1 times</span></div><div class='output co'>#&gt; 
-#&gt; Phylogenetic tree with 2 tips and 1 internal nodes.
+    <pre class="examples"><div class='input'><span class='fu'>phyloFromPTree</span><span class='op'>(</span><span class='fu'><a href='extractPTree.html'>extractPTree</a></span><span class='op'>(</span><span class='fu'><a href='simulateOutbreak.html'>simulateOutbreak</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
+#&gt; Phylogenetic tree with 1 tips and 1 internal nodes.
 #&gt; 
 #&gt; Tip labels:
-#&gt; [1] "1" "2"
+#&gt;   1
 #&gt; 
-#&gt; Rooted; includes branch lengths.</div></pre>
+#&gt; Rooted; no branch lengths.</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -171,7 +172,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

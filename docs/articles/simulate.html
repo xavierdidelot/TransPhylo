@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.5</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -78,13 +78,13 @@
 
       
 
-      </header><div class="row">
+      </header><script src="simulate_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simulation of outbreak data</h1>
                         <h4 class="author">Xavier Didelot</h4>
             
-            <h4 class="date">2020-06-04</h4>
+            <h4 class="date">2021-04-20</h4>
       
       
       <div class="hidden name"><code>simulate.rmd</code></div>
@@ -94,44 +94,55 @@
     
     
 <p>If you want to reproduce exactly the same results as the ones shown in this tutorial, you need to set the seed of your random number generator to zero:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">TransPhylo</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">0</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">TransPhylo</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></code></pre></div>
 <p>A pathogen has an effective within-host population size of <span class="math inline">\(N_e=100\)</span> and a generation time <span class="math inline">\(g=1\)</span> day, so that <span class="math inline">\(N_e g=100/365\)</span> year. The offspring distribution is negative binomial with mean equal to the basic reproduction number <span class="math inline">\(R=5\)</span>. Both the generation time and the sampling time are Gamma distributed with parameters (10,0.1) which has a mean of 1 year. The density of sampling is <span class="math inline">\(\pi=0.25\)</span>. The following commands specify these parameters:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">neg</span><span class="kw">=</span><span class="fl">100</span>/<span class="fl">365</span>
-<span class="no">off.r</span><span class="kw">=</span><span class="fl">5</span>
-<span class="no">w.shape</span><span class="kw">=</span><span class="fl">10</span>
-<span class="no">w.scale</span><span class="kw">=</span><span class="fl">0.1</span>
-<span class="no">pi</span><span class="kw">=</span><span class="fl">0.25</span></pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">neg</span><span class="op">=</span><span class="fl">100</span><span class="op">/</span><span class="fl">365</span>
+<span class="va">off.r</span><span class="op">=</span><span class="fl">5</span>
+<span class="va">w.shape</span><span class="op">=</span><span class="fl">10</span>
+<span class="va">w.scale</span><span class="op">=</span><span class="fl">0.1</span>
+<span class="va">pi</span><span class="op">=</span><span class="fl">0.25</span></code></pre></div>
 <p>We simulate an outbreak that starts in 2005 and which and is observed up to 2008:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">simu</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simulateOutbreak.html">simulateOutbreak</a></span>(<span class="kw">neg</span><span class="kw">=</span><span class="no">neg</span>,<span class="kw">pi</span><span class="kw">=</span><span class="no">pi</span>,<span class="kw">off.r</span><span class="kw">=</span><span class="no">off.r</span>,<span class="kw">w.shape</span><span class="kw">=</span><span class="no">w.shape</span>,
-                         <span class="kw">w.scale</span><span class="kw">=</span><span class="no">w.scale</span>,<span class="kw">dateStartOutbreak</span><span class="kw">=</span><span class="fl">2005</span>,<span class="kw">dateT</span><span class="kw">=</span><span class="fl">2008</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">simu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulateOutbreak.html">simulateOutbreak</a></span><span class="op">(</span>neg<span class="op">=</span><span class="va">neg</span>,pi<span class="op">=</span><span class="va">pi</span>,off.r<span class="op">=</span><span class="va">off.r</span>,w.shape<span class="op">=</span><span class="va">w.shape</span>,
+                         w.scale<span class="op">=</span><span class="va">w.scale</span>,dateStartOutbreak<span class="op">=</span><span class="fl">2005</span>,dateT<span class="op">=</span><span class="fl">2008</span><span class="op">)</span></code></pre></div>
 <p>This simulation contains both the transmission tree between infected hosts and the within-host phylogenetic tree of each host. This can be visualised as a colored phlogenetic tree, where each host is represented by a unique color:</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">simu</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">simu</span><span class="op">)</span></code></pre></div>
 <p><img src="simulate_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
 <p>The transmission tree can be extracted and plotted separately from the phylogeny:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">ttree</span><span class="kw">&lt;-</span><span class="fu"><a href="../reference/extractTTree.html">extractTTree</a></span>(<span class="no">simu</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">ttree</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ttree</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/extractTTree.html">extractTTree</a></span><span class="op">(</span><span class="va">simu</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">ttree</span><span class="op">)</span></code></pre></div>
 <p><img src="simulate_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 <p>A more detailed plot can be displayed as follows:</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">ttree</span>,<span class="kw">type</span><span class="kw">=</span><span class="st">'detailed'</span>,<span class="no">w.shape</span>,<span class="no">w.scale</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">ttree</span>,type<span class="op">=</span><span class="st">'detailed'</span>,<span class="va">w.shape</span>,<span class="va">w.scale</span><span class="op">)</span></code></pre></div>
 <p><img src="simulate_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
 <p>The phylogenetic tree can be extracted and plotted separately from the transmission tree:</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">ptree</span><span class="kw">&lt;-</span><span class="fu"><a href="../reference/extractPTree.html">extractPTree</a></span>(<span class="no">simu</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">ptree</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ptree</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/extractPTree.html">extractPTree</a></span><span class="op">(</span><span class="va">simu</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">ptree</span><span class="op">)</span></code></pre></div>
 <p><img src="simulate_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
 <p>The extracted phylogenetic tree can also be converted into a phylo object from the ape package:</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ape</span>)
-<span class="no">p</span><span class="kw">&lt;-</span><span class="fu"><a href="../reference/phyloFromPTree.html">phyloFromPTree</a></span>(<span class="no">ptree</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">p</span>)
-<span class="fu"><a href="https://rdrr.io/pkg/ape/man/axisPhylo.html">axisPhylo</a></span>(<span class="kw">backward</span> <span class="kw">=</span> <span class="no">F</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ape-package.ird.fr/">ape</a></span><span class="op">)</span>
+<span class="va">p</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/phyloFromPTree.html">phyloFromPTree</a></span><span class="op">(</span><span class="va">ptree</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/ape/man/axisPhylo.html">axisPhylo</a></span><span class="op">(</span>backward <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></code></pre></div>
 <p><img src="simulate_files/figure-html/unnamed-chunk-9-1.png" width="576"></p>
 <p>You can save this tree into a Newick file for further analysis. This is the tree that is used as the starting poit of the tutorial on inference of a transmission tree from a dated phylogeny.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/ape/man/write.tree.html">write.tree</a></span>(<span class="no">p</span>,<span class="st">'tree.nwk'</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/ape/man/write.tree.html">write.tree</a></span><span class="op">(</span><span class="va">p</span>,<span class="st">'tree.nwk'</span><span class="op">)</span></code></pre></div>
 <p>The content of this Newick file is:</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/ape/man/write.tree.html">write.tree</a></span>(<span class="no">p</span>,<span class="st">''</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/ape/man/write.tree.html">write.tree</a></span><span class="op">(</span><span class="va">p</span>,<span class="st">''</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "((4:1.257652937,(1:1.231048819,5:1.519248672):0.303038892):0.784065883,(3:1.643413444,(6:0.656820028,2:0.007344035611):0.7562780805):1.293120815);"</code></pre>
 <p>This phylogeny is scaled in years, but time is measured only relatively to the date of the last sample which is at 0 on the x-axis of the figure above. To use this tree again we also need to know exactly when was the last sample taken:</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/dateLastSample.html">dateLastSample</a></span>(<span class="no">simu</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/dateLastSample.html">dateLastSample</a></span><span class="op">(</span><span class="va">simu</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2007.964</code></pre>
   </div>
 
@@ -148,7 +159,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

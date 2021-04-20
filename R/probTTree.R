@@ -76,3 +76,14 @@ getOmegabarR=function(L,dt,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale) {
 wstar_rootFinderR=function(pi,off.p,off.r) {
   omegaStar <- uniroot(function(x) {x-(1-pi)*((1-off.p)/(1-off.p*x))^off.r},c(0,1))$root #This is Equation (2)
 }
+
+getOmegaR=function(L,dt,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale) {
+  omega=rep(NA,L);omega[1]=1;omegabar=rep(NA,L);omegabar[1]=1
+  dgammastore=dgamma(dt*(1:(L-1)),shape=w.shape,scale=w.scale)
+  coef=c(0.5,rep(1,L-1))
+  for (k in 1:(L-1)) {
+    omegabar[k+1]=min(1,sum(coef[1:k]*dgammastore[seq(k,1,-1)]*omega[1:k]*dt)+1-pgamma(k*dt,shape=w.shape,scale=w.scale))
+    omega[k+1]=(1-pi*pgamma(k*dt,shape=ws.shape,scale=ws.scale))*((1-off.p)/(1-off.p*omegabar[k+1]))^off.r #This is Equation (S3)
+  }
+  return(omega)
+}

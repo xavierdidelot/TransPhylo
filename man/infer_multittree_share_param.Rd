@@ -6,14 +6,31 @@
 User can specify any subset of parameters that will be shared by providing a character vector of parameter names to 
 the argument "share".}
 \usage{
-infer_multittree_share_param(ptree_lst, w.shape = 2, w.scale = 1,
-  ws.shape = w.shape, ws.scale = w.scale, mcmcIterations = 1000,
-  thinning = 1, startNeg = 100/365, startOff.r = 1,
-  startOff.p = 0.5, startPi = 0.5, prior_pi_a = 1, prior_pi_b = 1,
-  updateNeg = TRUE, updateOff.r = TRUE, updateOff.p = FALSE,
-  updatePi = TRUE, share = NULL, startCTree_lst = rep(NA,
-  length(ptree_lst)), updateTTree = TRUE, optiStart = 2, dateT = Inf,
-  verbose = F)
+infer_multittree_share_param(
+  ptree_lst,
+  w.shape = 2,
+  w.scale = 1,
+  ws.shape = w.shape,
+  ws.scale = w.scale,
+  mcmcIterations = 1000,
+  thinning = 1,
+  startNeg = 100/365,
+  startOff.r = 1,
+  startOff.p = 0.5,
+  startPi = 0.5,
+  prior_pi_a = 1,
+  prior_pi_b = 1,
+  updateNeg = TRUE,
+  updateOff.r = TRUE,
+  updateOff.p = FALSE,
+  updatePi = TRUE,
+  share = NULL,
+  startCTree_lst = rep(NA, length(ptree_lst)),
+  updateTTree = TRUE,
+  optiStart = 2,
+  dateT = Inf,
+  verbose = F
+)
 }
 \arguments{
 \item{ptree_lst}{List of phylogenetic tree}

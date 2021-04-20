@@ -4,9 +4,19 @@
 \alias{makeCTreeFromPTree}
 \title{Create a transmission tree compatible with the provided phylogenetic tree}
 \usage{
-makeCTreeFromPTree(ptree, off.r = NA, off.p = NA, neg = NA,
-  pi = NA, w.shape = NA, w.scale = NA, ws.shape = NA,
-  ws.scale = NA, T = NA, optiStart = 0)
+makeCTreeFromPTree(
+  ptree,
+  off.r = NA,
+  off.p = NA,
+  neg = NA,
+  pi = NA,
+  w.shape = NA,
+  w.scale = NA,
+  ws.shape = NA,
+  ws.scale = NA,
+  T = NA,
+  optiStart = 0
+)
 }
 \arguments{
 \item{ptree}{Phylogenetic tree}

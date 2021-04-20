@@ -4,8 +4,14 @@
 \alias{plotCTree}
 \title{Plot both phylogenetic and transmission trees using colors on the phylogeny}
 \usage{
-plotCTree(tree, showLabels = TRUE, showStars = TRUE, cols = NA,
-  maxTime = NA, cex = 1)
+plotCTree(
+  tree,
+  showLabels = TRUE,
+  showStars = TRUE,
+  cols = NA,
+  maxTime = NA,
+  cex = 1
+)
 }
 \arguments{
 \item{tree}{Combined phylogenetic/transmission tree}

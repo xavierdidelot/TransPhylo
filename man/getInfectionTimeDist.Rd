@@ -4,8 +4,7 @@
 \alias{getInfectionTimeDist}
 \title{Extract and return distribution of infection time of given sampled case(s)}
 \usage{
-getInfectionTimeDist(record, burnin = 0.5, k, numBins = 10,
-  show.plot = F)
+getInfectionTimeDist(record, burnin = 0.5, k, numBins = 10, show.plot = F)
 }
 \arguments{
 \item{record}{MCMC output produced by inferTTree}
