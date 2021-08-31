@@ -22,6 +22,7 @@
 #' @param updateTTree Whether or not to update the transmission tree
 #' @param optiStart Type of optimisation to apply to MCMC start point (0=none, 1=slow, 2=fast)
 #' @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
+#' @param delta_t Grid precision (smaller is better but slower) 
 #' @param verbose Whether or not to use verbose mode (default is false)
 #' @return posterior sample set of transmission trees
 #' @examples 
@@ -31,7 +32,7 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
                       w.mean=NA,w.std=NA,ws.mean=NA,ws.std=NA,mcmcIterations=1000,
                       thinning=1, startNeg=100/365, startOff.r=1, startOff.p=0.5, startPi=0.5, updateNeg=TRUE,
                       updateOff.r=TRUE, updateOff.p=FALSE, updatePi=TRUE, startCTree=NA, updateTTree=TRUE,
-                      optiStart=2, dateT=Inf,verbose=F) {
+                      optiStart=2, dateT=Inf,delta_t=0.01,verbose=F) {
 
   ptree$ptree[,1]=ptree$ptree[,1]+runif(nrow(ptree$ptree))*1e-10#Ensure that all leaves have unique times
   if (dateT<dateLastSample(ptree)) stop('The parameter dateT cannot be smaller than the date of last sample')
@@ -53,7 +54,7 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
   else ctree<-startCTree
   ttree <- extractTTree(ctree)
   record <- vector('list',mcmcIterations/thinning)
-  pTTree <- probTTree(ttree$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT) 
+  pTTree <- probTTree(ttree$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,delta_t) 
   pPTree <- probPTreeGivenTTree(ctree$ctree,neg) 
   if (verbose==F) pb <- utils::txtProgressBar(min=0,max=mcmcIterations,style = 3)
   
@@ -84,7 +85,7 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
     ctree2 <- list(ctree=prop$tree,nam=ctree$nam)
     class(ctree2)<-'ctree'
     ttree2 <- extractTTree(ctree2)
-    pTTree2 <- probTTree(ttree2$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT) 
+    pTTree2 <- probTTree(ttree2$ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,delta_t) 
     #pPTree2 <- probPTreeGivenTTree(ctree2$ctree,neg) 
     pPTreeDiff <- probPTreeGivenTTree(ctree2$ctree,neg,prop$new)-probPTreeGivenTTree(ctree$ctree,neg,prop$old)
     if (log(runif(1)) < log(prop$qr)+pTTree2+pPTreeDiff-pTTree)  { 
@@ -107,7 +108,7 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
       #Metropolis update for off.r, assuming Exp(1) prior 
       off.r2 <- abs(off.r + (runif(1)-0.5)*0.5)
       if (verbose) message(sprintf("Proposing off.r update %f->%f",off.r,off.r2))
-      pTTree2 <- probTTree(ttree$ttree,off.r2,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT) 
+      pTTree2 <- probTTree(ttree$ttree,off.r2,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,delta_t) 
       if (log(runif(1)) < pTTree2-pTTree-off.r2+off.r)  {off.r <- off.r2;pTTree <- pTTree2}
     }
     
@@ -116,7 +117,7 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
       off.p2 <- abs(off.p + (runif(1)-0.5)*0.1)
       if (off.p2>1) off.p2=2-off.p2
       if (verbose) message(sprintf("Proposing off.p update %f->%f",off.p,off.p2))
-      pTTree2 <- probTTree(ttree$ttree,off.r,off.p2,pi,w.shape,w.scale,ws.shape,ws.scale,dateT) 
+      pTTree2 <- probTTree(ttree$ttree,off.r,off.p2,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,delta_t) 
       if (log(runif(1)) < pTTree2-pTTree)  {off.p <- off.p2;pTTree <- pTTree2}
     }
 
@@ -126,7 +127,7 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
       if (pi2<0.01) pi2=0.02-pi2
       if (pi2>1) pi2=2-pi2
       if (verbose) message(sprintf("Proposing pi update %f->%f",pi,pi2))
-      pTTree2 <- probTTree(ttree$ttree,off.r,off.p,pi2,w.shape,w.scale,ws.shape,ws.scale,dateT) 
+      pTTree2 <- probTTree(ttree$ttree,off.r,off.p,pi2,w.shape,w.scale,ws.shape,ws.scale,dateT,delta_t) 
       if (log(runif(1)) < pTTree2-pTTree)  {pi <- pi2;pTTree <- pTTree2}       
     }
     

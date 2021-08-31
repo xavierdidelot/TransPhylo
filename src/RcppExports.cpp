@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // probSubtree
 double probSubtree(NumericMatrix tab, double rate);
 RcppExport SEXP _TransPhylo_probSubtree(SEXP tabSEXP, SEXP rateSEXP) {

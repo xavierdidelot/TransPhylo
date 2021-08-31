@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.6</span>
       </span>
     </div>
 
@@ -157,6 +157,7 @@
   updateTTree <span class='op'>=</span> <span class='cn'>TRUE</span>,
   optiStart <span class='op'>=</span> <span class='fl'>2</span>,
   dateT <span class='op'>=</span> <span class='cn'>Inf</span>,
+  delta_t <span class='op'>=</span> <span class='fl'>0.01</span>,
   verbose <span class='op'>=</span> <span class='cn'>F</span>
 <span class='op'>)</span></pre>
 
@@ -254,6 +255,10 @@
     <tr>
       <th>dateT</th>
       <td><p>Date when process stops (this can be Inf for fully simulated outbreaks)</p></td>
+    </tr>
+    <tr>
+      <th>delta_t</th>
+      <td><p>Grid precision (smaller is better but slower)</p></td>
     </tr>
     <tr>
       <th>verbose</th>
