@@ -29,6 +29,7 @@ infer_multittree_share_param(
   updateTTree = TRUE,
   optiStart = 2,
   dateT = Inf,
+  delta_t = 0.01,
   verbose = F
 )
 }
@@ -77,6 +78,8 @@ share the offspring distribution. Allowed parameter names are "neg", "off.r", "o
 \item{optiStart}{Type of optimisation to apply to MCMC start point (0=none, 1=slow, 2=fast)}
 
 \item{dateT}{Date when process stops (this can be Inf for fully simulated outbreaks)}
+
+\item{delta_t}{Grid precision (smaller is better but slower)}
 
 \item{verbose}{Whether or not to use verbose mode (default is false)}
 }
