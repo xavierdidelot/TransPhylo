@@ -24,11 +24,15 @@ inferTTree(
   updateOff.r = TRUE,
   updateOff.p = FALSE,
   updatePi = TRUE,
+  qNeg = 0.5,
+  qOff.r = 0.5,
+  qOff.p = 0.1,
+  qPi = 0.1,
   startCTree = NA,
   updateTTree = TRUE,
   optiStart = 2,
   dateT = Inf,
-  delta_t = 0.01,
+  delta_t = NA,
   verbose = F
 )
 }
@@ -70,6 +74,14 @@ inferTTree(
 \item{updateOff.p}{Whether or not to update the parameter off.p}
 
 \item{updatePi}{Whether or not to update the parameter pi}
+
+\item{qNeg}{Proposal kernel range for parameter Ne*g}
+
+\item{qOff.r}{Proposal kernel range for parameter Off.r}
+
+\item{qOff.p}{Proposal kernel range for parameter Off.p}
+
+\item{qPi}{Proposal kernel range for parameter pi}
 
 \item{startCTree}{Optional combined tree to start from}
 

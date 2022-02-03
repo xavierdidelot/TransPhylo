@@ -21,7 +21,7 @@ Imports: Rcpp (>= 0.12.8), stats, graphics, ape
 Suggests: knitr, testthat, purrr, coda, grDevices, lattice, rmarkdown
 LinkingTo: Rcpp
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 SystemRequirements: C++11
 VignetteBuilder: knitr
 NeedsCompilation: yes
