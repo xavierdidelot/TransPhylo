@@ -18,6 +18,10 @@
 #' @param updateOff.r Whether or not to update the parameter off.r
 #' @param updateOff.p Whether or not to update the parameter off.p
 #' @param updatePi Whether or not to update the parameter pi
+#' @param qNeg Proposal kernel range for parameter Ne*g
+#' @param qOff.r Proposal kernel range for parameter Off.r
+#' @param qOff.p Proposal kernel range for parameter Off.p
+#' @param qPi Proposal kernel range for parameter pi
 #' @param startCTree Optional combined tree to start from
 #' @param updateTTree Whether or not to update the transmission tree
 #' @param optiStart Type of optimisation to apply to MCMC start point (0=none, 1=slow, 2=fast)
@@ -31,8 +35,8 @@
 inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA, 
                       w.mean=NA,w.std=NA,ws.mean=NA,ws.std=NA,mcmcIterations=1000,
                       thinning=1, startNeg=100/365, startOff.r=1, startOff.p=0.5, startPi=0.5, updateNeg=TRUE,
-                      updateOff.r=TRUE, updateOff.p=FALSE, updatePi=TRUE, startCTree=NA, updateTTree=TRUE,
-                      optiStart=2, dateT=Inf,delta_t=0.01,verbose=F) {
+                      updateOff.r=TRUE, updateOff.p=FALSE, updatePi=TRUE, qNeg=NA, qOff.r=NA, qOff.p=NA, qPi=NA, 
+                      startCTree=NA, updateTTree=TRUE, optiStart=2, dateT=Inf,delta_t=NA,verbose=F) {
 
   ptree$ptree[,1]=ptree$ptree[,1]+runif(nrow(ptree$ptree))*1e-10#Ensure that all leaves have unique times
   if (dateT<dateLastSample(ptree)) stop('The parameter dateT cannot be smaller than the date of last sample')
@@ -44,6 +48,11 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
   if (!is.na(ws.mean)&&!is.na(ws.std)) {ws.shape=ws.mean^2/ws.std^2;ws.scale=ws.std^2/ws.mean}
   if (is.na(ws.shape)) ws.shape=w.shape
   if (is.na(ws.scale)) ws.scale=w.scale
+  if (is.na(delta_t)) delta_t=0.001*(max(ptree$ptree[,1])-min(ptree$ptree[,1]))
+  if (is.na(qNeg)) qNeg=0.5
+  if (is.na(qOff.r)) qOff.r=min(0.5,5/length(ptree$nam))
+  if (is.na(qOff.p)) qOff.p=min(0.1,1/length(ptree$nam))
+  if (is.na(qPi)) qPi=min(0.1,1/length(ptree$nam))
   
   #MCMC algorithm
   neg <- startNeg
@@ -98,7 +107,7 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
     
     if (updateNeg) {
       #Metropolis update for Ne*g, assuming Exp(1) prior 
-      neg2 <- abs(neg + (runif(1)-0.5)*0.5)
+      neg2 <- abs(neg + (runif(1)-0.5)*qNeg)
       if (verbose) message(sprintf("Proposing Ne*g update %f->%f",neg,neg2))
       pPTree2 <- probPTreeGivenTTree(ctree$ctree,neg2) 
       if (log(runif(1)) < pPTree2-pPTree-neg2+neg)  {neg <- neg2;pPTree <- pPTree2} 
@@ -106,7 +115,7 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
     
     if (updateOff.r) {
       #Metropolis update for off.r, assuming Exp(1) prior 
-      off.r2 <- abs(off.r + (runif(1)-0.5)*0.5)
+      off.r2 <- abs(off.r + (runif(1)-0.5)*qOff.r)
       if (verbose) message(sprintf("Proposing off.r update %f->%f",off.r,off.r2))
       pTTree2 <- probTTree(ttree$ttree,off.r2,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,delta_t) 
       if (log(runif(1)) < pTTree2-pTTree-off.r2+off.r)  {off.r <- off.r2;pTTree <- pTTree2}
@@ -114,7 +123,7 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
     
     if (updateOff.p) {
       #Metropolis update for off.p, assuming Unif(0,1) prior 
-      off.p2 <- abs(off.p + (runif(1)-0.5)*0.1)
+      off.p2 <- abs(off.p + (runif(1)-0.5)*qOff.p)
       if (off.p2>1) off.p2=2-off.p2
       if (verbose) message(sprintf("Proposing off.p update %f->%f",off.p,off.p2))
       pTTree2 <- probTTree(ttree$ttree,off.r,off.p2,pi,w.shape,w.scale,ws.shape,ws.scale,dateT,delta_t) 
@@ -122,9 +131,8 @@ inferTTree = function(ptree, w.shape=2, w.scale=1, ws.shape=NA, ws.scale=NA,
     }
 
         if (updatePi) {
-      #Metropolis update for pi, assuming Unif(0.01,1) prior 
-      pi2 <- pi + (runif(1)-0.5)*0.1
-      if (pi2<0.01) pi2=0.02-pi2
+      #Metropolis update for pi, assuming Unif(0,1) prior 
+      pi2 <- abs(pi + (runif(1)-0.5)*qPi)
       if (pi2>1) pi2=2-pi2
       if (verbose) message(sprintf("Proposing pi update %f->%f",pi,pi2))
       pTTree2 <- probTTree(ttree$ttree,off.r,off.p,pi2,w.shape,w.scale,ws.shape,ws.scale,dateT,delta_t) 

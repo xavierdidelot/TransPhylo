@@ -64,7 +64,7 @@ plot(res)
 
 These traces need to look stable (after initial convergence) for the MCMC to be well mixed and the results to be meaningful. Otherwise, the MCMC needs to be run for longer by increasing the `mcmcIterations` parameter in the `inferTTree` function (in the example above we had `mcmcIterations=1000` which was clearly not sufficient).
 
-Further assessment of the MCMC convergence and mixing can be obtained using the CODA package, for example to obtain the effective sample size (ESS) of paramaters as follows, making sure that the ESS of each parameter is at least 100:
+Further assessment of the MCMC convergence and mixing can be obtained using the CODA package, for example to obtain the effective sample size (ESS) of parameters as follows, making sure that the ESS of each parameter is at least 100:
 ```{r}
 library(coda)
 mcmc=convertToCoda(res)
