@@ -24,8 +24,9 @@ move1 = function(tree) {
   nage=tree[fathers[bra],1]+loc
   tree=treeAdd(tree,nage,bra,fathers[bra])
   tree <- cbind(tree[ ,1:3],.computeHost(tree)) 
-  ntraeve=sum( tree[ ,2] > 0&tree[ ,3] == 0)
-  qr=totbralen/(ntraeve-nsam)
+  trarows <- which(tree[, 2] > 0 & tree[, 3] == 0)
+  nremeve <- sum((tree[trarows, 4] > nsam) | (tree[tree[trarows, 2], 4] > nsam))
+  qr=totbralen/nremeve
   a=which(tree[,1]==nage)#find the new transmission event
   b=tree[a,2]
   return(list(tree=tree,qr=qr,old=old,new=c(tree[a,4],tree[b,4])))
@@ -34,8 +35,9 @@ move1 = function(tree) {
 #MOVE2: remove a transmission event if possible
 move2 = function(tree) {
   nsam <- sum(tree[ ,2] == 0&tree[ ,3] == 0) 
-  ntraeve=sum(tree[ ,2]  > 0&tree[ ,3] == 0)
-  if (nsam==ntraeve) return(list(tree=tree,qr=1,old=as.numeric(c()),new=as.numeric(c())))#Nothing to remove
+  trarows <- which(tree[, 2] > 0 & tree[, 3] == 0)
+  nremeve <- sum((tree[trarows, 4] > nsam) | (tree[tree[trarows, 2], 4] > nsam))
+  if (nremeve == 0) return(list(tree=tree,qr=1,old=as.numeric(c()),new=as.numeric(c())))#Nothing to remove
   
   #Choose a transmission event that can be removed
   host <- tree[ ,4]
@@ -52,7 +54,7 @@ move2 = function(tree) {
   #Remove it
   tree=treeRem(tree,w,fathers[w])
   tree <- cbind(tree[ ,1:3],.computeHost(tree)) 
-  qr=(ntraeve-nsam)/totbralen
+  qr=nremeve/totbralen
   return(list(tree=tree,qr=qr,old=c(infector,infected),new=tree[tmp,4]))
 }
 
