@@ -17,3 +17,8 @@
 #' @import stats
 #' @import graphics
 NULL
+
+.onUnload <- function (libpath) {
+  library.dynam.unload("TransPhylo", libpath)
+}
+NULL
