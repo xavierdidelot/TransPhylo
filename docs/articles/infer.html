@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.9</span>
       </span>
     </div>
 
@@ -50,7 +52,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -78,13 +80,13 @@
 
       
 
-      </header><script src="infer_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Inference of transmission tree from a dated phylogeny</h1>
-                        <h4 class="author">Xavier Didelot</h4>
+                        <h4 data-toc-skip class="author">Xavier Didelot</h4>
             
-            <h4 class="date">2021-08-31</h4>
+            <h4 data-toc-skip class="date">2022-07-18</h4>
       
       
       <div class="hidden name"><code>infer.Rmd</code></div>
@@ -95,92 +97,92 @@
     
 <p>If you want to reproduce exactly the same results as the ones shown in this tutorial, you need to set the seed of your random number generator to zero:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">TransPhylo</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></code></pre></div>
-<div id="inference-of-transmission-tree-from-a-dated-phylogeny" class="section level2">
-<h2 class="hasAnchor">
-<a href="#inference-of-transmission-tree-from-a-dated-phylogeny" class="anchor"></a>Inference of transmission tree from a dated phylogeny</h2>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">TransPhylo</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="inference-of-transmission-tree-from-a-dated-phylogeny">Inference of transmission tree from a dated phylogeny<a class="anchor" aria-label="anchor" href="#inference-of-transmission-tree-from-a-dated-phylogeny"></a>
+</h2>
 <p>This tutorial illustrates the main functionality of TransPhylo, which is to infer a transmission tree given a dated phylogeny. We will use the same dated phylogeny tree that was generated in the tutorial on simulations:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ape-package.ird.fr/">ape</a></span><span class="op">)</span>
-<span class="va">phy</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/read.tree.html">read.tree</a></span><span class="op">(</span>text<span class="op">=</span><span class="st">'((4:1.257652937,(1:1.231048819,5:1.519248672):0.303038892):0.784065883,(3:1.643413444,(6:0.656820028,2:0.007344035611):0.7562780805):1.293120815);'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">phy</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/ape/man/axisPhylo.html">axisPhylo</a></span><span class="op">(</span>backward <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://ape-package.ird.fr/" class="external-link">ape</a></span><span class="op">)</span></span>
+<span><span class="va">phy</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">read.tree</a></span><span class="op">(</span>text<span class="op">=</span><span class="st">'((4:1.257652937,(1:1.231048819,5:1.519248672):0.303038892):0.784065883,(3:1.643413444,(6:0.656820028,2:0.007344035611):0.7562780805):1.293120815);'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">phy</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/axisPhylo.html" class="external-link">axisPhylo</a></span><span class="op">(</span>backward <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
 <p><img src="infer_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
 <p>Because such a phylogeny is dated relatively and not absolutely, we also need to indicate when the last sample was taken, which in the simulation above was equal to 2007.964:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ptree</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/ptreeFromPhylo.html">ptreeFromPhylo</a></span><span class="op">(</span><span class="va">phy</span>,dateLastSample<span class="op">=</span><span class="fl">2007.964</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">ptree</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ptree</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/ptreeFromPhylo.html">ptreeFromPhylo</a></span><span class="op">(</span><span class="va">phy</span>,dateLastSample<span class="op">=</span><span class="fl">2007.964</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ptree</span><span class="op">)</span></span></code></pre></div>
 <p><img src="infer_files/figure-html/unnamed-chunk-4-1.png" width="576"></p>
 <p>TransPhylo also needs to know the parameters of the Gamma distribution representing the generation time. In the simulation above we assumed that these parameters were equal to (10,0.1), and so this is what we specify below. However, if you are using your own data, you should set these values to something sensible for your pathogen of interest.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">w.shape</span><span class="op">=</span><span class="fl">10</span>
-<span class="va">w.scale</span><span class="op">=</span><span class="fl">0.1</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">w.shape</span><span class="op">=</span><span class="fl">10</span></span>
+<span><span class="va">w.scale</span><span class="op">=</span><span class="fl">0.1</span></span></code></pre></div>
 <p>Finally TransPhylo needs to know the time at which observation of cases stopped. In the simulation above this was equal to 2008, and so this is what we specify below. However, if you are using your own data, you should set this equal to the date when observation stopped for your outbreak of interest. It might be today’s date if you are doing a real-time genomic epidemiology investigation. It can even be set equal to <code>Inf</code> if you are confident that the outbreak is finished and that there will be no cases in the future, for example if you are analysing an old outbreak which is clearly finished.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dateT</span><span class="op">=</span><span class="fl">2008</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">dateT</span><span class="op">=</span><span class="fl">2008</span></span></code></pre></div>
 <p>The MCMC procedure to infer the transmission tree given the phylogenetic tree can be run as follows:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">res</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/inferTTree.html">inferTTree</a></span><span class="op">(</span><span class="va">ptree</span>,mcmcIterations<span class="op">=</span><span class="fl">1000</span>,w.shape<span class="op">=</span><span class="va">w.shape</span>,w.scale<span class="op">=</span><span class="va">w.scale</span>,dateT<span class="op">=</span><span class="va">dateT</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">res</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/inferTTree.html">inferTTree</a></span><span class="op">(</span><span class="va">ptree</span>,mcmcIterations<span class="op">=</span><span class="fl">1000</span>,w.shape<span class="op">=</span><span class="va">w.shape</span>,w.scale<span class="op">=</span><span class="va">w.scale</span>,dateT<span class="op">=</span><span class="va">dateT</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="checking-convergence" class="section level2">
-<h2 class="hasAnchor">
-<a href="#checking-convergence" class="anchor"></a>Checking convergence</h2>
+<div class="section level2">
+<h2 id="checking-convergence">Checking convergence<a class="anchor" aria-label="anchor" href="#checking-convergence"></a>
+</h2>
 <p>The last command returned a record of all MCMC iterations. Traces of the MCMC can be plotted as follows:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
 <p><img src="infer_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
 <p>These traces need to look stable (after initial convergence) for the MCMC to be well mixed and the results to be meaningful. Otherwise, the MCMC needs to be run for longer by increasing the <code>mcmcIterations</code> parameter in the <code>inferTTree</code> function (in the example above we had <code>mcmcIterations=1000</code> which was clearly not sufficient).</p>
-<p>Further assessment of the MCMC convergence and mixing can be obtained using the CODA package, for example to obtain the effective sample size (ESS) of paramaters as follows, making sure that the ESS of each parameter is at least 100:</p>
+<p>Further assessment of the MCMC convergence and mixing can be obtained using the CODA package, for example to obtain the effective sample size (ESS) of parameters as follows, making sure that the ESS of each parameter is at least 100:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">coda</span><span class="op">)</span>
-<span class="va">mcmc</span><span class="op">=</span><span class="fu"><a href="../reference/convertToCoda.html">convertToCoda</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/coda/man/effectiveSize.html">effectiveSize</a></span><span class="op">(</span><span class="va">mcmc</span><span class="op">)</span></code></pre></div>
-<pre><code>##        pi       neg     off.r     off.p 
-##  5.875919 25.241231  3.407315  0.000000</code></pre>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">coda</span><span class="op">)</span></span>
+<span><span class="va">mcmc</span><span class="op">=</span><span class="fu"><a href="../reference/convertToCoda.html">convertToCoda</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/effectiveSize.html" class="external-link">effectiveSize</a></span><span class="op">(</span><span class="va">mcmc</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##       pi      neg    off.r    off.p </span></span>
+<span><span class="co">## 4.924841 8.604825 2.342614 0.000000</span></span></code></pre>
 </div>
-<div id="interpretation-of-output" class="section level2">
-<h2 class="hasAnchor">
-<a href="#interpretation-of-output" class="anchor"></a>Interpretation of output</h2>
+<div class="section level2">
+<h2 id="interpretation-of-output">Interpretation of output<a class="anchor" aria-label="anchor" href="#interpretation-of-output"></a>
+</h2>
 <p>Based on the MCMC sample, we can find the most representative (aka medoid) colored tree as follows:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">med</span><span class="op">=</span><span class="fu"><a href="../reference/medTTree.html">medTTree</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">med</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">med</span><span class="op">=</span><span class="fu"><a href="../reference/medTTree.html">medTTree</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">med</span><span class="op">)</span></span></code></pre></div>
 <p><img src="infer_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
 <p>We can plot the corresponding transmission tree:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ttree</span><span class="op">=</span><span class="fu"><a href="../reference/extractTTree.html">extractTTree</a></span><span class="op">(</span><span class="va">med</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">ttree</span>,type<span class="op">=</span><span class="st">'detailed'</span>,<span class="va">w.shape</span>,<span class="va">w.scale</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ttree</span><span class="op">=</span><span class="fu"><a href="../reference/extractTTree.html">extractTTree</a></span><span class="op">(</span><span class="va">med</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ttree</span>,type<span class="op">=</span><span class="st">'detailed'</span>,<span class="va">w.shape</span>,<span class="va">w.scale</span><span class="op">)</span></span></code></pre></div>
 <p><img src="infer_files/figure-html/unnamed-chunk-11-1.png" width="576"></p>
 <p>A matrix of probability of direct transmission for all pairs of individuals can be drawn as follows:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mat</span><span class="op">=</span><span class="fu"><a href="../reference/computeMatWIW.html">computeMatWIW</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
-<span class="fu">lattice</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lattice/man/levelplot.html">levelplot</a></span><span class="op">(</span><span class="va">mat</span>,xlab<span class="op">=</span><span class="st">''</span>,ylab<span class="op">=</span><span class="st">''</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">mat</span><span class="op">=</span><span class="fu"><a href="../reference/computeMatWIW.html">computeMatWIW</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span><span class="fu">lattice</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lattice/man/levelplot.html" class="external-link">levelplot</a></span><span class="op">(</span><span class="va">mat</span>,xlab<span class="op">=</span><span class="st">''</span>,ylab<span class="op">=</span><span class="st">''</span><span class="op">)</span></span></code></pre></div>
 <p><img src="infer_files/figure-html/unnamed-chunk-12-1.png" width="576"></p>
 <p>It is also possible to plot a matrix indicating for each pairs of individuals how many intermediates there are in the transmission chain:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mat</span><span class="op">=</span><span class="fu"><a href="../reference/computeMatTDist.html">computeMatTDist</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
-<span class="fu">lattice</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lattice/man/levelplot.html">levelplot</a></span><span class="op">(</span><span class="va">mat</span>,xlab<span class="op">=</span><span class="st">''</span>,ylab<span class="op">=</span><span class="st">''</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">mat</span><span class="op">=</span><span class="fu"><a href="../reference/computeMatTDist.html">computeMatTDist</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span><span class="fu">lattice</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lattice/man/levelplot.html" class="external-link">levelplot</a></span><span class="op">(</span><span class="va">mat</span>,xlab<span class="op">=</span><span class="st">''</span>,ylab<span class="op">=</span><span class="st">''</span><span class="op">)</span></span></code></pre></div>
 <p><img src="infer_files/figure-html/unnamed-chunk-13-1.png" width="576"></p>
 <p>Plot of sampled and unsampled cases over time:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">a</span><span class="op">=</span><span class="fu"><a href="../reference/getIncidentCases.html">getIncidentCases</a></span><span class="op">(</span><span class="va">res</span>,show.plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">a</span><span class="op">=</span><span class="fu"><a href="../reference/getIncidentCases.html">getIncidentCases</a></span><span class="op">(</span><span class="va">res</span>,show.plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p><img src="infer_files/figure-html/unnamed-chunk-14-1.png" width="576"></p>
 <p>Distribution of realised generation times:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">a</span><span class="op">=</span><span class="fu"><a href="../reference/getGenerationTimeDist.html">getGenerationTimeDist</a></span><span class="op">(</span><span class="va">res</span>,show.plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">a</span><span class="op">=</span><span class="fu"><a href="../reference/getGenerationTimeDist.html">getGenerationTimeDist</a></span><span class="op">(</span><span class="va">res</span>,show.plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p><img src="infer_files/figure-html/unnamed-chunk-15-1.png" width="576"></p>
 <p>Distribution of realised sampling times:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">a</span><span class="op">=</span><span class="fu"><a href="../reference/getSamplingTimeDist.html">getSamplingTimeDist</a></span><span class="op">(</span><span class="va">res</span>,show.plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">a</span><span class="op">=</span><span class="fu"><a href="../reference/getSamplingTimeDist.html">getSamplingTimeDist</a></span><span class="op">(</span><span class="va">res</span>,show.plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p><img src="infer_files/figure-html/unnamed-chunk-16-1.png" width="576"></p>
 <p>Distribution of infection time for the individuals labelled ‘1’ and ‘2’:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">a</span><span class="op">=</span><span class="fu"><a href="../reference/getInfectionTimeDist.html">getInfectionTimeDist</a></span><span class="op">(</span><span class="va">res</span>,k<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'1'</span>,<span class="st">'2'</span><span class="op">)</span>,show.plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">a</span><span class="op">=</span><span class="fu"><a href="../reference/getInfectionTimeDist.html">getInfectionTimeDist</a></span><span class="op">(</span><span class="va">res</span>,k<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'1'</span>,<span class="st">'2'</span><span class="op">)</span>,show.plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p><img src="infer_files/figure-html/unnamed-chunk-17-1.png" width="576"></p>
 <p>Offspring distribution for the individuals labelled ‘1’ and ‘2’:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">a</span><span class="op">=</span><span class="fu"><a href="../reference/getOffspringDist.html">getOffspringDist</a></span><span class="op">(</span><span class="va">res</span>,k<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'1'</span>,<span class="st">'2'</span><span class="op">)</span>,show.plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">a</span><span class="op">=</span><span class="fu"><a href="../reference/getOffspringDist.html">getOffspringDist</a></span><span class="op">(</span><span class="va">res</span>,k<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'1'</span>,<span class="st">'2'</span><span class="op">)</span>,show.plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p><img src="infer_files/figure-html/unnamed-chunk-18-1.png" width="576"></p>
 </div>
   </div>
@@ -196,11 +198,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Xavier Didelot.</p>
+  <p></p>
+<p>Developed by Xavier Didelot.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -208,6 +212,8 @@
 
   
 
+
+  
 
   </body>
 </html>

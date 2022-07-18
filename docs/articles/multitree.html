@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TransPhylo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.9</span>
       </span>
     </div>
 
@@ -50,7 +52,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -78,13 +80,13 @@
 
       
 
-      </header><script src="multitree_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simultaneous Inference of Multiple Transmission Trees</h1>
-                        <h4 class="author">Yuanwei Xu</h4>
+                        <h4 data-toc-skip class="author">Yuanwei Xu</h4>
             
-            <h4 class="date">2021-08-31</h4>
+            <h4 data-toc-skip class="date">2022-07-18</h4>
       
       
       <div class="hidden name"><code>multitree.Rmd</code></div>
@@ -94,92 +96,92 @@
     
     
 <p>TransPhylo can draw inference on transmission events from a dated phylogenetic tree. In this tutorial, we demonstrate an extension, <code>infer_multittree_shar_param</code>, that allows simultaneous inference of multiple transmission trees from corresponding phylogenetic trees, with the possibility of sharing any subset of TransPhylo parameters. This may be useful when one is faced with multiple transmission clusters, which may be define genetically through SNP cutoff coupled with epidemiological data, and it may be the case that jointly analyzing these clusters is desirable assuming they share the same underlying epidemiological parameters. It is also computational efficient since fewer number of parameters will be estimated. Another use case might be that sometimes it is difficult to summarise a single representative tree from a collection of phylogenetic trees, such as BEAST trees. In this case, one could run multiple tree inference on a subsample of BEAST trees. This has additional benefit of incorporating some degree of uncertainty from the BEAST posterior.</p>
-<div id="simulated-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simulated-data" class="anchor"></a>Simulated Data</h2>
+<div class="section level2">
+<h2 id="simulated-data">Simulated Data<a class="anchor" aria-label="anchor" href="#simulated-data"></a>
+</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ape-package.ird.fr/">ape</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">TransPhylo</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://ape-package.ird.fr/" class="external-link">ape</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">TransPhylo</span><span class="op">)</span></span></code></pre></div>
 <p>We simulate two outbreaks with the same set of parameters defined below, using TransPhylo’s outbreak simulator.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">neg</span> <span class="op">&lt;-</span> <span class="fl">100</span><span class="op">/</span><span class="fl">365</span>
-<span class="va">off.r</span> <span class="op">&lt;-</span> <span class="fl">1.5</span>
-<span class="va">w.shape</span> <span class="op">&lt;-</span> <span class="fl">10</span>
-<span class="va">w.scale</span> <span class="op">&lt;-</span> <span class="fl">0.1</span>
-<span class="va">ws.shape</span> <span class="op">&lt;-</span> <span class="va">w.shape</span>
-<span class="va">ws.scale</span> <span class="op">&lt;-</span> <span class="va">w.scale</span>
-<span class="va">pi</span> <span class="op">&lt;-</span> <span class="fl">0.8</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span>
-<span class="va">simu1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulateOutbreak.html">simulateOutbreak</a></span><span class="op">(</span>neg<span class="op">=</span><span class="va">neg</span>, off.r<span class="op">=</span><span class="va">off.r</span>, pi<span class="op">=</span><span class="va">pi</span>, w.shape<span class="op">=</span><span class="va">w.shape</span>,
-                         w.scale<span class="op">=</span><span class="va">w.scale</span>, dateStartOutbreak<span class="op">=</span><span class="fl">2000</span>,dateT<span class="op">=</span><span class="fl">2005</span><span class="op">)</span>
-<span class="va">simu2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulateOutbreak.html">simulateOutbreak</a></span><span class="op">(</span>neg<span class="op">=</span><span class="va">neg</span>, off.r<span class="op">=</span><span class="va">off.r</span>, pi<span class="op">=</span><span class="va">pi</span>, w.shape<span class="op">=</span><span class="va">w.shape</span>,
-                         w.scale<span class="op">=</span><span class="va">w.scale</span>, dateStartOutbreak<span class="op">=</span><span class="fl">2000</span>,dateT<span class="op">=</span><span class="fl">2005</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">neg</span> <span class="op">&lt;-</span> <span class="fl">100</span><span class="op">/</span><span class="fl">365</span></span>
+<span><span class="va">off.r</span> <span class="op">&lt;-</span> <span class="fl">1.5</span></span>
+<span><span class="va">w.shape</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">w.scale</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
+<span><span class="va">ws.shape</span> <span class="op">&lt;-</span> <span class="va">w.shape</span></span>
+<span><span class="va">ws.scale</span> <span class="op">&lt;-</span> <span class="va">w.scale</span></span>
+<span><span class="va">pi</span> <span class="op">&lt;-</span> <span class="fl">0.8</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
+<span><span class="va">simu1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulateOutbreak.html">simulateOutbreak</a></span><span class="op">(</span>neg<span class="op">=</span><span class="va">neg</span>, off.r<span class="op">=</span><span class="va">off.r</span>, pi<span class="op">=</span><span class="va">pi</span>, w.shape<span class="op">=</span><span class="va">w.shape</span>,</span>
+<span>                         w.scale<span class="op">=</span><span class="va">w.scale</span>, dateStartOutbreak<span class="op">=</span><span class="fl">2000</span>,dateT<span class="op">=</span><span class="fl">2005</span><span class="op">)</span></span>
+<span><span class="va">simu2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulateOutbreak.html">simulateOutbreak</a></span><span class="op">(</span>neg<span class="op">=</span><span class="va">neg</span>, off.r<span class="op">=</span><span class="va">off.r</span>, pi<span class="op">=</span><span class="va">pi</span>, w.shape<span class="op">=</span><span class="va">w.shape</span>,</span>
+<span>                         w.scale<span class="op">=</span><span class="va">w.scale</span>, dateStartOutbreak<span class="op">=</span><span class="fl">2000</span>,dateT<span class="op">=</span><span class="fl">2005</span><span class="op">)</span></span></code></pre></div>
 <p>We plot the combined phylogenetic and transmission trees, each colour represents an infected host, colour changes when there is a transmission event.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">simu1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">simu1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="multitree_files/figure-html/unnamed-chunk-2-1.png" width="576"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">simu2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">simu2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="multitree_files/figure-html/unnamed-chunk-2-2.png" width="576"></p>
 </div>
-<div id="run-single-and-multiple-tree-inference-algorithm" class="section level2">
-<h2 class="hasAnchor">
-<a href="#run-single-and-multiple-tree-inference-algorithm" class="anchor"></a>Run single and multiple tree inference algorithm</h2>
+<div class="section level2">
+<h2 id="run-single-and-multiple-tree-inference-algorithm">Run single and multiple tree inference algorithm<a class="anchor" aria-label="anchor" href="#run-single-and-multiple-tree-inference-algorithm"></a>
+</h2>
 <p>The corresponding phylogenetic trees can be extracted. We first use single tree routine <code>inferTTree</code> separately for each phylogenetic tree, then use the multiple tree routine <code>infer_multittree_shar_param</code> to jointly infer transmission trees while sharing all parameters. The second parameter of offspring distribution, <code>off.p</code>, has no effect because it is not updated by default, but we still include it in the set of shared parameters.</p>
 <p>We compare the posterior estimates of the parameters with those obtained from running <code>inferTTree</code> separately. In the multiple tree routine, we specify the two parameters of beta prior to be both 1, in order to get a uniform prior for the sampling rate that is consistent with <code>inferTTree</code>, where uniform prior is assumed.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ptree1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extractPTree.html">extractPTree</a></span><span class="op">(</span><span class="va">simu1</span><span class="op">)</span>
-<span class="va">ptree2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extractPTree.html">extractPTree</a></span><span class="op">(</span><span class="va">simu2</span><span class="op">)</span>
-
-<span class="va">iters</span> <span class="op">&lt;-</span> <span class="fl">2e3</span>; <span class="va">thin</span> <span class="op">&lt;-</span> <span class="fl">10</span>
-<span class="va">record_tp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inferTTree.html">inferTTree</a></span><span class="op">(</span><span class="va">ptree1</span>, <span class="va">w.shape</span>, <span class="va">w.scale</span>, <span class="va">ws.shape</span>, <span class="va">ws.scale</span>,
-                         mcmcIterations <span class="op">=</span> <span class="va">iters</span>, thinning <span class="op">=</span> <span class="va">thin</span>, dateT <span class="op">=</span> <span class="fl">2005</span><span class="op">)</span>
-<span class="va">record_tp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inferTTree.html">inferTTree</a></span><span class="op">(</span><span class="va">ptree2</span>, <span class="va">w.shape</span>, <span class="va">w.scale</span>, <span class="va">ws.shape</span>, <span class="va">ws.scale</span>,
-                         mcmcIterations <span class="op">=</span> <span class="va">iters</span>, thinning <span class="op">=</span> <span class="va">thin</span>, dateT <span class="op">=</span> <span class="fl">2005</span><span class="op">)</span>
-<span class="va">record_tpj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/infer_multittree_share_param.html">infer_multittree_share_param</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">ptree1</span>,<span class="va">ptree2</span><span class="op">)</span>, <span class="va">w.shape</span>, <span class="va">w.scale</span>, <span class="va">ws.shape</span>, <span class="va">ws.scale</span>, 
-                                    mcmcIterations <span class="op">=</span> <span class="va">iters</span>, thinning <span class="op">=</span> <span class="va">thin</span>, dateT <span class="op">=</span> <span class="fl">2005</span>,
-                                    share <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"neg"</span>, <span class="st">"off.r"</span>, <span class="st">"off.p"</span>, <span class="st">"pi"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ptree1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extractPTree.html">extractPTree</a></span><span class="op">(</span><span class="va">simu1</span><span class="op">)</span></span>
+<span><span class="va">ptree2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extractPTree.html">extractPTree</a></span><span class="op">(</span><span class="va">simu2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">iters</span> <span class="op">&lt;-</span> <span class="fl">2e3</span>; <span class="va">thin</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">record_tp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inferTTree.html">inferTTree</a></span><span class="op">(</span><span class="va">ptree1</span>, <span class="va">w.shape</span>, <span class="va">w.scale</span>, <span class="va">ws.shape</span>, <span class="va">ws.scale</span>,</span>
+<span>                         mcmcIterations <span class="op">=</span> <span class="va">iters</span>, thinning <span class="op">=</span> <span class="va">thin</span>, dateT <span class="op">=</span> <span class="fl">2005</span><span class="op">)</span></span>
+<span><span class="va">record_tp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inferTTree.html">inferTTree</a></span><span class="op">(</span><span class="va">ptree2</span>, <span class="va">w.shape</span>, <span class="va">w.scale</span>, <span class="va">ws.shape</span>, <span class="va">ws.scale</span>,</span>
+<span>                         mcmcIterations <span class="op">=</span> <span class="va">iters</span>, thinning <span class="op">=</span> <span class="va">thin</span>, dateT <span class="op">=</span> <span class="fl">2005</span><span class="op">)</span></span>
+<span><span class="va">record_tpj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/infer_multittree_share_param.html">infer_multittree_share_param</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ptree1</span>,<span class="va">ptree2</span><span class="op">)</span>, <span class="va">w.shape</span>, <span class="va">w.scale</span>, <span class="va">ws.shape</span>, <span class="va">ws.scale</span>, </span>
+<span>                                    mcmcIterations <span class="op">=</span> <span class="va">iters</span>, thinning <span class="op">=</span> <span class="va">thin</span>, dateT <span class="op">=</span> <span class="fl">2005</span>,</span>
+<span>                                    share <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"neg"</span>, <span class="st">"off.r"</span>, <span class="st">"off.p"</span>, <span class="st">"pi"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Take the last 50% trees. Note that the multiple tree inference returns list of length two where each element contains the result corresponding to the input phylogenetic tree.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">begin</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">iters</span> <span class="op">*</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">/</span> <span class="va">thin</span> <span class="op">+</span> <span class="fl">1</span>
-<span class="va">end</span> <span class="op">&lt;-</span> <span class="va">iters</span> <span class="op">/</span> <span class="va">thin</span>
-<span class="va">record_tp1</span> <span class="op">&lt;-</span> <span class="va">record_tp1</span><span class="op">[</span><span class="va">begin</span><span class="op">:</span><span class="va">end</span><span class="op">]</span>
-<span class="va">record_tp2</span> <span class="op">&lt;-</span> <span class="va">record_tp2</span><span class="op">[</span><span class="va">begin</span><span class="op">:</span><span class="va">end</span><span class="op">]</span>
-<span class="va">record_tpj</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">record_tpj</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">begin</span><span class="op">:</span><span class="va">end</span><span class="op">]</span>
-<span class="va">record_tpj</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">record_tpj</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">begin</span><span class="op">:</span><span class="va">end</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">begin</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">iters</span> <span class="op">*</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">/</span> <span class="va">thin</span> <span class="op">+</span> <span class="fl">1</span></span>
+<span><span class="va">end</span> <span class="op">&lt;-</span> <span class="va">iters</span> <span class="op">/</span> <span class="va">thin</span></span>
+<span><span class="va">record_tp1</span> <span class="op">&lt;-</span> <span class="va">record_tp1</span><span class="op">[</span><span class="va">begin</span><span class="op">:</span><span class="va">end</span><span class="op">]</span></span>
+<span><span class="va">record_tp2</span> <span class="op">&lt;-</span> <span class="va">record_tp2</span><span class="op">[</span><span class="va">begin</span><span class="op">:</span><span class="va">end</span><span class="op">]</span></span>
+<span><span class="va">record_tpj</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">record_tpj</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">begin</span><span class="op">:</span><span class="va">end</span><span class="op">]</span></span>
+<span><span class="va">record_tpj</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">record_tpj</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">begin</span><span class="op">:</span><span class="va">end</span><span class="op">]</span></span></code></pre></div>
 </div>
-<div id="compare-parameter-estimates" class="section level2">
-<h2 class="hasAnchor">
-<a href="#compare-parameter-estimates" class="anchor"></a>Compare parameter estimates</h2>
+<div class="section level2">
+<h2 id="compare-parameter-estimates">Compare parameter estimates<a class="anchor" aria-label="anchor" href="#compare-parameter-estimates"></a>
+</h2>
 <p>We visualize the estimates from the three runs. Note that because we have shared the parameters, we can pick either element from the list result <code>record_tpj</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">get_param_estimates</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">record</span>, <span class="va">p</span><span class="op">)</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">record</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[[</span><span class="va">p</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>run <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"tp1"</span>,<span class="st">"tp2"</span>,<span class="st">"tp_multitree"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">record_tp1</span><span class="op">)</span><span class="op">)</span>,
-           pi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tp1</span>, <span class="st">"pi"</span><span class="op">)</span>,
-                  <span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tp2</span>, <span class="st">"pi"</span><span class="op">)</span>,
-                  <span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tpj</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="st">"pi"</span><span class="op">)</span><span class="op">)</span>,
-           off.r <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tp1</span>, <span class="st">"off.r"</span><span class="op">)</span>,
-                     <span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tp2</span>, <span class="st">"off.r"</span><span class="op">)</span>,
-                     <span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tpj</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="st">"off.r"</span><span class="op">)</span><span class="op">)</span>,
-           neg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tp1</span>, <span class="st">"neg"</span><span class="op">)</span>,
-                   <span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tp2</span>, <span class="st">"neg"</span><span class="op">)</span>,
-                   <span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tpj</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="st">"neg"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">get_param_estimates</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">record</span>, <span class="va">p</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">record</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[[</span><span class="va">p</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>run <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tp1"</span>,<span class="st">"tp2"</span>,<span class="st">"tp_multitree"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">record_tp1</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>           pi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tp1</span>, <span class="st">"pi"</span><span class="op">)</span>,</span>
+<span>                  <span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tp2</span>, <span class="st">"pi"</span><span class="op">)</span>,</span>
+<span>                  <span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tpj</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="st">"pi"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>           off.r <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tp1</span>, <span class="st">"off.r"</span><span class="op">)</span>,</span>
+<span>                     <span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tp2</span>, <span class="st">"off.r"</span><span class="op">)</span>,</span>
+<span>                     <span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tpj</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="st">"off.r"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>           neg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tp1</span>, <span class="st">"neg"</span><span class="op">)</span>,</span>
+<span>                   <span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tp2</span>, <span class="st">"neg"</span><span class="op">)</span>,</span>
+<span>                   <span class="fu">get_param_estimates</span><span class="op">(</span><span class="va">record_tpj</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="st">"neg"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>In this example where we explicitly set the parameters when simulating the outbreaks, we see that the posterior estimates from the multiple tree inference generally have lower variance than those resulting from single tree inference. The true parameter values are shown in gray reference line.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">pi</span><span class="op">~</span><span class="va">df</span><span class="op">$</span><span class="va">run</span>,ylab<span class="op">=</span><span class="st">'pi'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0.8</span>,<span class="fl">2</span><span class="op">)</span>,col<span class="op">=</span><span class="st">'grey'</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">pi</span><span class="op">~</span><span class="va">df</span><span class="op">$</span><span class="va">run</span>,ylab<span class="op">=</span><span class="st">'pi'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.8</span>,<span class="fl">2</span><span class="op">)</span>,col<span class="op">=</span><span class="st">'grey'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="multitree_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">off.r</span><span class="op">~</span><span class="va">df</span><span class="op">$</span><span class="va">run</span>,ylab<span class="op">=</span><span class="st">'off.r'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1.5</span>,<span class="fl">2</span><span class="op">)</span>,col<span class="op">=</span><span class="st">'grey'</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">off.r</span><span class="op">~</span><span class="va">df</span><span class="op">$</span><span class="va">run</span>,ylab<span class="op">=</span><span class="st">'off.r'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1.5</span>,<span class="fl">2</span><span class="op">)</span>,col<span class="op">=</span><span class="st">'grey'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="multitree_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">neg</span><span class="op">~</span><span class="va">df</span><span class="op">$</span><span class="va">run</span>,ylab<span class="op">=</span><span class="st">'Ne*g'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">100</span><span class="op">/</span><span class="fl">365</span>,<span class="fl">2</span><span class="op">)</span>,col<span class="op">=</span><span class="st">'grey'</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">neg</span><span class="op">~</span><span class="va">df</span><span class="op">$</span><span class="va">run</span>,ylab<span class="op">=</span><span class="st">'Ne*g'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">100</span><span class="op">/</span><span class="fl">365</span>,<span class="fl">2</span><span class="op">)</span>,col<span class="op">=</span><span class="st">'grey'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="multitree_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
 </div>
   </div>
@@ -195,11 +197,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Xavier Didelot.</p>
+  <p></p>
+<p>Developed by Xavier Didelot.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -207,6 +211,8 @@
 
   
 
+
+  
 
   </body>
 </html>
