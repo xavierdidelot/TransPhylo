@@ -43,7 +43,6 @@ probTTreeR = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dat
     fomegabar=function(x) {omegabar[max(1,round((dateT-x)/dt))] }
     for (i in (1:n)) { 
       tinf=ttree[i,1]
-      ltruncW =pgamma(dateT-tinf,shape= w.shape,scale= w.scale,log.p=T)
        truncWS=pgamma(dateT-tinf,shape=ws.shape,scale=ws.scale)
       if (is.na(ttree[i,2])) prob<-prob+log(1-pi*truncWS) #This is the first term in the product in Equation (11)
       else prob<-prob+log(pi)+dgamma((ttree[i,2]-tinf),shape=ws.shape,scale=ws.scale,log=TRUE) #This is the second term in the product in Equation (11) Note simplification of truncWS/truncWS
@@ -52,7 +51,7 @@ probTTreeR = function(ttree,off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dat
       notinf=max(1000,d)
       alpha=sum(choose(d:notinf,d)*dnbinom(d:notinf,off.r,1-off.p)*fomegabar(tinf)^{0:(notinf-d)}) #This is Equation (10)
       prob <- prob + log(alpha) #This is the third term in the product in Equation (11)
-      prob <- prob + sum(dgamma((ttree[offspring,1]-tinf),shape=w.shape,scale=w.scale,log=TRUE)-ltruncW)#This is the fourth term in the product in Equation (11)
+      prob <- prob + sum(dgamma((ttree[offspring,1]-tinf),shape=w.shape,scale=w.scale,log=TRUE))#This is the fourth term in the product in Equation (11)
     } 
   }
   return(prob)
