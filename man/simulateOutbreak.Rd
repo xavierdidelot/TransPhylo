@@ -19,7 +19,9 @@ simulateOutbreak(
   ws.mean = NA,
   ws.std = NA,
   dateStartOutbreak = 2000,
-  dateT = Inf
+  dateT = Inf,
+  nloc = 1,
+  rho = 0.8
 )
 }
 \arguments{
@@ -52,6 +54,10 @@ simulateOutbreak(
 \item{dateStartOutbreak}{Date when index case becomes infected}
 
 \item{dateT}{Date when process stops (this can be Inf for fully simulated outbreaks)}
+
+\item{nloc}{Number of locations}
+
+\item{rho}{Probability of transmitting to the same location}
 }
 \value{
 Combined phylogenetic and transmission tree

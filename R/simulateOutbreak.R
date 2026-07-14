@@ -14,12 +14,14 @@
 #' @param ws.std Std of the Gamma distribution representing the sampling time 
 #' @param dateStartOutbreak Date when index case becomes infected
 #' @param dateT Date when process stops (this can be Inf for fully simulated outbreaks)
+#' @param nloc Number of locations
+#' @param rho Probability of transmitting to the same location
 #' @return Combined phylogenetic and transmission tree
 #' @examples
 #' simulateOutbreak()
 #' simulateOutbreak(off.r=2,dateStartOutbreak=2010,dateT=2015)
 #' @export
-simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shape=2,w.scale=1,ws.shape=NA,ws.scale=NA,w.mean=NA,w.std=NA,ws.mean=NA,ws.std=NA,dateStartOutbreak=2000,dateT=Inf) {
+simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shape=2,w.scale=1,ws.shape=NA,ws.scale=NA,w.mean=NA,w.std=NA,ws.mean=NA,ws.std=NA,dateStartOutbreak=2000,dateT=Inf,nloc=1,rho=0.8) {
   if (!is.na( w.mean)&&!is.na( w.std)) { w.shape= w.mean^2/ w.std^2; w.scale= w.std^2/ w.mean}
   if (!is.na(ws.mean)&&!is.na(ws.std)) {ws.shape=ws.mean^2/ws.std^2;ws.scale=ws.std^2/ws.mean}
   if (is.na(ws.shape)) ws.shape=w.shape
@@ -32,7 +34,7 @@ simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shap
   while (is.na(nSampled)||nsam!=nSampled) {
     ttree=NULL
     while (is.null(ttree)) {
-      mtt<-makeTTree(off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT-dateStartOutbreak,nSampled)
+      mtt<-makeTTree(off.r,off.p,pi,w.shape,w.scale,ws.shape,ws.scale,dateT-dateStartOutbreak,nSampled,nloc,rho)
       rejected=rejected+1
       ttree<-mtt$ttree
       probttree<-mtt$prob
@@ -62,7 +64,7 @@ simulateOutbreak = function(off.r=1,off.p=0.5,neg=0.25,nSampled=NA,pi=0.5,w.shap
   #Glue these trees together
   truth<-.glueTrees(ttree,wtree)
   truth[,1]<-truth[,1]+dateStartOutbreak
-  l=list(ctree=truth,nam=mtt$nam,probttree=probttree,probwithin=probwithin)
+  l=list(ctree=truth,nam=mtt$nam,probttree=probttree,probwithin=probwithin,locs=mtt$locs)
   class(l)<-'ctree'
   return(l)
 }  

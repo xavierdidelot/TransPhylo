@@ -1,6 +1,6 @@
 #' @name TransPhylo-package
 #' @aliases TransPhylo
-#' @docType package
+#' @docType _PACKAGE
 #' @title Inference of Transmission Tree from a Dated Phylogeny
 #'
 #' @description Inference of transmission tree from a dated phylogeny. 

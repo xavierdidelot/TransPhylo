@@ -13,7 +13,9 @@ makeTTree(
   ws.shape = w.shape,
   ws.scale = w.scale,
   maxTime = Inf,
-  nSampled = NA
+  nSampled = NA,
+  nloc = 1,
+  rho = 0.8
 )
 }
 \arguments{
@@ -34,6 +36,10 @@ makeTTree(
 \item{maxTime}{Duration of simulation (can be Inf)}
 
 \item{nSampled}{Number of sampled individuals (can be NA for any)}
+
+\item{nloc}{Number of locations}
+
+\item{rho}{Probability of transmitting to the same location}
 }
 \value{
 A N*3 matrix in the following format with one row per infected host, first column is time of infection, second column is time of sampling, third column is infector
